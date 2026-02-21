@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import ShareActions from "./ShareActions";
 import { Server } from "@heroui/shared-icons";
 
 const LibraryManagement = ({ onLibraryUpdate }) => {
@@ -28,7 +29,7 @@ const LibraryManagement = ({ onLibraryUpdate }) => {
   const handleDeleteLibrary = async (library) => {
     if (
       !window.confirm(
-        `Are you sure you want to delete "${library.name}"? This will permanently delete all songs in this library!`
+        `Are you sure you want to delete "${library.name}"? This will permanently delete all songs in this library!`,
       )
     ) {
       return;
@@ -64,8 +65,10 @@ const LibraryManagement = ({ onLibraryUpdate }) => {
       });
       setLibraries(
         libraries.map((lib) =>
-          lib.id === editingLibrary.id ? { ...lib, name: editName.trim() } : lib
-        )
+          lib.id === editingLibrary.id
+            ? { ...lib, name: editName.trim() }
+            : lib,
+        ),
       );
       setEditingLibrary(null);
       setEditName("");
@@ -195,18 +198,12 @@ const LibraryManagement = ({ onLibraryUpdate }) => {
                       alignItems: "center",
                     }}
                   >
-                    <div>
+                    <div style={{ flex: 1 }}>
                       <h3 style={{ margin: "0 0 0.5rem 0" }}>{library.name}</h3>
-                      <p
-                        style={{
-                          margin: 0,
-                          fontSize: "0.9rem",
-                          color: "#666",
-                          fontFamily: "monospace",
-                        }}
-                      >
-                        /library/{library.slug}
-                      </p>
+                      <ShareActions
+                        url={`${window.location.origin}/library/${library.slug}`}
+                        libraryName={library.name}
+                      />
                     </div>
                     <div style={{ display: "flex", gap: "0.5rem" }}>
                       <button
@@ -248,4 +245,3 @@ const LibraryManagement = ({ onLibraryUpdate }) => {
 };
 
 export default LibraryManagement;
-
