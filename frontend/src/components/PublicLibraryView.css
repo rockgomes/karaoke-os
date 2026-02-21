@@ -1,0 +1,140 @@
+/* Public Library View - Mobile First */
+.public-library {
+  min-height: calc(100vh - 64px);
+  background-color: var(--background);
+  padding-bottom: var(--space-20);
+}
+
+/* Header */
+.public-library__header {
+  padding: var(--space-6) var(--space-4);
+  background-color: var(--background-secondary);
+  border-bottom: 1px solid var(--border);
+}
+
+.public-library__venue {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.public-library__venue svg {
+  flex-shrink: 0;
+  color: var(--primary);
+}
+
+.public-library__venue-name {
+  margin: 0;
+  color: var(--foreground);
+  font-family: var(--font-primary);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.public-library__venue-subtitle {
+  margin: var(--space-1) 0 0 0;
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.4;
+}
+
+/* Search */
+.public-library__search {
+  padding: var(--space-4);
+}
+
+/* Genre Pills */
+.public-library__genres {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.public-library__genres::-webkit-scrollbar {
+  display: none;
+}
+
+/* Results Count */
+.public-library__results-count {
+  padding: 0 var(--space-4) var(--space-2);
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Content */
+.public-library__content {
+  padding: 0 var(--space-4);
+}
+
+/* Songs List */
+.public-library__songs {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Skeleton Loading */
+.public-library__skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: var(--space-4);
+}
+
+/* Desktop Responsive */
+@media (min-width: 768px) {
+  .public-library__header {
+    padding: var(--space-8) var(--space-8);
+  }
+
+  .public-library__venue-name {
+    font-size: 32px;
+  }
+
+  .public-library__venue-subtitle {
+    font-size: 16px;
+  }
+
+  .public-library__search {
+    padding: var(--space-6) var(--space-8);
+  }
+
+  .public-library__search .ds-searchbar {
+    max-width: 600px;
+  }
+
+  .public-library__genres {
+    padding: var(--space-4) var(--space-8);
+  }
+
+  .public-library__results-count {
+    padding: 0 var(--space-8) var(--space-3);
+  }
+
+  .public-library__content {
+    padding: 0 var(--space-8);
+  }
+
+  /* Grid layout for desktop */
+  .public-library__songs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .public-library {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}

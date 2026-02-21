@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { HeadphonesIcon } from "@heroui/shared-icons";
-import GenrePills from "./GenrePills";
+import {
+  SearchBar,
+  GenrePill,
+  MobileSongCard,
+  EmptyState,
+  SkeletonCard,
+} from "./design-system";
 import SongModal from "./SongModal";
+import "./PublicLibraryView.css";
 
 const PublicLibraryView = () => {
   const { slug } = useParams();
@@ -81,13 +87,13 @@ const PublicLibraryView = () => {
 
     if (selectedGenre) {
       filtered = filtered.filter((song) =>
-        song.genre.toLowerCase().includes(selectedGenre.toLowerCase())
+        song.genre.toLowerCase().includes(selectedGenre.toLowerCase()),
       );
     }
 
     if (selectedArtist) {
       filtered = filtered.filter((song) =>
-        song.artist.toLowerCase().includes(selectedArtist.toLowerCase())
+        song.artist.toLowerCase().includes(selectedArtist.toLowerCase()),
       );
     }
 
@@ -95,7 +101,7 @@ const PublicLibraryView = () => {
       filtered = filtered.filter(
         (song) =>
           song.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          song.artist.toLowerCase().includes(searchTerm.toLowerCase())
+          song.artist.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
@@ -131,11 +137,13 @@ const PublicLibraryView = () => {
 
   if (loading) {
     return (
-      <div className="container">
-        <div className="song-list">
-          <p style={{ textAlign: "center", fontSize: "1.2rem" }}>
-            Loading library...
-          </p>
+      <div className="public-library">
+        <div className="public-library__content">
+          <div className="public-library__skeleton">
+            {[...Array(8)].map((_, i) => (
+              <SkeletonCard key={i} />
+            ))}
+          </div>
         </div>
       </div>
     );
@@ -143,9 +151,26 @@ const PublicLibraryView = () => {
 
   if (error) {
     return (
-      <div className="container">
-        <div className="song-list">
-          <div className="error-message">{error}</div>
+      <div className="public-library">
+        <div className="public-library__content">
+          <EmptyState
+            icon={
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="15" y1="9" x2="9" y2="15" />
+                <line x1="9" y1="9" x2="15" y2="15" />
+              </svg>
+            }
+            title={error}
+            description="Please check the URL and try again"
+          />
         </div>
       </div>
     );
@@ -155,152 +180,109 @@ const PublicLibraryView = () => {
     return null;
   }
 
+  const uniqueGenres = ["All", ...new Set(genres)];
+
   return (
-    <div className="container">
-      <div className="song-list">
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: "2rem",
-            padding: "1.5rem",
-            backgroundColor: "#f0f4ff",
-            borderRadius: "8px",
-          }}
-        >
-          <h1
-            style={{
-              margin: "0 0 0.5rem 0",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "0.5rem",
-            }}
+    <div className="public-library">
+      {/* Header */}
+      <div className="public-library__header">
+        <div className="public-library__venue">
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
           >
-            <HeadphonesIcon style={{ width: 24, height: 24 }} />
-            {library.name}
-          </h1>
-          <p style={{ margin: 0, color: "#666", fontSize: "0.9rem" }}>
-            Public Karaoke Library
-          </p>
-        </div>
-
-        {/* Filters */}
-        <div className="filters">
-          <div className="filter-group">
-            <label>Search Songs:</label>
-            <input
-              type="text"
-              placeholder="Search by title or artist..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-
-          <div className="filter-group">
-            <label>Filter by Genre:</label>
-            <select
-              value={selectedGenre}
-              onChange={(e) => setSelectedGenre(e.target.value)}
-            >
-              <option value="">All Genres</option>
-              {genres.map((genre, index) => (
-                <option key={index} value={genre}>
-                  {genre}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="filter-group">
-            <label>Filter by Artist:</label>
-            <select
-              value={selectedArtist}
-              onChange={(e) => setSelectedArtist(e.target.value)}
-            >
-              <option value="">All Artists</option>
-              {artists.map((artist, index) => (
-                <option key={index} value={artist}>
-                  {artist}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <button className="clear-filters" onClick={clearFilters}>
-            Clear Filters
-          </button>
-        </div>
-
-        {/* Order Controls */}
-        <div className="order-controls">
-          <label className="order-label">Order by:</label>
-          <div className="order-options">
-            <label className="radio-option">
-              <input
-                type="radio"
-                name="orderBy"
-                value="artist"
-                checked={orderBy === "artist"}
-                onChange={(e) => setOrderBy(e.target.value)}
-              />
-              <span>Artist</span>
-            </label>
-            <label className="radio-option">
-              <input
-                type="radio"
-                name="orderBy"
-                value="song"
-                checked={orderBy === "song"}
-                onChange={(e) => setOrderBy(e.target.value)}
-              />
-              <span>Song Name</span>
-            </label>
+            <path d="M9 18V5l12-2v13" />
+            <circle cx="6" cy="18" r="3" />
+            <circle cx="18" cy="16" r="3" />
+          </svg>
+          <div>
+            <h1 className="public-library__venue-name">{library.name}</h1>
+            <p className="public-library__venue-subtitle">
+              Karaoke Song Library
+            </p>
           </div>
         </div>
+      </div>
 
-        {/* Songs Grid */}
+      {/* Search */}
+      <div className="public-library__search">
+        <SearchBar
+          placeholder="Search songs or artists..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          onClear={() => setSearchTerm("")}
+        />
+      </div>
+
+      {/* Genre Pills */}
+      <div className="public-library__genres">
+        {uniqueGenres.map((genre) => (
+          <GenrePill
+            key={genre}
+            label={genre}
+            active={genre === "All" ? !selectedGenre : selectedGenre === genre}
+            onClick={() => setSelectedGenre(genre === "All" ? "" : genre)}
+          />
+        ))}
+      </div>
+
+      {/* Results Count */}
+      {searchTerm || selectedGenre ? (
+        <div className="public-library__results-count">
+          {filteredSongs.length} {filteredSongs.length === 1 ? "song" : "songs"}{" "}
+          found
+        </div>
+      ) : null}
+
+      {/* Song List */}
+      <div className="public-library__content">
         {filteredSongs.length > 0 ? (
-          <div className="songs-grid">
+          <div className="public-library__songs">
             {filteredSongs.map((song) => (
-              <div
+              <MobileSongCard
                 key={song.id}
-                className="song-card clickable"
+                title={song.title}
+                artist={song.artist}
                 onClick={() => handleSongClick(song)}
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    handleSongClick(song);
-                  }
-                }}
-              >
-                <div className="song-title">{song.title}</div>
-                <div className="song-artist">by {song.artist}</div>
-                <div className="song-meta">
-                  <GenrePills genres={song.genre} className="song-genres" />
-                  {song.duration && (
-                    <span className="song-duration">⏱️ {song.duration}</span>
-                  )}
-                </div>
-                <div className="click-hint">Click for details</div>
-              </div>
+              />
             ))}
           </div>
         ) : (
-          <div className="no-songs">
-            {songs.length === 0
-              ? "No songs in this library yet."
-              : "No songs found. Try adjusting your filters."}
-          </div>
+          <EmptyState
+            icon={
+              <svg
+                width="48"
+                height="48"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M9 18V5l12-2v13" />
+                <circle cx="6" cy="18" r="3" />
+                <circle cx="18" cy="16" r="3" />
+              </svg>
+            }
+            title="No songs found"
+            description={
+              songs.length === 0
+                ? "This library doesn't have any songs yet"
+                : "Try adjusting your search or filters"
+            }
+          />
         )}
-
-        {/* Song Modal */}
-        <SongModal
-          song={selectedSong}
-          isOpen={isModalOpen}
-          onClose={handleCloseModal}
-        />
       </div>
+
+      {/* Song Modal */}
+      <SongModal
+        song={selectedSong}
+        isOpen={isModalOpen}
+        onClose={handleCloseModal}
+      />
     </div>
   );
 };
