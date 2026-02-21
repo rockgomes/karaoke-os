@@ -151,9 +151,6 @@ const ShareActions = ({ url, libraryName }) => {
             <Button variant="flat" onPress={handleDownloadSVG}>
               Download SVG
             </Button>
-            <Button color="primary" onPress={onClose}>
-              Close
-            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
