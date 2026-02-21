@@ -14,11 +14,13 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 
 // Components
 import Navbar from "./components/Navbar";
+import SongList from "./components/SongList";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import AdminPanel from "./components/AdminPanel";
 import LibraryManagement from "./components/LibraryManagement";
 import PublicLibraryView from "./components/PublicLibraryView";
+import AdminLayout from "./components/AdminLayout";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -146,10 +148,12 @@ function App() {
                 path="/admin/songs"
                 element={
                   user ? (
-                    <AdminPanel
-                      selectedLibrary={selectedLibrary}
-                      onLibrarySelect={handleLibrarySelect}
-                    />
+                    <AdminLayout user={user}>
+                      <AdminPanel
+                        selectedLibrary={selectedLibrary}
+                        onLibrarySelect={handleLibrarySelect}
+                      />
+                    </AdminLayout>
                   ) : (
                     <Navigate to="/admin/login" />
                   )
@@ -159,17 +163,20 @@ function App() {
                 path="/admin/libraries"
                 element={
                   user ? (
-                    <LibraryManagement
-                      onLibraryUpdate={() => {
-                        // Refresh libraries after update
-                        axios.get("/api/libraries").then((response) => {
-                          if (response.data.length > 0) {
-                            const currentLib = response.data.find(
-                              (lib) => lib.id === selectedLibrary?.id,
-                            );
-                            if (currentLib) {
-                              setSelectedLibrary(currentLib);
-                            } else {
+                    <AdminLayout user={user}>
+                      <LibraryManagement
+                        onLibraryUpdate={() => {
+                          // Refresh libraries after update
+                          axios.get("/api/libraries").then((response) => {
+                            if (response.data.length > 0) {
+                              const currentLib = response.data.find(
+                                (lib) => lib.id === selectedLibrary?.id,
+                              );
+                              if (currentLib) {
+                                setSelectedLibrary(currentLib);
+                              } else {
+                                setSelectedLibrary(response.data[0]);
+                              }
                               setSelectedLibrary(response.data[0]);
                             }
                           }
