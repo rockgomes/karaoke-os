@@ -65,7 +65,7 @@ const Navbar = ({ user, onLogout }) => {
 
   return (
     <HeroUINavbar maxWidth="full" className="border-b border-default-100">
-      <NavbarBrand className="flex items-center gap-6">
+      <NavbarBrand className="flex items-center gap-6 flex-grow-0">
         {user && (
           <Button
             isIconOnly
@@ -121,11 +121,21 @@ const Navbar = ({ user, onLogout }) => {
           </h1>
         </Link>
         {user && (
-          <div className="hidden sm:flex items-center gap-4">
-            <HeroUILink as={Link} to="/admin/songs" color="foreground">
+          <div className="hidden sm:flex items-center gap-4 ml-4">
+            <HeroUILink
+              as={Link}
+              to="/admin/songs"
+              color="foreground"
+              className="text-sm font-medium"
+            >
               Manage Songs
             </HeroUILink>
-            <HeroUILink as={Link} to="/admin/libraries" color="foreground">
+            <HeroUILink
+              as={Link}
+              to="/admin/libraries"
+              color="foreground"
+              className="text-sm font-medium"
+            >
               Libraries
             </HeroUILink>
           </div>
