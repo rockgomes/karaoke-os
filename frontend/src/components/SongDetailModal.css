@@ -1,0 +1,118 @@
+/* Song Detail Modal Styles */
+.song-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.song-detail__header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.song-detail__cover {
+  width: 80px;
+  height: 80px;
+  background-color: var(--surface);
+  border-radius: var(--radius-m);
+  flex-shrink: 0;
+}
+
+.song-detail__title-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.song-detail__title {
+  margin: 0;
+  color: var(--foreground);
+  font-family: var(--font-primary);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.song-detail__artist {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.4;
+}
+
+/* Metadata Section */
+.song-detail__metadata {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background-color: var(--background-secondary);
+  border-radius: var(--radius-m);
+}
+
+.song-detail__metadata-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.song-detail__label {
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.song-detail__value {
+  color: var(--foreground);
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  font-weight: normal;
+}
+
+/* AI Section */
+.song-detail__ai-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(0, 102, 255, 0.05) 0%, rgba(236, 72, 153, 0.05) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+}
+
+.song-detail__ai-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--foreground-secondary);
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.song-detail__ai-label svg {
+  color: var(--primary);
+}
+
+.song-detail__ai-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+  .song-detail__header {
+    flex-direction: column;
+  }
+
+  .song-detail__cover {
+    width: 100%;
+    height: 120px;
+  }
+}

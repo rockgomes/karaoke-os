@@ -9,6 +9,7 @@ const SongsTable = ({
   onSearch,
   onFilterGenre,
   onFilterStatus,
+  onViewDetails,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -70,7 +71,12 @@ const SongsTable = ({
           </thead>
           <tbody>
             {currentSongs.map((song) => (
-              <tr key={song.id} className="songs-table__row">
+              <tr
+                key={song.id}
+                className="songs-table__row"
+                onClick={() => onViewDetails?.(song)}
+                style={{ cursor: "pointer" }}
+              >
                 <td className="songs-table__td songs-table__td--song">
                   <div className="songs-table__song-cell">
                     <div className="songs-table__cover"></div>
@@ -106,23 +112,9 @@ const SongsTable = ({
                     className="songs-table__action-btn"
                     onClick={(e) => {
                       e.stopPropagation();
-                      // Simple inline menu for now
-                      if (
-                        window.confirm(
-                          "Edit or Delete?\n\nOK = Edit\nCancel = Delete",
-                        )
-                      ) {
-                        onEdit?.(song);
-                      } else {
-                        if (
-                          window.confirm(
-                            "Are you sure you want to delete this song?",
-                          )
-                        ) {
-                          onDelete?.(song.id);
-                        }
-                      }
+                      onViewDetails?.(song);
                     }}
+                    title="View details"
                   >
                     <svg
                       width="18"
@@ -131,10 +123,11 @@ const SongsTable = ({
                       fill="none"
                       stroke="currentColor"
                       strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     >
-                      <circle cx="12" cy="12" r="1" />
-                      <circle cx="12" cy="5" r="1" />
-                      <circle cx="12" cy="19" r="1" />
+                      <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
+                      <circle cx="12" cy="12" r="3" />
                     </svg>
                   </button>
                 </td>
