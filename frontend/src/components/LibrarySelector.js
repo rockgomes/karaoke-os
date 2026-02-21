@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Select, SelectItem, Button, Input } from "@heroui/react";
+import ShareActions from "./ShareActions";
 
 const LibrarySelector = ({
   selectedLibrary,
@@ -76,7 +77,7 @@ const LibrarySelector = ({
               const selectedId = Array.from(keys)[0];
               if (!selectedId) return;
               const library = libraries.find(
-                (lib) => lib.id === parseInt(selectedId.toString(), 10)
+                (lib) => lib.id === parseInt(selectedId.toString(), 10),
               );
               if (library) {
                 onSelectLibrary(library);
@@ -128,11 +129,14 @@ const LibrarySelector = ({
       )}
 
       {selectedLibrary && (
-        <div className="text-sm text-default-600">
-          <span className="mr-1 font-semibold">Share URL:</span>
-          <code className="rounded bg-content2 px-2 py-1 font-mono text-xs">
-            {window.location.origin}/library/{selectedLibrary.slug}
-          </code>
+        <div>
+          <div className="text-sm font-semibold text-default-600 mb-2">
+            Share URL:
+          </div>
+          <ShareActions
+            url={`${window.location.origin}/library/${selectedLibrary.slug}`}
+            libraryName={selectedLibrary.name}
+          />
         </div>
       )}
     </div>
@@ -140,4 +144,3 @@ const LibrarySelector = ({
 };
 
 export default LibrarySelector;
-
