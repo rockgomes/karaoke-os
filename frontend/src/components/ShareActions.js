@@ -121,9 +121,19 @@ const ShareActions = ({ url, libraryName }) => {
             fill="none"
             stroke="currentColor"
             strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           >
-            <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-            <rect x="7" y="7" width="10" height="10" />
+            <rect x="3" y="3" width="5" height="5" />
+            <rect x="3" y="16" width="5" height="5" />
+            <rect x="16" y="3" width="5" height="5" />
+            <path d="M13 13h.01" />
+            <path d="M13 16h.01" />
+            <path d="M13 19h.01" />
+            <path d="M16 13h.01" />
+            <path d="M16 16h.01" />
+            <path d="M19 13h.01" />
+            <path d="M19 16h.01" />
           </svg>
           QR Code
         </Button>
