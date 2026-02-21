@@ -1,0 +1,1 @@
+Note: The qrcode.react package needs to be installed manually due to HeroUI dependency conflicts. Run: npm install qrcode.react --force
