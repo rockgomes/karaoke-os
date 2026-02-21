@@ -65,7 +65,7 @@ const Navbar = ({ user, onLogout }) => {
 
   return (
     <HeroUINavbar maxWidth="full" className="border-b border-default-100">
-      <NavbarBrand>
+      <NavbarBrand className="flex items-center gap-6">
         {user && (
           <Button
             isIconOnly
@@ -120,24 +120,17 @@ const Navbar = ({ user, onLogout }) => {
             Karaoke OS
           </h1>
         </Link>
-      </NavbarBrand>
-
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
         {user && (
-          <>
-            <NavbarItem>
-              <HeroUILink as={Link} to="/admin/songs" color="foreground">
-                Manage Songs
-              </HeroUILink>
-            </NavbarItem>
-            <NavbarItem>
-              <HeroUILink as={Link} to="/admin/libraries" color="foreground">
-                Libraries
-              </HeroUILink>
-            </NavbarItem>
-          </>
+          <div className="hidden sm:flex items-center gap-4">
+            <HeroUILink as={Link} to="/admin/songs" color="foreground">
+              Manage Songs
+            </HeroUILink>
+            <HeroUILink as={Link} to="/admin/libraries" color="foreground">
+              Libraries
+            </HeroUILink>
+          </div>
         )}
-      </NavbarContent>
+      </NavbarBrand>
 
       {/* Desktop actions */}
       <NavbarContent justify="end" className="hidden sm:flex">
