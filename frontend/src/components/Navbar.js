@@ -64,18 +64,20 @@ const Navbar = ({ user, onLogout }) => {
   };
 
   return (
-    <HeroUINavbar isBordered className="sticky top-0 z-50">
-      <NavbarBrand className="flex items-center gap-2">
-        <Button
-          isIconOnly
-          variant="light"
-          size="sm"
-          aria-label="Open navigation menu"
-          onPress={handleToggleMenu}
-          className="sm:hidden"
-        >
-          <MenuIcon className="w-5 h-5" />
-        </Button>
+    <HeroUINavbar maxWidth="full" className="border-b border-default-100">
+      <NavbarBrand>
+        {user && (
+          <Button
+            isIconOnly
+            variant="light"
+            size="sm"
+            aria-label="Open navigation menu"
+            onPress={handleToggleMenu}
+            className="sm:hidden"
+          >
+            <MenuIcon className="w-5 h-5" />
+          </Button>
+        )}
         <Link to="/" style={{ textDecoration: "none" }}>
           <h1
             style={{
@@ -172,91 +174,102 @@ const Navbar = ({ user, onLogout }) => {
         )}
       </NavbarContent>
 
-      {/* Mobile drawer menu */}
-      <Drawer
-        isOpen={isMenuOpen}
-        onOpenChange={setIsMenuOpen}
-        placement="left"
-        size="xs"
-        className="sm:hidden"
-        hideCloseButton
-      >
-        <DrawerContent>
-          <DrawerHeader className="flex items-center justify-between gap-2">
-            <button
-              type="button"
-              onClick={handleCloseMenu}
-              className="flex items-center gap-2 text-left text-base font-semibold"
-            >
-              <CloseIcon className="w-5 h-5" />
-              <span>Karaoke OS</span>
-            </button>
+      {/* Mobile theme toggle for public users */}
+      {!user && (
+        <NavbarContent justify="end" className="sm:hidden">
+          <NavbarItem>
             <ThemeToggle />
-          </DrawerHeader>
-          <DrawerBody className="flex flex-col gap-4">
-            {user ? (
-              <>
-                <div className="flex items-center gap-2 text-sm text-default-600">
-                  <User className="w-4 h-4" fill="currentColor" />
-                  {user.username}
-                </div>
-                <div className="flex flex-col gap-2">
-                  <HeroUILink
-                    as={Link}
-                    to="/admin/songs"
-                    color="foreground"
-                    onClick={handleCloseMenu}
-                  >
-                    Manage Songs
-                  </HeroUILink>
-                  <HeroUILink
-                    as={Link}
-                    to="/admin/libraries"
-                    color="foreground"
-                    onClick={handleCloseMenu}
-                  >
-                    Libraries
-                  </HeroUILink>
-                </div>
-                <Button
-                  color="danger"
-                  variant="flat"
-                  onClick={() => {
-                    handleCloseMenu();
-                    onLogout();
-                  }}
-                  className="w-full"
-                >
-                  Logout
-                </Button>
-              </>
-            ) : (
-              <>
-                <div className="flex items-center justify-between text-sm text-default-600">
-                  <span>Appearance</span>
-                </div>
-                <div>
-                  <ThemeToggle />
-                </div>
-                {showAdminLogin && (
-                  <div className="flex flex-col gap-2">
-                    <Button
-                      as={Link}
-                      to="/admin/login"
-                      variant="flat"
-                      color="primary"
-                      onClick={handleCloseMenu}
-                      className="w-full"
-                    >
-                      Admin Login
-                    </Button>
+          </NavbarItem>
+        </NavbarContent>
+      )}
+
+      {/* Mobile drawer menu - only for authenticated admins */}
+      {user && (
+        <Drawer
+          isOpen={isMenuOpen}
+          onOpenChange={setIsMenuOpen}
+          placement="left"
+          size="xs"
+          className="sm:hidden"
+          hideCloseButton
+        >
+          <DrawerContent>
+            <DrawerHeader className="flex items-center justify-between gap-2">
+              <button
+                type="button"
+                onClick={handleCloseMenu}
+                className="flex items-center gap-2 text-left text-base font-semibold"
+              >
+                <CloseIcon className="w-5 h-5" />
+                <span>Karaoke OS</span>
+              </button>
+              <ThemeToggle />
+            </DrawerHeader>
+            <DrawerBody className="flex flex-col gap-4">
+              {user ? (
+                <>
+                  <div className="flex items-center gap-2 text-sm text-default-600">
+                    <User className="w-4 h-4" fill="currentColor" />
+                    {user.username}
                   </div>
-                )}
-              </>
-            )}
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+                  <div className="flex flex-col gap-2">
+                    <HeroUILink
+                      as={Link}
+                      to="/admin/songs"
+                      color="foreground"
+                      onClick={handleCloseMenu}
+                    >
+                      Manage Songs
+                    </HeroUILink>
+                    <HeroUILink
+                      as={Link}
+                      to="/admin/libraries"
+                      color="foreground"
+                      onClick={handleCloseMenu}
+                    >
+                      Libraries
+                    </HeroUILink>
+                  </div>
+                  <Button
+                    color="danger"
+                    variant="flat"
+                    onClick={() => {
+                      handleCloseMenu();
+                      onLogout();
+                    }}
+                    className="w-full"
+                  >
+                    Logout
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between text-sm text-default-600">
+                    <span>Appearance</span>
+                  </div>
+                  <div>
+                    <ThemeToggle />
+                  </div>
+                  {showAdminLogin && (
+                    <div className="flex flex-col gap-2">
+                      <Button
+                        as={Link}
+                        to="/admin/login"
+                        variant="flat"
+                        color="primary"
+                        onClick={handleCloseMenu}
+                        className="w-full"
+                      >
+                        Admin Login
+                      </Button>
+                    </div>
+                  )}
+                </>
+              )}
+            </DrawerBody>
+          </DrawerContent>
+        </Drawer>
+      )}
     </HeroUINavbar>
   );
 };
