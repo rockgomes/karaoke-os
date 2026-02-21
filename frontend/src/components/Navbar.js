@@ -120,27 +120,24 @@ const Navbar = ({ user, onLogout }) => {
             Karaoke OS
           </h1>
         </Link>
-        {user && (
-          <div className="hidden sm:flex items-center gap-4 ml-4">
-            <HeroUILink
-              as={Link}
-              to="/admin/songs"
-              color="foreground"
-              className="text-sm font-medium"
-            >
-              Manage Songs
-            </HeroUILink>
-            <HeroUILink
-              as={Link}
-              to="/admin/libraries"
-              color="foreground"
-              className="text-sm font-medium"
-            >
-              Libraries
-            </HeroUILink>
-          </div>
-        )}
       </NavbarBrand>
+
+      <NavbarContent className="hidden sm:flex gap-4 pl-20" justify="start">
+        {user && (
+          <>
+            <NavbarItem>
+              <HeroUILink as={Link} to="/admin/songs" color="foreground">
+                Manage Songs
+              </HeroUILink>
+            </NavbarItem>
+            <NavbarItem>
+              <HeroUILink as={Link} to="/admin/libraries" color="foreground">
+                Libraries
+              </HeroUILink>
+            </NavbarItem>
+          </>
+        )}
+      </NavbarContent>
 
       {/* Desktop actions */}
       <NavbarContent justify="end" className="hidden sm:flex">
