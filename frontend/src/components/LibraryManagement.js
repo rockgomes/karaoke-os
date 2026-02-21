@@ -99,135 +99,119 @@ const LibraryManagement = ({ onLibraryUpdate }) => {
   }
 
   return (
-    <div className="container">
-      <div className="admin-login">
-        <h2 className="flex items-center gap-2">
-          <Server className="w-6 h-6" fill="currentColor" />
-          Manage Libraries
-        </h2>
+    <div className="library-management">
+      <h2
+        style={{ fontSize: "2rem", fontWeight: "bold", marginBottom: "1.5rem" }}
+      >
+        Library Management
+      </h2>
 
-        {error && (
-          <div className="error-message" style={{ marginBottom: "1rem" }}>
-            {error}
-          </div>
-        )}
+      {error && <div className="library-management__error">{error}</div>}
 
-        {success && (
-          <div
-            style={{
-              backgroundColor: "#d4edda",
-              color: "#155724",
-              padding: "0.75rem",
-              borderRadius: "4px",
-              marginBottom: "1rem",
-            }}
-          >
-            {success}
-          </div>
-        )}
+      {success && <div className="library-management__success">{success}</div>}
 
-        {libraries.length === 0 ? (
-          <p style={{ textAlign: "center", color: "#666" }}>
-            No libraries found. Create one from the library selector.
-          </p>
-        ) : (
-          <div style={{ marginTop: "1.5rem" }}>
-            {libraries.map((library) => (
-              <div key={library.id} className="library-card">
-                {editingLibrary?.id === library.id ? (
-                  <div
+      {libraries.length === 0 ? (
+        <p className="library-management__empty">
+          No libraries found. Create one from the library selector.
+        </p>
+      ) : (
+        <div style={{ marginTop: "1.5rem" }}>
+          {libraries.map((library) => (
+            <div key={library.id} className="library-card">
+              {editingLibrary?.id === library.id ? (
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "0.5rem",
+                    alignItems: "center",
+                  }}
+                >
+                  <input
+                    type="text"
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)}
                     style={{
-                      display: "flex",
-                      gap: "0.5rem",
-                      alignItems: "center",
+                      flex: 1,
+                      padding: "0.5rem",
+                      borderRadius: "4px",
+                      border: "1px solid #ddd",
+                    }}
+                    autoFocus
+                  />
+                  <button
+                    onClick={handleSaveEdit}
+                    style={{
+                      padding: "0.5rem 1rem",
+                      backgroundColor: "#28a745",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer",
                     }}
                   >
-                    <input
-                      type="text"
-                      value={editName}
-                      onChange={(e) => setEditName(e.target.value)}
-                      style={{
-                        flex: 1,
-                        padding: "0.5rem",
-                        borderRadius: "4px",
-                        border: "1px solid #ddd",
-                      }}
-                      autoFocus
+                    Save
+                  </button>
+                  <button
+                    onClick={handleCancelEdit}
+                    style={{
+                      padding: "0.5rem 1rem",
+                      backgroundColor: "#6c757d",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ margin: "0 0 0.5rem 0" }}>{library.name}</h3>
+                    <ShareActions
+                      url={`${window.location.origin}/library/${library.slug}`}
+                      libraryName={library.name}
                     />
+                  </div>
+                  <div style={{ display: "flex", gap: "0.5rem" }}>
                     <button
-                      onClick={handleSaveEdit}
+                      onClick={() => handleEditLibrary(library)}
                       style={{
                         padding: "0.5rem 1rem",
-                        backgroundColor: "#28a745",
+                        backgroundColor: "#667eea",
                         color: "white",
                         border: "none",
                         borderRadius: "4px",
                         cursor: "pointer",
                       }}
                     >
-                      Save
+                      Edit
                     </button>
                     <button
-                      onClick={handleCancelEdit}
+                      onClick={() => handleDeleteLibrary(library)}
                       style={{
                         padding: "0.5rem 1rem",
-                        backgroundColor: "#6c757d",
+                        backgroundColor: "#dc3545",
                         color: "white",
                         border: "none",
                         borderRadius: "4px",
                         cursor: "pointer",
                       }}
                     >
-                      Cancel
+                      Delete
                     </button>
                   </div>
-                ) : (
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <div style={{ flex: 1 }}>
-                      <h3 style={{ margin: "0 0 0.5rem 0" }}>{library.name}</h3>
-                      <ShareActions
-                        url={`${window.location.origin}/library/${library.slug}`}
-                        libraryName={library.name}
-                      />
-                    </div>
-                    <div style={{ display: "flex", gap: "0.5rem" }}>
-                      <button
-                        onClick={() => handleEditLibrary(library)}
-                        style={{
-                          padding: "0.5rem 1rem",
-                          backgroundColor: "#667eea",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                        }}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteLibrary(library)}
-                        style={{
-                          padding: "0.5rem 1rem",
-                          backgroundColor: "#dc3545",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
       )}
     </div>
