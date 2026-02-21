@@ -59,7 +59,7 @@
 
 .sidebar__nav-label {
   padding: var(--space-2) var(--space-3);
-  color: var(--muted-foreground);
+  color: var(--foreground-secondary);
   font-family: var(--font-secondary);
   font-size: 10px;
   font-weight: 600;

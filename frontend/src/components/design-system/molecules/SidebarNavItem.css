@@ -8,7 +8,7 @@
   border: none;
   border-radius: var(--radius-m);
   background-color: transparent;
-  color: var(--muted-foreground);
+  color: var(--foreground);
   font-family: var(--font-primary);
   font-size: 14px;
   font-weight: 500;
@@ -16,8 +16,9 @@
   cursor: pointer;
   text-align: left;
   position: relative;
-  transition: background-color var(--transition-fast) var(--ease-in-out),
-              color var(--transition-fast) var(--ease-in-out);
+  transition:
+    background-color var(--transition-fast) var(--ease-in-out),
+    color var(--transition-fast) var(--ease-in-out);
 }
 
 .ds-sidebar-nav-item:hover {
