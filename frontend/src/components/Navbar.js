@@ -150,9 +150,6 @@ const Navbar = ({ user, onLogout }) => {
               </span>
             </NavbarItem>
             <NavbarItem>
-              <ThemeToggle />
-            </NavbarItem>
-            <NavbarItem>
               <Button color="danger" variant="flat" onClick={onLogout}>
                 Logout
               </Button>
@@ -160,9 +157,6 @@ const Navbar = ({ user, onLogout }) => {
           </>
         ) : (
           <>
-            <NavbarItem>
-              <ThemeToggle />
-            </NavbarItem>
             {showAdminLogin && (
               <NavbarItem className="hidden lg:flex">
                 <HeroUILink as={Link} to="/admin/login" color="foreground">
@@ -172,16 +166,17 @@ const Navbar = ({ user, onLogout }) => {
             )}
           </>
         )}
+        <NavbarItem>
+          <ThemeToggle />
+        </NavbarItem>
       </NavbarContent>
 
-      {/* Mobile theme toggle for public users */}
-      {!user && (
-        <NavbarContent justify="end" className="sm:hidden">
-          <NavbarItem>
-            <ThemeToggle />
-          </NavbarItem>
-        </NavbarContent>
-      )}
+      {/* Mobile theme toggle - always visible */}
+      <NavbarContent justify="end" className="sm:hidden">
+        <NavbarItem>
+          <ThemeToggle />
+        </NavbarItem>
+      </NavbarContent>
 
       {/* Mobile drawer menu - only for authenticated admins */}
       {user && (
@@ -203,7 +198,6 @@ const Navbar = ({ user, onLogout }) => {
                 <CloseIcon className="w-5 h-5" />
                 <span>Karaoke OS</span>
               </button>
-              <ThemeToggle />
             </DrawerHeader>
             <DrawerBody className="flex flex-col gap-4">
               {user ? (
@@ -242,30 +236,7 @@ const Navbar = ({ user, onLogout }) => {
                     Logout
                   </Button>
                 </>
-              ) : (
-                <>
-                  <div className="flex items-center justify-between text-sm text-default-600">
-                    <span>Appearance</span>
-                  </div>
-                  <div>
-                    <ThemeToggle />
-                  </div>
-                  {showAdminLogin && (
-                    <div className="flex flex-col gap-2">
-                      <Button
-                        as={Link}
-                        to="/admin/login"
-                        variant="flat"
-                        color="primary"
-                        onClick={handleCloseMenu}
-                        className="w-full"
-                      >
-                        Admin Login
-                      </Button>
-                    </div>
-                  )}
-                </>
-              )}
+              ) : null}
             </DrawerBody>
           </DrawerContent>
         </Drawer>
