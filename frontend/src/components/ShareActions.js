@@ -144,7 +144,7 @@ const ShareActions = ({ url, libraryName }) => {
               Download as SVG for printing large posters (A4 size)
             </p>
           </ModalBody>
-          <ModalFooter>
+          <ModalFooter className="justify-center">
             <Button variant="flat" onPress={handleDownloadPNG}>
               Download PNG
             </Button>
