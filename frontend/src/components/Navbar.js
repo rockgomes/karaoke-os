@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   Navbar as HeroUINavbar,
   NavbarContent,
@@ -49,6 +49,11 @@ const CloseIcon = ({ className }) => (
 
 const Navbar = ({ user, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const location = useLocation();
+
+  // Only show admin login on admin routes, not on public library views
+  const isAdminRoute = location.pathname.startsWith("/admin");
+  const showAdminLogin = !user && isAdminRoute;
 
   const handleToggleMenu = () => {
     setIsMenuOpen((open) => !open);
@@ -120,11 +125,13 @@ const Navbar = ({ user, onLogout }) => {
             <NavbarItem>
               <ThemeToggle />
             </NavbarItem>
-            <NavbarItem className="hidden lg:flex">
-              <HeroUILink as={Link} to="/admin/login" color="foreground">
-                Admin Login
-              </HeroUILink>
-            </NavbarItem>
+            {showAdminLogin && (
+              <NavbarItem className="hidden lg:flex">
+                <HeroUILink as={Link} to="/admin/login" color="foreground">
+                  Admin Login
+                </HeroUILink>
+              </NavbarItem>
+            )}
           </>
         )}
       </NavbarContent>
@@ -195,18 +202,20 @@ const Navbar = ({ user, onLogout }) => {
                 <div>
                   <ThemeToggle />
                 </div>
-                <div className="flex flex-col gap-2">
-                  <Button
-                    as={Link}
-                    to="/admin/login"
-                    variant="flat"
-                    color="primary"
-                    onClick={handleCloseMenu}
-                    className="w-full"
-                  >
-                    Admin Login
-                  </Button>
-                </div>
+                {showAdminLogin && (
+                  <div className="flex flex-col gap-2">
+                    <Button
+                      as={Link}
+                      to="/admin/login"
+                      variant="flat"
+                      color="primary"
+                      onClick={handleCloseMenu}
+                      className="w-full"
+                    >
+                      Admin Login
+                    </Button>
+                  </div>
+                )}
               </>
             )}
           </DrawerBody>
