@@ -26,26 +26,17 @@ export const ThemeProvider = ({ children }) => {
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
-  // Apply theme class immediately on mount to prevent flash
+  // Apply theme attribute immediately on mount to prevent flash
   useLayoutEffect(() => {
     const root = window.document.documentElement;
-    if (isDark) {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-  }, []);
+    root.setAttribute("data-theme", isDark ? "dark" : "light");
+  }, [isDark]);
 
   useEffect(() => {
-    // Update HTML class and localStorage when theme changes
+    // Update HTML data-theme attribute and localStorage when theme changes
     const root = window.document.documentElement;
-    if (isDark) {
-      root.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      root.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+    root.setAttribute("data-theme", isDark ? "dark" : "light");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
   }, [isDark]);
 
   const toggleTheme = () => {
