@@ -1,0 +1,40 @@
+/* StatCard Styles (TOfsA) */
+.ds-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-5);
+  border-radius: var(--radius-m);
+  background-color: #FFFFFF;
+  border: 1px solid var(--border);
+}
+
+/* Label */
+.ds-stat-card__label {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 1.4;
+}
+
+/* Value */
+.ds-stat-card__value {
+  margin: 0;
+  color: var(--foreground);
+  font-family: var(--font-primary);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* Subtitle */
+.ds-stat-card__subtitle {
+  margin: 0;
+  color: var(--color-success);
+  font-family: var(--font-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.4;
+}

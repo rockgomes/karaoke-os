@@ -1,0 +1,48 @@
+/* FilterPill Styles (as99c) */
+.ds-filter-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 36px;
+  padding: 0 14px;
+  border-radius: var(--radius-m);
+  background-color: #FFFFFF;
+  border: 1px solid var(--border);
+  color: var(--foreground-secondary);
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color var(--transition-fast) var(--ease-in-out),
+              border-color var(--transition-fast) var(--ease-in-out);
+}
+
+.ds-filter-pill:hover {
+  background-color: var(--surface);
+}
+
+.ds-filter-pill:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Label */
+.ds-filter-pill__label {
+  display: inline-block;
+}
+
+/* Chevron */
+.ds-filter-pill__chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  color: var(--muted-foreground);
+}
+
+.ds-filter-pill__chevron svg {
+  width: 100%;
+  height: 100%;
+}

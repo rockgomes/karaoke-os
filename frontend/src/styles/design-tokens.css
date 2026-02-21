@@ -1,0 +1,140 @@
+/**
+ * Design Tokens
+ * Extracted from karaoke-design.pen
+ * 
+ * These CSS custom properties define the design system foundation.
+ * Light theme is default, dark theme overrides are applied via [data-theme="dark"]
+ */
+
+:root {
+  /* Colors - Primary */
+  --primary: #0066FF;
+  --primary-hover: #0052CC;
+  --primary-foreground: #FFFFFF;
+  --primary-subtle: #E6F0FF;
+  
+  /* Colors - Secondary */
+  --secondary: #EC4899;
+  
+  /* Colors - Semantic */
+  --color-success: #10B981;
+  --color-success-foreground: #FFFFFF;
+  --color-error: #EF4444;
+  --color-error-foreground: #FFFFFF;
+  --color-info: #3B82F6;
+  --color-info-foreground: #FFFFFF;
+  --color-warning: #FBBF24;
+  --color-warning-foreground: #1A1035;
+  
+  /* Colors - Accent */
+  --accent-teal: #14B8A6;
+  --accent-yellow: #FBBF24;
+  
+  /* Colors - Backgrounds */
+  --background: #FFFFFF;
+  --background-secondary: #F8FAFC;
+  --card: #FFFFFF;
+  --surface: #F1F5F9;
+  
+  /* Colors - Foreground/Text */
+  --foreground: #0F172A;
+  --foreground-secondary: #475569;
+  --muted-foreground: #94A3B8;
+  
+  /* Colors - Borders */
+  --border: #E2E8F0;
+  
+  /* Typography - Font Families */
+  --font-primary: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-secondary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-m: 6px;
+  --radius-lg: 12px;
+  --radius-pill: 100px;
+  
+  /* Transitions - Animation Durations */
+  --transition-fast: 150ms;
+  --transition-base: 300ms;
+  --transition-slow: 500ms;
+  
+  /* Transitions - Timing Functions */
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  
+  /* Spacing Scale */
+  --space-0: 0px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  
+  /* Z-index Scale */
+  --z-base: 0;
+  --z-dropdown: 1000;
+  --z-sticky: 1100;
+  --z-fixed: 1200;
+  --z-modal-backdrop: 1300;
+  --z-modal: 1400;
+  --z-popover: 1500;
+  --z-tooltip: 1600;
+}
+
+/* Dark Theme Overrides */
+[data-theme="dark"] {
+  --background: #0F172A;
+  --background-secondary: #1E293B;
+  --card: #1E293B;
+  --surface: #334155;
+  
+  --foreground: #F1F5F9;
+  --foreground-secondary: #CBD5E1;
+  --muted-foreground: #64748B;
+  
+  --border: #334155;
+  
+  --primary-subtle: #1E3A8A;
+}
+
+/* Smooth theme transitions */
+* {
+  transition: background-color var(--transition-base) var(--ease-in-out),
+              border-color var(--transition-base) var(--ease-in-out),
+              color var(--transition-base) var(--ease-in-out);
+}
+
+/* Disable transitions for elements that shouldn't animate */
+*:focus,
+*:active,
+button,
+input,
+select,
+textarea {
+  transition: none;
+}
+
+/* Re-enable specific transitions for interactive elements */
+button,
+a,
+[role="button"] {
+  transition: background-color var(--transition-fast) var(--ease-in-out),
+              border-color var(--transition-fast) var(--ease-in-out),
+              color var(--transition-fast) var(--ease-in-out),
+              transform var(--transition-fast) var(--ease-out),
+              box-shadow var(--transition-fast) var(--ease-in-out);
+}

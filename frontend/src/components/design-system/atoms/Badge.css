@@ -1,0 +1,45 @@
+/* Badge Base Styles */
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  padding: var(--space-1) 10px;
+  border-radius: var(--radius-m);
+  font-family: var(--font-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Default Variant (w3iUh) */
+.ds-badge--default {
+  background-color: var(--surface);
+  color: var(--muted-foreground);
+}
+
+/* AI Variant (Oew16) */
+.ds-badge--ai {
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+}
+
+/* Icon */
+.ds-badge__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 11px;
+  height: 11px;
+}
+
+.ds-badge__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Label */
+.ds-badge__label {
+  display: inline-block;
+}

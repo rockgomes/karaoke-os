@@ -1,0 +1,71 @@
+/* SearchResultItem Styles (fKO9U) */
+.ds-search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  width: 100%;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background-color var(--transition-fast) var(--ease-in-out);
+}
+
+.ds-search-result-item:hover {
+  background-color: var(--surface);
+}
+
+.ds-search-result-item:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Info Container */
+.ds-search-result-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Title */
+.ds-search-result-item__title {
+  margin: 0;
+  color: var(--foreground);
+  font-family: var(--font-primary);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Meta */
+.ds-search-result-item__meta {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Chevron */
+.ds-search-result-item__chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+  color: var(--muted-foreground);
+}
+
+.ds-search-result-item__chevron svg {
+  width: 100%;
+  height: 100%;
+}

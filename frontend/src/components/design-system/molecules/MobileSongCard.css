@@ -1,0 +1,73 @@
+/* MobileSongCard Styles (g86h6) */
+.ds-mobile-song-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  transition: background-color var(--transition-fast) var(--ease-in-out);
+}
+
+.ds-mobile-song-card--clickable {
+  cursor: pointer;
+}
+
+.ds-mobile-song-card--clickable:hover {
+  background-color: var(--surface);
+}
+
+.ds-mobile-song-card--clickable:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Cover Art */
+.ds-mobile-song-card__cover {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-m);
+  background-color: var(--surface);
+  overflow: hidden;
+}
+
+.ds-mobile-song-card__cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Info Container */
+.ds-mobile-song-card__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+/* Title */
+.ds-mobile-song-card__title {
+  margin: 0;
+  color: var(--foreground);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Artist */
+.ds-mobile-song-card__artist {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,0 +1,79 @@
+/* SearchBar Styles (h8nQG) */
+.ds-searchbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 var(--space-4);
+  height: 44px;
+  width: 100%;
+  max-width: 342px;
+  border-radius: var(--radius-m);
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  transition: border-color var(--transition-fast) var(--ease-in-out),
+              box-shadow var(--transition-fast) var(--ease-in-out);
+}
+
+.ds-searchbar:focus-within {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 102, 255, 0.1);
+}
+
+/* Icon */
+.ds-searchbar__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--muted-foreground);
+}
+
+.ds-searchbar__icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Input */
+.ds-searchbar__input {
+  flex: 1;
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--foreground);
+  font-family: var(--font-secondary);
+  font-size: 15px;
+  font-weight: normal;
+  line-height: 1.5;
+}
+
+.ds-searchbar__input::placeholder {
+  color: var(--muted-foreground);
+}
+
+/* Clear Button */
+.ds-searchbar__clear {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  transition: color var(--transition-fast) var(--ease-in-out);
+}
+
+.ds-searchbar__clear:hover {
+  color: var(--foreground);
+}
+
+.ds-searchbar__clear svg {
+  width: 100%;
+  height: 100%;
+}

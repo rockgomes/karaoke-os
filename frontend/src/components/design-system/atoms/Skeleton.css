@@ -1,0 +1,61 @@
+/* Skeleton Animation */
+@keyframes skeleton-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* SkeletonLine Styles (wiIYv) */
+.ds-skeleton-line {
+  height: 12px;
+  border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* SkeletonCard Styles (CNuKx) */
+.ds-skeleton-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 72px;
+  padding: 12px 0;
+  width: 100%;
+  max-width: 358px;
+}
+
+.ds-skeleton-card__thumb {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-m);
+  background-color: var(--surface);
+  animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.ds-skeleton-card__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex: 1;
+}
+
+.ds-skeleton-card__line1 {
+  width: 140px;
+  height: 14px;
+  border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.ds-skeleton-card__line2 {
+  width: 100px;
+  height: 12px;
+  border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation-delay: 0.15s;
+}

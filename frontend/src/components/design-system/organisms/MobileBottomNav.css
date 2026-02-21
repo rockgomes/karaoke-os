@@ -1,0 +1,23 @@
+/* MobileBottomNav Styles (SCvrn) */
+.ds-mobile-bottom-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 390px;
+  height: 80px;
+  padding: 0 var(--space-2);
+  background-color: #1A1A1A;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  z-index: var(--z-fixed);
+}
+
+@media (min-width: 768px) {
+  .ds-mobile-bottom-nav {
+    display: none;
+  }
+}

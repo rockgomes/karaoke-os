@@ -1,0 +1,40 @@
+/* GenrePill Styles */
+.ds-genre-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 14px;
+  border: none;
+  border-radius: var(--radius-pill);
+  background-color: var(--surface);
+  color: var(--foreground-secondary);
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast) var(--ease-in-out),
+              color var(--transition-fast) var(--ease-in-out),
+              transform var(--transition-fast) var(--ease-out);
+}
+
+.ds-genre-pill:hover:not(.ds-genre-pill--active) {
+  background-color: var(--border);
+}
+
+.ds-genre-pill:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.ds-genre-pill:active {
+  transform: scale(0.98);
+}
+
+/* Active State (kjlX1) */
+.ds-genre-pill--active {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  font-weight: 600;
+}

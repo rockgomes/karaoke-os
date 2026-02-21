@@ -1,0 +1,67 @@
+/* SongListItem Styles (hkRlf) */
+.ds-song-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: var(--space-4) 0;
+  width: 100%;
+  max-width: 358px;
+  border-bottom: 1px solid var(--border);
+  transition: background-color var(--transition-fast) var(--ease-in-out);
+}
+
+.ds-song-list-item--clickable {
+  cursor: pointer;
+}
+
+.ds-song-list-item--clickable:hover {
+  background-color: var(--surface);
+}
+
+.ds-song-list-item--clickable:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Info Container */
+.ds-song-list-item__info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  flex: 1;
+  min-width: 0;
+}
+
+/* Title */
+.ds-song-list-item__title {
+  margin: 0;
+  color: var(--foreground);
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Meta (Artist • Duration) */
+.ds-song-list-item__meta {
+  margin: 0;
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: normal;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Tags Row */
+.ds-song-list-item__tags {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
