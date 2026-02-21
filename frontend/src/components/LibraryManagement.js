@@ -90,8 +90,8 @@ const LibraryManagement = ({ onLibraryUpdate }) => {
 
   if (loading) {
     return (
-      <div className="container">
-        <div style={{ textAlign: "center", padding: "2rem" }}>
+      <div className="library-management">
+        <div className="library-management__loading">
           <p>Loading libraries...</p>
         </div>
       </div>
@@ -133,16 +133,7 @@ const LibraryManagement = ({ onLibraryUpdate }) => {
         ) : (
           <div style={{ marginTop: "1.5rem" }}>
             {libraries.map((library) => (
-              <div
-                key={library.id}
-                style={{
-                  padding: "1rem",
-                  marginBottom: "1rem",
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                  backgroundColor: "#fff",
-                }}
-              >
+              <div key={library.id} className="library-card">
                 {editingLibrary?.id === library.id ? (
                   <div
                     style={{
@@ -237,9 +228,8 @@ const LibraryManagement = ({ onLibraryUpdate }) => {
                 )}
               </div>
             ))}
-          </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

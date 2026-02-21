@@ -1,0 +1,127 @@
+/* Library Management Styles */
+.library-management {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.library-management__loading {
+  text-align: center;
+  padding: 2rem;
+  color: var(--foreground-secondary);
+}
+
+.library-management__error {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: var(--color-error);
+  color: var(--color-error-foreground);
+  border-radius: var(--radius-m);
+}
+
+.library-management__success {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: var(--color-success);
+  color: var(--color-success-foreground);
+  border-radius: var(--radius-m);
+}
+
+.library-management__empty {
+  text-align: center;
+  color: var(--muted-foreground);
+  padding: 2rem;
+}
+
+.library-card {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  background-color: var(--card);
+}
+
+.library-card__edit {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.library-card__edit-input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-secondary);
+}
+
+.library-card__view {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.library-card__info {
+  flex: 1;
+}
+
+.library-card__name {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.library-card__actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.library-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+}
+
+.library-btn--save {
+  background-color: var(--color-success);
+  color: var(--color-success-foreground);
+}
+
+.library-btn--save:hover {
+  opacity: 0.9;
+}
+
+.library-btn--cancel {
+  background-color: var(--surface);
+  color: var(--foreground);
+}
+
+.library-btn--cancel:hover {
+  background-color: var(--border);
+}
+
+.library-btn--edit {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.library-btn--edit:hover {
+  background-color: var(--primary-hover);
+}
+
+.library-btn--delete {
+  background-color: var(--color-error);
+  color: var(--color-error-foreground);
+}
+
+.library-btn--delete:hover {
+  opacity: 0.9;
+}
