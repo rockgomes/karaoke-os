@@ -1,16 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Input,
-  Button,
-  Alert,
-} from "@heroui/react";
-import { HeadphonesIcon } from "@heroui/shared-icons";
+import { Button, Input } from "../components/design-system";
+import "./Signup.css";
 
 const Signup = ({ onSignup }) => {
   const [formData, setFormData] = useState({
@@ -56,93 +48,134 @@ const Signup = ({ onSignup }) => {
   };
 
   return (
-    <div className="container flex items-center justify-center min-h-[calc(100vh-80px)] p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="flex flex-col gap-1">
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <HeadphonesIcon className="w-6 h-6 text-primary" />
+    <div className="signup-container">
+      <div className="signup-card">
+        <div className="signup-header">
+          <h2 className="signup-title">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+              <polyline points="9 22 9 12 15 12 15 22" />
+            </svg>
             Create Account
           </h2>
-          <p className="text-default-500 text-sm">
+          <p className="signup-subtitle">
             Sign up to manage your personal karaoke song list
           </p>
-        </CardHeader>
-        <CardBody>
+        </div>
+
+        <div className="signup-body">
           {error && (
-            <Alert color="danger" className="mb-4">
+            <div className="signup-error" role="alert">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="15" y1="9" x2="9" y2="15" />
+                <line x1="9" y1="9" x2="15" y2="15" />
+              </svg>
               {error}
-            </Alert>
+            </div>
           )}
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <Input
-              type="email"
-              label="Email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              isRequired
-              isDisabled={loading}
-              placeholder="your@email.com"
-            />
+          <form onSubmit={handleSubmit} className="signup-form">
+            <div className="form-field">
+              <label htmlFor="email" className="form-label">
+                Email
+              </label>
+              <Input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="your@email.com"
+                value={formData.email}
+                onChange={handleChange}
+                disabled={loading}
+                required
+              />
+            </div>
 
-            <Input
-              type="text"
-              label="Username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              isRequired
-              isDisabled={loading}
-              placeholder="Choose a username"
-            />
+            <div className="form-field">
+              <label htmlFor="username" className="form-label">
+                Username
+              </label>
+              <Input
+                id="username"
+                type="text"
+                name="username"
+                placeholder="Choose a username"
+                value={formData.username}
+                onChange={handleChange}
+                disabled={loading}
+                required
+              />
+            </div>
 
-            <Input
-              type="password"
-              label="Password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              isRequired
-              isDisabled={loading}
-              placeholder="At least 6 characters"
-              minLength={6}
-            />
+            <div className="form-field">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="At least 6 characters"
+                value={formData.password}
+                onChange={handleChange}
+                disabled={loading}
+                minLength={6}
+                required
+              />
+            </div>
 
-            <Input
-              type="password"
-              label="Confirm Password"
-              name="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              isRequired
-              isDisabled={loading}
-              placeholder="Re-enter your password"
-            />
+            <div className="form-field">
+              <label htmlFor="confirmPassword" className="form-label">
+                Confirm Password
+              </label>
+              <Input
+                id="confirmPassword"
+                type="password"
+                name="confirmPassword"
+                placeholder="Re-enter your password"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                disabled={loading}
+                required
+              />
+            </div>
 
             <Button
               type="submit"
-              color="primary"
-              isLoading={loading}
-              isDisabled={loading}
-              className="w-full"
+              variant="primary"
+              loading={loading}
+              disabled={loading}
+              className="signup-button"
             >
               {loading ? "Creating Account..." : "Sign Up"}
             </Button>
           </form>
-        </CardBody>
-        <CardFooter className="justify-center">
-          <p className="text-small text-default-500">
+        </div>
+
+        <div className="signup-footer">
+          <p className="signup-footer-text">
             Already have an account?{" "}
-            <Link
-              to="/login"
-              className="text-primary font-semibold hover:underline"
-            >
+            <Link to="/login" className="signup-link">
               Log in
             </Link>
           </p>
-        </CardFooter>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };

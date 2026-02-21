@@ -1,16 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Input,
-  Button,
-  Alert,
-} from "@heroui/react";
-import { Lock } from "@heroui/shared-icons";
+import { Button, Input } from "../components/design-system";
+import "./Login.css";
 
 const Login = ({ onLogin }) => {
   const [credentials, setCredentials] = useState({
@@ -43,68 +35,101 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-80px)] px-4">
-      <Card className="w-full max-w-md bg-content1/80 backdrop-blur-md border border-default-100 shadow-large">
-        <CardHeader className="flex flex-col gap-1 items-center text-center">
-          <h2 className="text-2xl font-bold flex items-center gap-2">
-            <Lock className="w-6 h-6" fill="currentColor" />
+    <div className="login-container">
+      <div className="login-card">
+        <div className="login-header">
+          <h2 className="login-title">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
             Login
           </h2>
-          <p className="text-default-500 text-sm">
+          <p className="login-subtitle">
             Sign in to access your karaoke song list
           </p>
-        </CardHeader>
-        <CardBody>
+        </div>
+
+        <div className="login-body">
           {error && (
-            <Alert color="danger" className="mb-4">
+            <div className="login-error" role="alert">
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="15" y1="9" x2="9" y2="15" />
+                <line x1="9" y1="9" x2="15" y2="15" />
+              </svg>
               {error}
-            </Alert>
+            </div>
           )}
 
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-            <Input
-              type="text"
-              label="Email or Username"
-              name="email"
-              value={credentials.email}
-              onChange={handleChange}
-              isRequired
-              isDisabled={loading}
-            />
+          <form onSubmit={handleSubmit} className="login-form">
+            <div className="form-field">
+              <label htmlFor="email" className="form-label">
+                Email or Username
+              </label>
+              <Input
+                id="email"
+                type="text"
+                name="email"
+                placeholder="Enter your email or username"
+                value={credentials.email}
+                onChange={handleChange}
+                disabled={loading}
+                required
+              />
+            </div>
 
-            <Input
-              type="password"
-              label="Password"
-              name="password"
-              value={credentials.password}
-              onChange={handleChange}
-              isRequired
-              isDisabled={loading}
-            />
+            <div className="form-field">
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <Input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+                value={credentials.password}
+                onChange={handleChange}
+                disabled={loading}
+                required
+              />
+            </div>
 
             <Button
               type="submit"
-              color="primary"
-              isLoading={loading}
-              isDisabled={loading}
-              className="w-full"
+              variant="primary"
+              loading={loading}
+              disabled={loading}
+              className="login-button"
             >
               {loading ? "Logging in..." : "Login"}
             </Button>
           </form>
-        </CardBody>
-        <CardFooter className="justify-center">
-          <p className="text-small text-default-500">
+        </div>
+
+        <div className="login-footer">
+          <p className="login-footer-text">
             Don't have an account?{" "}
-            <Link
-              to="/signup"
-              className="text-primary font-semibold hover:underline"
-            >
+            <Link to="/signup" className="login-link">
               Sign up
             </Link>
           </p>
-        </CardFooter>
-      </Card>
+        </div>
+      </div>
     </div>
   );
 };
