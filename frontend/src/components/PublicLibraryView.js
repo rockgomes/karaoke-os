@@ -75,24 +75,29 @@ const PublicLibraryView = () => {
 
     if (selectedGenre) {
       filtered = filtered.filter((song) =>
-        song.genre.toLowerCase().includes(selectedGenre.toLowerCase()),
+        song.genre?.toLowerCase().includes(selectedGenre.toLowerCase()),
       );
     }
 
     if (searchTerm) {
       filtered = filtered.filter(
         (song) =>
-          song.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          song.artist.toLowerCase().includes(searchTerm.toLowerCase()),
+          song.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          song.artist?.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
     // Sort by artist, then title
     filtered = [...filtered].sort((a, b) => {
-      if (a.artist.toLowerCase() === b.artist.toLowerCase()) {
-        return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
+      const artistA = a.artist?.toLowerCase() || "";
+      const artistB = b.artist?.toLowerCase() || "";
+      const titleA = a.title?.toLowerCase() || "";
+      const titleB = b.title?.toLowerCase() || "";
+
+      if (artistA === artistB) {
+        return titleA.localeCompare(titleB);
       }
-      return a.artist.toLowerCase().localeCompare(b.artist.toLowerCase());
+      return artistA.localeCompare(artistB);
     });
 
     setFilteredSongs(filtered);
