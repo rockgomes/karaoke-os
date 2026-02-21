@@ -18,6 +18,7 @@ import SongList from "./components/SongList";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import AdminPanel from "./components/AdminPanel";
+import AdminPanelNew from "./components/AdminPanelNew";
 import LibraryManagement from "./components/LibraryManagement";
 import PublicLibraryView from "./components/PublicLibraryView";
 import AdminLayout from "./components/AdminLayout";
@@ -149,7 +150,7 @@ function App() {
                 element={
                   user ? (
                     <AdminLayout user={user}>
-                      <AdminPanel
+                      <AdminPanelNew
                         selectedLibrary={selectedLibrary}
                         onLibrarySelect={handleLibrarySelect}
                       />
