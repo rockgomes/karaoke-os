@@ -77,7 +77,18 @@ const Navbar = ({ user, onLogout }) => {
           <MenuIcon className="w-5 h-5" />
         </Button>
         <Link to="/" style={{ textDecoration: "none" }}>
-          <h1 className="text-2xl font-bold text-black dark:text-white flex items-center gap-2">
+          <h1
+            style={{
+              fontSize: "20px",
+              fontWeight: 700,
+              fontFamily: "var(--font-primary)",
+              color: "var(--foreground)",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              margin: 0,
+            }}
+          >
             <div
               style={{
                 width: "28px",
