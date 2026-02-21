@@ -6,12 +6,13 @@
   padding: 0 var(--space-4);
   height: 44px;
   width: 100%;
-  max-width: 342px;
+  max-width: 600px;
   border-radius: var(--radius-m);
   background-color: var(--card);
   border: 1px solid var(--border);
-  transition: border-color var(--transition-fast) var(--ease-in-out),
-              box-shadow var(--transition-fast) var(--ease-in-out);
+  transition:
+    border-color var(--transition-fast) var(--ease-in-out),
+    box-shadow var(--transition-fast) var(--ease-in-out);
 }
 
 .ds-searchbar:focus-within {

@@ -41,9 +41,14 @@
   line-height: 1.4;
 }
 
-/* Search */
+/* Search - Sticky */
 .public-library__search {
+  position: sticky;
+  top: 64px; /* Height of navbar */
+  z-index: 10;
   padding: var(--space-4);
+  background-color: var(--background);
+  border-bottom: 1px solid var(--border);
 }
 
 /* Genre Pills */
