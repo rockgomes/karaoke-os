@@ -158,7 +158,8 @@ const PublicLibraryView = () => {
     return null;
   }
 
-  const uniqueGenres = ["All", ...new Set(genres)];
+  // Create unique genres list, filtering out empty values
+  const uniqueGenres = ["All", ...new Set(genres.filter(Boolean))];
 
   return (
     <div className="public-library">
