@@ -1,0 +1,242 @@
+/* Songs Table Styles */
+.songs-table {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-m);
+  overflow: hidden;
+}
+
+/* Toolbar */
+.songs-table__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.songs-table__toolbar-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.songs-table__toolbar-right {
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 12px;
+  font-weight: normal;
+}
+
+/* Table Container */
+.songs-table__container {
+  overflow-x: auto;
+}
+
+.songs-table__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Table Header */
+.songs-table__th {
+  padding: 0 12px;
+  height: 36px;
+  background-color: var(--background-secondary);
+  border-bottom: 1px solid var(--border);
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.songs-table__th--song {
+  padding-left: 20px;
+  width: 240px;
+}
+
+.songs-table__th--artist {
+  width: 200px;
+}
+
+.songs-table__th--genre {
+  width: 120px;
+}
+
+.songs-table__th--duration {
+  width: 90px;
+}
+
+.songs-table__th--tags {
+  width: auto;
+}
+
+.songs-table__th--actions {
+  width: 80px;
+}
+
+/* Table Row */
+.songs-table__row {
+  border-bottom: 1px solid var(--border);
+  transition: background-color var(--transition-fast);
+}
+
+.songs-table__row:hover {
+  background-color: var(--background-secondary);
+}
+
+/* Table Cell */
+.songs-table__td {
+  padding: 0 12px;
+  height: 64px;
+  color: var(--foreground-secondary);
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+.songs-table__td--song {
+  padding-left: 20px;
+}
+
+/* Song Cell */
+.songs-table__song-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.songs-table__cover {
+  width: 44px;
+  height: 44px;
+  background-color: var(--surface);
+  border-radius: var(--radius-m);
+  flex-shrink: 0;
+}
+
+.songs-table__song-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.songs-table__song-title {
+  color: var(--foreground);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.songs-table__song-subtitle {
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Duration */
+.songs-table__duration {
+  color: var(--muted-foreground);
+}
+
+/* Tags */
+.songs-table__tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+/* Action Button */
+.songs-table__action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.songs-table__action-btn:hover {
+  background-color: var(--surface);
+  color: var(--foreground);
+}
+
+/* Footer */
+.songs-table__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  padding: 0 20px;
+}
+
+.songs-table__footer-left {
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: normal;
+}
+
+.songs-table__footer-right {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Pagination Buttons */
+.songs-table__page-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background-color: var(--surface);
+  color: var(--foreground-secondary);
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-m);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.songs-table__page-btn:hover:not(:disabled) {
+  background-color: var(--border);
+}
+
+.songs-table__page-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.songs-table__page-btn--active {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.songs-table__page-btn--active:hover {
+  background-color: var(--primary-hover);
+}
