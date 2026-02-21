@@ -177,12 +177,68 @@ function App() {
                               } else {
                                 setSelectedLibrary(response.data[0]);
                               }
-                              setSelectedLibrary(response.data[0]);
                             }
-                          }
-                        });
-                      }}
-                    />
+                          });
+                        }}
+                      />
+                    </AdminLayout>
+                  ) : (
+                    <Navigate to="/admin/login" />
+                  )
+                }
+              />
+              {/* Placeholder admin routes */}
+              <Route
+                path="/admin/dashboard"
+                element={
+                  user ? (
+                    <AdminLayout user={user}>
+                      <div style={{ padding: "32px" }}>
+                        <h1>Dashboard - Coming Soon</h1>
+                      </div>
+                    </AdminLayout>
+                  ) : (
+                    <Navigate to="/admin/login" />
+                  )
+                }
+              />
+              <Route
+                path="/admin/ai-generator"
+                element={
+                  user ? (
+                    <AdminLayout user={user}>
+                      <div style={{ padding: "32px" }}>
+                        <h1>AI Generator - Coming Soon</h1>
+                      </div>
+                    </AdminLayout>
+                  ) : (
+                    <Navigate to="/admin/login" />
+                  )
+                }
+              />
+              <Route
+                path="/admin/customers"
+                element={
+                  user ? (
+                    <AdminLayout user={user}>
+                      <div style={{ padding: "32px" }}>
+                        <h1>Customers - Coming Soon</h1>
+                      </div>
+                    </AdminLayout>
+                  ) : (
+                    <Navigate to="/admin/login" />
+                  )
+                }
+              />
+              <Route
+                path="/admin/appearance"
+                element={
+                  user ? (
+                    <AdminLayout user={user}>
+                      <div style={{ padding: "32px" }}>
+                        <h1>Appearance Settings - Coming Soon</h1>
+                      </div>
+                    </AdminLayout>
                   ) : (
                     <Navigate to="/admin/login" />
                   )
