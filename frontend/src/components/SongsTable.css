@@ -48,12 +48,12 @@
 }
 
 .songs-table__bulk-btn--danger {
-  background-color: #dc2626;
-  color: white;
+  background-color: var(--color-error);
+  color: var(--color-error-foreground);
 }
 
 .songs-table__bulk-btn--danger:hover {
-  background-color: #b91c1c;
+  opacity: 0.9;
 }
 
 /* Toolbar */

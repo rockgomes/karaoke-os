@@ -6,7 +6,7 @@
   height: 36px;
   padding: 0 14px;
   border-radius: var(--radius-m);
-  background-color: #FFFFFF;
+  background-color: var(--card);
   border: 1px solid var(--border);
   color: var(--foreground-secondary);
   font-family: var(--font-secondary);
@@ -14,8 +14,9 @@
   font-weight: 500;
   line-height: 1;
   cursor: pointer;
-  transition: background-color var(--transition-fast) var(--ease-in-out),
-              border-color var(--transition-fast) var(--ease-in-out);
+  transition:
+    background-color var(--transition-fast) var(--ease-in-out),
+    border-color var(--transition-fast) var(--ease-in-out);
 }
 
 .ds-filter-pill:hover {

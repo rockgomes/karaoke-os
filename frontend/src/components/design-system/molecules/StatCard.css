@@ -5,7 +5,7 @@
   gap: var(--space-1);
   padding: var(--space-5);
   border-radius: var(--radius-m);
-  background-color: #FFFFFF;
+  background-color: var(--card);
   border: 1px solid var(--border);
 }
 
