@@ -79,7 +79,7 @@ const Navbar = ({ user, onLogout }) => {
         <Link to="/" style={{ textDecoration: "none" }}>
           <h1 className="text-2xl font-bold text-black dark:text-white flex items-center gap-2">
             <HeadphonesIcon className="w-6 h-6" />
-            Karaoke Zen
+            Karaoke OS
           </h1>
         </Link>
       </NavbarBrand>
@@ -153,7 +153,7 @@ const Navbar = ({ user, onLogout }) => {
               className="flex items-center gap-2 text-left text-base font-semibold"
             >
               <CloseIcon className="w-5 h-5" />
-              <span>Karaoke Zen</span>
+              <span>Karaoke OS</span>
             </button>
             <ThemeToggle />
           </DrawerHeader>

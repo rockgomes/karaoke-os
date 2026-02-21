@@ -1,5 +1,5 @@
 {
-  "name": "karaoke-zen-backend",
+  "name": "karaoke-os-backend",
   "version": "1.0.0",
   "description": "Backend API for Karaoke Zen",
   "main": "server.js",

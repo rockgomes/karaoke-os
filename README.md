@@ -1,4 +1,4 @@
-# 🎤 Karaoke Zen
+# 🎤 Karaoke OS
 
 A SaaS (Software as a Service) web application for managing personal karaoke song collections. Features a React frontend and Node.js/Express backend with SQLite database. Each user has their own private song list.
 
@@ -80,7 +80,6 @@ If the quick start doesn't work, you can set up manually:
 1. **Create an Account**: Click "Sign Up" to create a new account
    - Enter your email, username, and password
    - Password must be at least 6 characters long
-   
 2. **Login**: After creating an account, log in with your email/username and password
 
 3. **Manage Your Songs**:
