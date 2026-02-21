@@ -33,7 +33,7 @@ body {
 }
 
 .navbar h1 {
-  color: #667eea;
+  color: var(--primary);
   font-size: 2rem;
   font-weight: bold;
 }
@@ -57,7 +57,7 @@ body {
 }
 
 .logout-btn {
-  background: #ff4757;
+  background: var(--color-error);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -67,7 +67,7 @@ body {
 }
 
 .logout-btn:hover {
-  background: #ff3742;
+  opacity: 0.9;
 }
 
 /* Container */
@@ -132,12 +132,12 @@ body {
 .filter-group input:focus,
 .filter-group select:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--primary);
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
 }
 
 .clear-filters {
-  background: #667eea;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 10px 16px;
@@ -151,7 +151,7 @@ body {
 }
 
 .clear-filters:hover {
-  background: #5a6fd3;
+  background: var(--primary-hover);
   transform: translateY(-1px);
 }
 
@@ -242,7 +242,7 @@ body {
 .radio-option input[type="radio"] {
   width: 16px;
   height: 16px;
-  accent-color: #667eea;
+  accent-color: var(--primary);
   cursor: pointer;
   margin: 0;
 }
@@ -295,7 +295,7 @@ body {
   padding: 1.25rem;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: all 0.2s ease;
-  border-left: 3px solid #667eea;
+  border-left: 3px solid var(--primary);
   position: relative;
   overflow: hidden;
 }
@@ -360,7 +360,7 @@ body {
 }
 
 .song-genre {
-  background: #667eea;
+  background: var(--primary);
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 15px;
@@ -410,7 +410,7 @@ body {
 .admin-login h2 {
   text-align: center;
   margin-bottom: 2rem;
-  color: #667eea;
+  color: var(--primary);
 }
 
 .form-group {
@@ -435,12 +435,12 @@ body {
 
 .form-group input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--primary);
 }
 
 .login-btn {
   width: 100%;
-  background: #667eea;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 0.75rem;
@@ -451,11 +451,11 @@ body {
 }
 
 .login-btn:hover {
-  background: #5a6fd8;
+  background: var(--primary-hover);
 }
 
 .error-message {
-  background: #ff4757;
+  background: var(--color-error);
   color: white;
   padding: 0.75rem;
   border-radius: 5px;
@@ -495,7 +495,7 @@ body {
 }
 
 .add-btn {
-  background: #2ed573;
+  background: var(--color-success);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -506,7 +506,7 @@ body {
 }
 
 .add-btn:hover {
-  background: #26d063;
+  opacity: 0.9;
 }
 
 .admin-songs-list {
@@ -567,11 +567,11 @@ body {
 }
 
 .delete-btn:hover {
-  background: #ff3742;
+  opacity: 0.9;
 }
 
 .success-message {
-  background: #2ed573;
+  background: var(--color-success);
   color: white;
   padding: 0.75rem;
   border-radius: 5px;
@@ -593,7 +593,7 @@ body {
 }
 
 .save-btn {
-  background: #2ed573;
+  background: var(--color-success);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -604,7 +604,7 @@ body {
 }
 
 .save-btn:hover {
-  background: #26d063;
+  opacity: 0.9;
 }
 
 .cancel-btn {
@@ -687,7 +687,9 @@ body {
   justify-content: center;
   align-items: center;
   border-radius: 50%;
-  transition: background-color 0.2s ease, color 0.2s ease;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .modal-close-btn:hover {
@@ -717,7 +719,7 @@ body {
 
 .detail-label {
   font-weight: 600;
-  color: #667eea;
+  color: var(--primary);
   min-width: 100px;
   margin-right: 1rem;
 }
@@ -765,7 +767,9 @@ body {
   border-radius: 10px;
   padding: 1rem;
   border-left: 4px solid #667eea;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .related-song-item:hover {
@@ -788,7 +792,7 @@ body {
 
 .related-genre {
   background: #e0e7ff;
-  color: #667eea;
+  color: var(--primary);
   padding: 0.2rem 0.6rem;
   border-radius: 12px;
   font-size: 0.8rem;
@@ -926,13 +930,13 @@ body {
 }
 
 .tab-btn:hover {
-  color: #667eea;
+  color: var(--primary);
   background: rgba(102, 126, 234, 0.05);
 }
 
 .tab-btn.active {
-  color: #667eea;
-  border-bottom-color: #667eea;
+  color: var(--primary);
+  border-bottom-color: var(--primary);
   background: rgba(102, 126, 234, 0.05);
 }
 
@@ -953,7 +957,7 @@ body {
 
 .instructions-btn {
   background: #f8f9ff;
-  color: #667eea;
+  color: var(--primary);
   border: 1px solid #e0e7ff;
   padding: 0.5rem 1rem;
   border-radius: 8px;
@@ -990,7 +994,7 @@ body {
 }
 
 .sample-btn {
-  background: #667eea;
+  background: var(--primary);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -1001,7 +1005,7 @@ body {
 }
 
 .sample-btn:hover {
-  background: #5a67d8;
+  background: var(--primary-hover);
   transform: translateY(-1px);
 }
 
@@ -1027,7 +1031,7 @@ body {
 .checkbox-label input[type="checkbox"] {
   width: 18px;
   height: 18px;
-  accent-color: #667eea;
+  accent-color: var(--primary);
 }
 
 .option-description {
@@ -1126,7 +1130,7 @@ body {
 
 .clear-btn {
   background: #f8f9ff;
-  color: #667eea;
+  color: var(--primary);
   border: 2px solid #e0e7ff;
   padding: 1rem 2rem;
   border-radius: 10px;
@@ -1155,7 +1159,7 @@ body {
 }
 
 .import-results h4 {
-  color: #667eea;
+  color: var(--primary);
   margin-bottom: 1rem;
 }
 
@@ -1251,7 +1255,7 @@ body {
 /* Different color schemes for multiple pills */
 .genre-pills .genre-pill:nth-child(1) {
   background: #e0e7ff;
-  color: #667eea;
+  color: var(--primary);
   border-color: #c7d2fe;
 }
 
@@ -1286,7 +1290,7 @@ body {
 /* Legacy support - keep old genre-tag for backwards compatibility */
 .genre-tag {
   background: #e0e7ff;
-  color: #667eea;
+  color: var(--primary);
   padding: 0.25rem 0.6rem;
   border-radius: 12px;
   font-size: 0.8rem;
@@ -1363,7 +1367,7 @@ body {
 
   .tab-btn.active {
     border-bottom: none;
-    border-left-color: #667eea;
+    border-left-color: var(--primary);
   }
 
   .batch-import-section {
