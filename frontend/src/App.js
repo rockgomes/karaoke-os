@@ -32,7 +32,6 @@ function App() {
       (error) => {
         if (error.response?.status === 401) {
           // Token is invalid or expired
-          setToken(null);
           setUser(null);
           localStorage.removeItem("token");
           delete axios.defaults.headers.common["Authorization"];
@@ -56,7 +55,6 @@ function App() {
             `Bearer ${savedToken}`;
           const response = await axios.get("/api/auth/me");
           setUser(response.data);
-          setToken(savedToken);
 
           // Fetch and set default library
           const librariesResponse = await axios.get("/api/libraries");
