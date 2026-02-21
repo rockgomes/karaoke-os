@@ -194,6 +194,24 @@ const AdminPanelNew = ({ selectedLibrary, onLibrarySelect }) => {
     }
   };
 
+  const handleBulkDelete = async (songIds) => {
+    try {
+      await Promise.all(
+        songIds.map((id) =>
+          axios.delete(`/api/libraries/${selectedLibrary.id}/songs/${id}`),
+        ),
+      );
+      const updatedSongs = songs.filter((song) => !songIds.includes(song.id));
+      setSongs(updatedSongs);
+      setFilteredSongs(updatedSongs);
+      calculateStats(updatedSongs);
+      setSuccess(`${songIds.length} song(s) deleted successfully!`);
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (err) {
+      setError(err.response?.data?.error || "Failed to delete songs");
+    }
+  };
+
   const openEditModal = (song) => {
     setEditingSongId(song.id);
     setFormData({
@@ -205,6 +223,11 @@ const AdminPanelNew = ({ selectedLibrary, onLibrarySelect }) => {
       album: song.album || "",
     });
     onEditOpen();
+  };
+
+  const handleViewDetails = (song) => {
+    setSelectedSong(song);
+    onDetailOpen();
   };
 
   const handleSearch = (term) => {
