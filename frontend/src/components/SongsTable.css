@@ -8,6 +8,54 @@
   overflow: hidden;
 }
 
+/* Bulk Action Bar */
+.songs-table__bulk-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background-color: var(--primary-subtle);
+  border-bottom: 1px solid var(--border);
+}
+
+.songs-table__bulk-count {
+  color: var(--foreground);
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.songs-table__bulk-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.songs-table__bulk-btn {
+  padding: 6px 16px;
+  border: none;
+  background-color: var(--surface);
+  color: var(--foreground);
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.songs-table__bulk-btn:hover {
+  background-color: var(--border);
+}
+
+.songs-table__bulk-btn--danger {
+  background-color: #dc2626;
+  color: white;
+}
+
+.songs-table__bulk-btn--danger:hover {
+  background-color: #b91c1c;
+}
+
 /* Toolbar */
 .songs-table__toolbar {
   display: flex;
@@ -56,8 +104,12 @@
   white-space: nowrap;
 }
 
-.songs-table__th--song {
+.songs-table__th--checkbox {
+  width: 48px;
   padding-left: 20px;
+}
+
+.songs-table__th--song {
   width: 240px;
 }
 
@@ -91,6 +143,14 @@
   background-color: var(--background-secondary);
 }
 
+.songs-table__row--selected {
+  background-color: var(--primary-subtle);
+}
+
+.songs-table__row--selected:hover {
+  background-color: var(--primary-subtle);
+}
+
 /* Table Cell */
 .songs-table__td {
   padding: 0 12px;
@@ -102,8 +162,15 @@
   vertical-align: middle;
 }
 
-.songs-table__td--song {
+.songs-table__td--checkbox {
   padding-left: 20px;
+}
+
+.songs-table__checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--primary);
 }
 
 /* Song Cell */

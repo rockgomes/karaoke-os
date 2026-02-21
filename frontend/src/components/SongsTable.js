@@ -10,9 +10,11 @@ const SongsTable = ({
   onFilterGenre,
   onFilterStatus,
   onViewDetails,
+  onBulkDelete,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedSongs, setSelectedSongs] = useState([]);
   const itemsPerPage = 10;
 
   const handleSearch = (e) => {
@@ -25,8 +27,65 @@ const SongsTable = ({
   const endIndex = startIndex + itemsPerPage;
   const currentSongs = songs.slice(startIndex, endIndex);
 
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      setSelectedSongs(currentSongs.map((s) => s.id));
+    } else {
+      setSelectedSongs([]);
+    }
+  };
+
+  const handleSelectSong = (songId, e) => {
+    e.stopPropagation();
+    if (selectedSongs.includes(songId)) {
+      setSelectedSongs(selectedSongs.filter((id) => id !== songId));
+    } else {
+      setSelectedSongs([...selectedSongs, songId]);
+    }
+  };
+
+  const handleBulkDelete = () => {
+    if (selectedSongs.length === 0) return;
+    if (
+      window.confirm(
+        `Are you sure you want to delete ${selectedSongs.length} song(s)?`,
+      )
+    ) {
+      onBulkDelete?.(selectedSongs);
+      setSelectedSongs([]);
+    }
+  };
+
+  const allSelected =
+    currentSongs.length > 0 &&
+    currentSongs.every((s) => selectedSongs.includes(s.id));
+
   return (
     <div className="songs-table">
+      {/* Bulk Action Bar */}
+      {selectedSongs.length > 0 && (
+        <div className="songs-table__bulk-bar">
+          <span className="songs-table__bulk-count">
+            {selectedSongs.length} song{selectedSongs.length > 1 ? "s" : ""}{" "}
+            selected
+          </span>
+          <div className="songs-table__bulk-actions">
+            <button
+              className="songs-table__bulk-btn songs-table__bulk-btn--danger"
+              onClick={handleBulkDelete}
+            >
+              Delete Selected
+            </button>
+            <button
+              className="songs-table__bulk-btn"
+              onClick={() => setSelectedSongs([])}
+            >
+              Cancel Selection
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Toolbar */}
       <div className="songs-table__toolbar">
         <div className="songs-table__toolbar-left">
@@ -53,6 +112,14 @@ const SongsTable = ({
         <table className="songs-table__table">
           <thead>
             <tr>
+              <th className="songs-table__th songs-table__th--checkbox">
+                <input
+                  type="checkbox"
+                  checked={allSelected}
+                  onChange={handleSelectAll}
+                  className="songs-table__checkbox"
+                />
+              </th>
               <th className="songs-table__th songs-table__th--song">
                 SONG DETAILS
               </th>
@@ -73,10 +140,19 @@ const SongsTable = ({
             {currentSongs.map((song) => (
               <tr
                 key={song.id}
-                className="songs-table__row"
+                className={`songs-table__row ${selectedSongs.includes(song.id) ? "songs-table__row--selected" : ""}`}
                 onClick={() => onViewDetails?.(song)}
                 style={{ cursor: "pointer" }}
               >
+                <td className="songs-table__td songs-table__td--checkbox">
+                  <input
+                    type="checkbox"
+                    checked={selectedSongs.includes(song.id)}
+                    onChange={(e) => handleSelectSong(song.id, e)}
+                    className="songs-table__checkbox"
+                    onClick={(e) => e.stopPropagation()}
+                  />
+                </td>
                 <td className="songs-table__td songs-table__td--song">
                   <div className="songs-table__song-cell">
                     <div className="songs-table__cover"></div>

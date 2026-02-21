@@ -346,6 +346,7 @@ const AdminPanelNew = ({ selectedLibrary, onLibrarySelect }) => {
           onDelete={handleDeleteSong}
           onSearch={handleSearch}
           onViewDetails={handleViewDetails}
+          onBulkDelete={handleBulkDelete}
         />
       )}
 
