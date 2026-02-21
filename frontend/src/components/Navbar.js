@@ -12,7 +12,7 @@ import {
   DrawerHeader,
   DrawerBody,
 } from "@heroui/react";
-import { HeadphonesIcon, User } from "@heroui/shared-icons";
+import { User } from "@heroui/shared-icons";
 import ThemeToggle from "./ThemeToggle";
 
 const MenuIcon = ({ className }) => (
@@ -78,7 +78,20 @@ const Navbar = ({ user, onLogout }) => {
         </Button>
         <Link to="/" style={{ textDecoration: "none" }}>
           <h1 className="text-2xl font-bold text-black dark:text-white flex items-center gap-2">
-            <HeadphonesIcon className="w-6 h-6" />
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M9 18V5l12-2v13" />
+              <circle cx="6" cy="18" r="3" />
+              <circle cx="18" cy="16" r="3" />
+            </svg>
             Karaoke OS
           </h1>
         </Link>
