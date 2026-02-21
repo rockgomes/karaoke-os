@@ -17,70 +17,58 @@ const PublicLibraryView = () => {
   const [songs, setSongs] = useState([]);
   const [filteredSongs, setFilteredSongs] = useState([]);
   const [genres, setGenres] = useState([]);
-  const [artists, setArtists] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   // Filter states
   const [selectedGenre, setSelectedGenre] = useState("");
-  const [selectedArtist, setSelectedArtist] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [orderBy, setOrderBy] = useState("artist");
 
   // Modal states
   const [selectedSong, setSelectedSong] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
+    const fetchLibrary = async () => {
+      try {
+        const response = await axios.get(`/api/public/libraries/${slug}`);
+        setLibrary(response.data);
+      } catch (err) {
+        setError("Library not found");
+        setLoading(false);
+      }
+    };
     fetchLibrary();
   }, [slug]);
 
   useEffect(() => {
+    const fetchSongs = async () => {
+      try {
+        const response = await axios.get(`/api/public/libraries/${slug}/songs`);
+        setSongs(response.data);
+        setLoading(false);
+      } catch (err) {
+        setError("Failed to fetch songs");
+        setLoading(false);
+      }
+    };
+
+    const fetchGenres = async () => {
+      try {
+        const response = await axios.get(
+          `/api/public/libraries/${slug}/genres`,
+        );
+        setGenres(response.data);
+      } catch (err) {
+        console.error("Failed to fetch genres:", err);
+      }
+    };
+
     if (library) {
       fetchSongs();
       fetchGenres();
-      fetchArtists();
     }
-  }, [library]);
-
-  const fetchLibrary = async () => {
-    try {
-      const response = await axios.get(`/api/public/libraries/${slug}`);
-      setLibrary(response.data);
-    } catch (err) {
-      setError("Library not found");
-      setLoading(false);
-    }
-  };
-
-  const fetchSongs = async () => {
-    try {
-      const response = await axios.get(`/api/public/libraries/${slug}/songs`);
-      setSongs(response.data);
-      setLoading(false);
-    } catch (err) {
-      setError("Failed to fetch songs");
-      setLoading(false);
-    }
-  };
-
-  const fetchGenres = async () => {
-    try {
-      const response = await axios.get(`/api/public/libraries/${slug}/genres`);
-      setGenres(response.data);
-    } catch (err) {
-      console.error("Failed to fetch genres:", err);
-    }
-  };
-
-  const fetchArtists = async () => {
-    try {
-      const response = await axios.get(`/api/public/libraries/${slug}/artists`);
-      setArtists(response.data);
-    } catch (err) {
-      console.error("Failed to fetch artists:", err);
-    }
-  };
+  }, [library, slug]);
 
   useEffect(() => {
     let filtered = songs;
@@ -88,12 +76,6 @@ const PublicLibraryView = () => {
     if (selectedGenre) {
       filtered = filtered.filter((song) =>
         song.genre.toLowerCase().includes(selectedGenre.toLowerCase()),
-      );
-    }
-
-    if (selectedArtist) {
-      filtered = filtered.filter((song) =>
-        song.artist.toLowerCase().includes(selectedArtist.toLowerCase()),
       );
     }
 
@@ -105,23 +87,19 @@ const PublicLibraryView = () => {
       );
     }
 
+    // Sort by artist, then title
     filtered = [...filtered].sort((a, b) => {
-      if (orderBy === "artist") {
-        if (a.artist.toLowerCase() === b.artist.toLowerCase()) {
-          return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
-        }
-        return a.artist.toLowerCase().localeCompare(b.artist.toLowerCase());
-      } else {
+      if (a.artist.toLowerCase() === b.artist.toLowerCase()) {
         return a.title.toLowerCase().localeCompare(b.title.toLowerCase());
       }
+      return a.artist.toLowerCase().localeCompare(b.artist.toLowerCase());
     });
 
     setFilteredSongs(filtered);
-  }, [songs, selectedGenre, selectedArtist, searchTerm, orderBy]);
+  }, [songs, selectedGenre, searchTerm]);
 
   const clearFilters = () => {
     setSelectedGenre("");
-    setSelectedArtist("");
     setSearchTerm("");
   };
 
