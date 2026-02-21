@@ -15,6 +15,7 @@ const SongsTable = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedSongs, setSelectedSongs] = useState([]);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
   const itemsPerPage = 10;
 
   const handleSearch = (e) => {
@@ -22,10 +23,31 @@ const SongsTable = ({
     onSearch?.(e.target.value);
   };
 
-  const totalPages = Math.ceil(songs.length / itemsPerPage);
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedSongs = [...songs].sort((a, b) => {
+    if (!sortConfig.key) return 0;
+
+    const aVal = a[sortConfig.key] || "";
+    const bVal = b[sortConfig.key] || "";
+
+    if (sortConfig.direction === "asc") {
+      return aVal.toString().localeCompare(bVal.toString());
+    } else {
+      return bVal.toString().localeCompare(aVal.toString());
+    }
+  });
+
+  const totalPages = Math.ceil(sortedSongs.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentSongs = songs.slice(startIndex, endIndex);
+  const currentSongs = sortedSongs.slice(startIndex, endIndex);
 
   const handleSelectAll = (e) => {
     if (e.target.checked) {
@@ -120,15 +142,49 @@ const SongsTable = ({
                   className="songs-table__checkbox"
                 />
               </th>
-              <th className="songs-table__th songs-table__th--song">
+              <th
+                className="songs-table__th songs-table__th--song songs-table__th--sortable"
+                onClick={() => handleSort("title")}
+              >
                 SONG DETAILS
+                {sortConfig.key === "title" && (
+                  <span className="songs-table__sort-icon">
+                    {sortConfig.direction === "asc" ? " ↑" : " ↓"}
+                  </span>
+                )}
               </th>
-              <th className="songs-table__th songs-table__th--artist">
+              <th
+                className="songs-table__th songs-table__th--artist songs-table__th--sortable"
+                onClick={() => handleSort("artist")}
+              >
                 ARTIST
+                {sortConfig.key === "artist" && (
+                  <span className="songs-table__sort-icon">
+                    {sortConfig.direction === "asc" ? " ↑" : " ↓"}
+                  </span>
+                )}
               </th>
-              <th className="songs-table__th songs-table__th--genre">GENRE</th>
-              <th className="songs-table__th songs-table__th--duration">
+              <th
+                className="songs-table__th songs-table__th--genre songs-table__th--sortable"
+                onClick={() => handleSort("genre")}
+              >
+                GENRE
+                {sortConfig.key === "genre" && (
+                  <span className="songs-table__sort-icon">
+                    {sortConfig.direction === "asc" ? " ↑" : " ↓"}
+                  </span>
+                )}
+              </th>
+              <th
+                className="songs-table__th songs-table__th--duration songs-table__th--sortable"
+                onClick={() => handleSort("duration")}
+              >
                 DURATION
+                {sortConfig.key === "duration" && (
+                  <span className="songs-table__sort-icon">
+                    {sortConfig.direction === "asc" ? " ↑" : " ↓"}
+                  </span>
+                )}
               </th>
               <th className="songs-table__th songs-table__th--tags">AI TAGS</th>
               <th className="songs-table__th songs-table__th--actions">

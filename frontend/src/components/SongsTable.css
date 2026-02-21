@@ -104,6 +104,21 @@
   white-space: nowrap;
 }
 
+.songs-table__th--sortable {
+  cursor: pointer;
+  user-select: none;
+  transition: background-color var(--transition-fast);
+}
+
+.songs-table__th--sortable:hover {
+  background-color: var(--surface);
+}
+
+.songs-table__sort-icon {
+  margin-left: 4px;
+  color: var(--primary);
+}
+
 .songs-table__th--checkbox {
   width: 48px;
   padding-left: 20px;
