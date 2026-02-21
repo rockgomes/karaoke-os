@@ -14,19 +14,14 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 
 // Components
 import Navbar from "./components/Navbar";
-import SongList from "./components/SongList";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import AdminPanel from "./components/AdminPanel";
 import LibraryManagement from "./components/LibraryManagement";
 import PublicLibraryView from "./components/PublicLibraryView";
 
-// API base URL
-const API_BASE_URL = process.env.REACT_APP_API_URL || "";
-
 function App() {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem("token"));
   const [loading, setLoading] = useState(true);
   const [selectedLibrary, setSelectedLibrary] = useState(null);
 
@@ -44,7 +39,7 @@ function App() {
           // Redirect will happen automatically due to state change
         }
         return Promise.reject(error);
-      }
+      },
     );
 
     return () => {
@@ -57,9 +52,8 @@ function App() {
       const savedToken = localStorage.getItem("token");
       if (savedToken) {
         try {
-          axios.defaults.headers.common[
-            "Authorization"
-          ] = `Bearer ${savedToken}`;
+          axios.defaults.headers.common["Authorization"] =
+            `Bearer ${savedToken}`;
           const response = await axios.get("/api/auth/me");
           setUser(response.data);
           setToken(savedToken);
@@ -70,7 +64,7 @@ function App() {
             const savedLibraryId = localStorage.getItem("selectedLibraryId");
             const libraryToSelect = savedLibraryId
               ? librariesResponse.data.find(
-                  (lib) => lib.id === parseInt(savedLibraryId)
+                  (lib) => lib.id === parseInt(savedLibraryId),
                 ) || librariesResponse.data[0]
               : librariesResponse.data[0];
             setSelectedLibrary(libraryToSelect);
@@ -92,14 +86,12 @@ function App() {
   };
 
   const handleLogin = (newToken, userData) => {
-    setToken(newToken);
     setUser(userData);
     localStorage.setItem("token", newToken);
     axios.defaults.headers.common["Authorization"] = `Bearer ${newToken}`;
   };
 
   const handleLogout = () => {
-    setToken(null);
     setUser(null);
     localStorage.removeItem("token");
     delete axios.defaults.headers.common["Authorization"];
@@ -127,33 +119,33 @@ function App() {
             <Navbar user={user} onLogout={handleLogout} />
 
             <Routes>
+              {/* Public Routes - No Authentication Required */}
+              <Route path="/" element={<PublicLibraryView />} />
+              <Route path="/library/:slug" element={<PublicLibraryView />} />
+
+              {/* Admin Routes - Authentication Required */}
               <Route
-                path="/"
+                path="/admin/login"
                 element={
                   user ? (
-                    <SongList
-                      selectedLibrary={selectedLibrary}
-                      onLibrarySelect={handleLibrarySelect}
-                    />
+                    <Navigate to="/admin/songs" />
                   ) : (
-                    <Navigate to="/login" />
+                    <Login onLogin={handleLogin} />
                   )
                 }
               />
               <Route
-                path="/login"
+                path="/admin/signup"
                 element={
-                  user ? <Navigate to="/" /> : <Login onLogin={handleLogin} />
+                  user ? (
+                    <Navigate to="/admin/songs" />
+                  ) : (
+                    <Signup onSignup={handleLogin} />
+                  )
                 }
               />
               <Route
-                path="/signup"
-                element={
-                  user ? <Navigate to="/" /> : <Signup onSignup={handleLogin} />
-                }
-              />
-              <Route
-                path="/admin"
+                path="/admin/songs"
                 element={
                   user ? (
                     <AdminPanel
@@ -161,12 +153,12 @@ function App() {
                       onLibrarySelect={handleLibrarySelect}
                     />
                   ) : (
-                    <Navigate to="/login" />
+                    <Navigate to="/admin/login" />
                   )
                 }
               />
               <Route
-                path="/libraries"
+                path="/admin/libraries"
                 element={
                   user ? (
                     <LibraryManagement
@@ -175,7 +167,7 @@ function App() {
                         axios.get("/api/libraries").then((response) => {
                           if (response.data.length > 0) {
                             const currentLib = response.data.find(
-                              (lib) => lib.id === selectedLibrary?.id
+                              (lib) => lib.id === selectedLibrary?.id,
                             );
                             if (currentLib) {
                               setSelectedLibrary(currentLib);
@@ -187,11 +179,24 @@ function App() {
                       }}
                     />
                   ) : (
-                    <Navigate to="/login" />
+                    <Navigate to="/admin/login" />
                   )
                 }
               />
-              <Route path="/library/:slug" element={<PublicLibraryView />} />
+
+              {/* Redirect old routes */}
+              <Route
+                path="/login"
+                element={<Navigate to="/admin/login" replace />}
+              />
+              <Route
+                path="/signup"
+                element={<Navigate to="/admin/signup" replace />}
+              />
+              <Route
+                path="/admin"
+                element={<Navigate to="/admin/songs" replace />}
+              />
             </Routes>
           </div>
         </Router>

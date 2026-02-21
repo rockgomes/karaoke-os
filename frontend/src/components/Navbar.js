@@ -83,17 +83,12 @@ const Navbar = ({ user, onLogout }) => {
         {user && (
           <>
             <NavbarItem>
-              <HeroUILink as={Link} to="/" color="foreground">
-                My Songs
+              <HeroUILink as={Link} to="/admin/songs" color="foreground">
+                Manage Songs
               </HeroUILink>
             </NavbarItem>
             <NavbarItem>
-              <HeroUILink as={Link} to="/admin" color="foreground">
-                Manage
-              </HeroUILink>
-            </NavbarItem>
-            <NavbarItem>
-              <HeroUILink as={Link} to="/libraries" color="foreground">
+              <HeroUILink as={Link} to="/admin/libraries" color="foreground">
                 Libraries
               </HeroUILink>
             </NavbarItem>
@@ -126,14 +121,9 @@ const Navbar = ({ user, onLogout }) => {
               <ThemeToggle />
             </NavbarItem>
             <NavbarItem className="hidden lg:flex">
-              <HeroUILink as={Link} to="/login" color="foreground">
-                Login
+              <HeroUILink as={Link} to="/admin/login" color="foreground">
+                Admin Login
               </HeroUILink>
-            </NavbarItem>
-            <NavbarItem>
-              <Button as={Link} to="/signup" color="primary" variant="flat">
-                Sign Up
-              </Button>
             </NavbarItem>
           </>
         )}
@@ -170,23 +160,15 @@ const Navbar = ({ user, onLogout }) => {
                 <div className="flex flex-col gap-2">
                   <HeroUILink
                     as={Link}
-                    to="/"
+                    to="/admin/songs"
                     color="foreground"
                     onClick={handleCloseMenu}
                   >
-                    My Songs
+                    Manage Songs
                   </HeroUILink>
                   <HeroUILink
                     as={Link}
-                    to="/admin"
-                    color="foreground"
-                    onClick={handleCloseMenu}
-                  >
-                    Manage
-                  </HeroUILink>
-                  <HeroUILink
-                    as={Link}
-                    to="/libraries"
+                    to="/admin/libraries"
                     color="foreground"
                     onClick={handleCloseMenu}
                   >
@@ -216,23 +198,13 @@ const Navbar = ({ user, onLogout }) => {
                 <div className="flex flex-col gap-2">
                   <Button
                     as={Link}
-                    to="/login"
+                    to="/admin/login"
                     variant="flat"
-                    color="default"
-                    onClick={handleCloseMenu}
-                    className="w-full"
-                  >
-                    Login
-                  </Button>
-                  <Button
-                    as={Link}
-                    to="/signup"
                     color="primary"
-                    variant="solid"
                     onClick={handleCloseMenu}
                     className="w-full"
                   >
-                    Sign Up
+                    Admin Login
                   </Button>
                 </div>
               </>
