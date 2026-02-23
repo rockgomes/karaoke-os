@@ -1,0 +1,299 @@
+/* ============================================================
+   Navbar
+   All colours use design tokens so dark mode works automatically
+   via [data-theme="dark"] on <html> — no extra class needed.
+   ============================================================ */
+
+/* ── Main bar ── */
+.navbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-6);
+  height: 64px;
+  padding: 0 var(--space-6);
+  background-color: var(--card);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  /* Smooth theme transition inherited from global * rule */
+}
+
+/* ── Brand ── */
+.navbar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.navbar__logo-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  text-decoration: none;
+}
+
+.navbar__logo-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background-color: var(--primary);
+  border-radius: var(--radius-m);
+  flex-shrink: 0;
+}
+
+.navbar__logo-text {
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--foreground);
+  line-height: 1;
+}
+
+/* Hamburger — mobile only */
+.navbar__menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-m);
+  background: transparent;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background-color var(--transition-fast) var(--ease-in-out);
+}
+
+.navbar__menu-btn:hover {
+  background-color: var(--surface);
+}
+
+.navbar__menu-btn:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* ── Desktop nav links ── */
+.navbar__links {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  flex: 1;
+}
+
+.navbar__link {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-m);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground-secondary);
+  text-decoration: none;
+  transition:
+    background-color var(--transition-fast) var(--ease-in-out),
+    color var(--transition-fast) var(--ease-in-out);
+}
+
+.navbar__link:hover {
+  background-color: var(--surface);
+  color: var(--foreground);
+}
+
+.navbar__link--active {
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ── Right-side actions ── */
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.navbar__user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  color: var(--foreground-secondary);
+}
+
+/* Override ds-button sizing for the logout btn in the navbar */
+.navbar__logout-btn {
+  height: 32px;
+  font-size: 13px;
+  padding: 0 var(--space-3);
+}
+
+/* ── Mobile drawer backdrop ── */
+.navbar__backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: calc(var(--z-fixed) - 1);
+  opacity: 0;
+  transition: opacity var(--transition-base) var(--ease-in-out);
+}
+
+.navbar__backdrop--open {
+  opacity: 1;
+}
+
+/* ── Mobile drawer ── */
+.navbar__drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  background-color: var(--card);
+  border-right: 1px solid var(--border);
+  z-index: var(--z-fixed);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(-100%);
+  transition: transform var(--transition-base) var(--ease-in-out);
+}
+
+.navbar__drawer--open {
+  transform: translateX(0);
+}
+
+.navbar__drawer-header {
+  display: flex;
+  align-items: center;
+  height: 64px;
+  padding: 0 var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.navbar__drawer-close {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-2);
+  border: none;
+  border-radius: var(--radius-m);
+  background: transparent;
+  color: var(--foreground);
+  font-family: var(--font-primary);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color var(--transition-fast) var(--ease-in-out);
+}
+
+.navbar__drawer-close:hover {
+  background-color: var(--surface);
+}
+
+.navbar__drawer-close:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.navbar__drawer-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  flex: 1;
+  overflow-y: auto;
+}
+
+.navbar__drawer-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-m);
+  background-color: var(--surface);
+  font-family: var(--font-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--foreground-secondary);
+}
+
+.navbar__drawer-nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.navbar__drawer-link {
+  display: flex;
+  align-items: center;
+  padding: var(--space-3) var(--space-3);
+  border-radius: var(--radius-m);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--foreground-secondary);
+  text-decoration: none;
+  transition:
+    background-color var(--transition-fast) var(--ease-in-out),
+    color var(--transition-fast) var(--ease-in-out);
+}
+
+.navbar__drawer-link:hover {
+  background-color: var(--surface);
+  color: var(--foreground);
+}
+
+.navbar__drawer-link--active {
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+  font-weight: 600;
+}
+
+.navbar__drawer-logout {
+  width: 100%;
+  margin-top: auto;
+}
+
+/* ── Responsive ── */
+@media (max-width: 639px) {
+  .navbar__links {
+    display: none;
+  }
+
+  .navbar__menu-btn {
+    display: flex;
+  }
+
+  .navbar__user {
+    display: none;
+  }
+
+  .navbar__logout-btn {
+    display: none;
+  }
+
+  .navbar__backdrop {
+    display: block;
+  }
+
+  .navbar__drawer {
+    display: flex;
+  }
+}
+
+@media (min-width: 640px) {
+  .navbar__backdrop,
+  .navbar__drawer {
+    display: none !important;
+  }
+}
