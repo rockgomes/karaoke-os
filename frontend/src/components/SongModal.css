@@ -1,0 +1,229 @@
+/* ── Modal Wrapper (shared portal pattern) ── */
+.song-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-modal-backdrop);
+  padding: 20px;
+  animation: song-modal-fade-in var(--transition-fast) var(--ease-out);
+}
+
+.song-modal__panel {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  max-width: 640px;
+  width: 100%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-modal);
+  animation: song-modal-slide-in var(--transition-fast) var(--ease-out);
+}
+
+.song-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.song-modal__title {
+  margin: 0;
+  color: var(--foreground);
+  font-family: var(--font-primary);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.song-modal__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-m);
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.song-modal__close:hover {
+  background-color: var(--surface);
+  color: var(--foreground);
+}
+
+.song-modal__body {
+  padding: 24px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.song-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+/* ── Content: Song Fields ── */
+.song-modal__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.song-modal__field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.song-modal__field-label {
+  color: var(--foreground);
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  min-width: 100px;
+  flex-shrink: 0;
+}
+
+.song-modal__field-value {
+  color: var(--foreground-secondary);
+  font-family: var(--font-secondary);
+  font-size: 14px;
+}
+
+/* ── Divider ── */
+.song-modal__divider {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 0 0 20px;
+}
+
+/* ── Related Songs ── */
+.song-modal__related-title {
+  margin: 0 0 12px;
+  color: var(--foreground);
+  font-family: var(--font-primary);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.song-modal__loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 0;
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 14px;
+}
+
+.song-modal__spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: song-modal-spin 0.6s linear infinite;
+  flex-shrink: 0;
+}
+
+.song-modal__related-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.song-modal__related-item {
+  padding: 12px;
+  border-radius: var(--radius-m);
+  border: 1px solid var(--border);
+}
+
+.song-modal__related-item:hover {
+  border-color: var(--primary);
+}
+
+.song-modal__related-item-title {
+  margin: 0 0 6px;
+  color: var(--foreground);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.song-modal__related-item-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.song-modal__related-item-detail {
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 12px;
+}
+
+.song-modal__related-empty {
+  margin: 0;
+  padding: 16px 0;
+  text-align: center;
+  color: var(--muted-foreground);
+  font-family: var(--font-secondary);
+  font-size: 14px;
+  font-style: italic;
+}
+
+/* ── Close button in footer ── */
+.song-modal__close-btn {
+  height: 40px;
+  padding: 0 20px;
+  border-radius: var(--radius-m);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--foreground-secondary);
+  font-family: var(--font-primary);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.song-modal__close-btn:hover {
+  background-color: var(--surface);
+}
+
+/* ── Animations ── */
+@keyframes song-modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes song-modal-slide-in {
+  from { opacity: 0; transform: scale(0.96) translateY(-8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes song-modal-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 640px) {
+  .song-modal__panel {
+    max-height: 95vh;
+  }
+}
