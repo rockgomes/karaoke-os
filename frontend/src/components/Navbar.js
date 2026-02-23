@@ -1,49 +1,34 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  Navbar as HeroUINavbar,
-  NavbarContent,
-  NavbarItem,
-  NavbarBrand,
-  Button,
-  Link as HeroUILink,
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerBody,
-} from "@heroui/react";
-import { User } from "@heroui/shared-icons";
+import { Button } from "./design-system";
 import ThemeToggle from "./ThemeToggle";
+import "./Navbar.css";
 
-const MenuIcon = ({ className }) => (
-  <svg
-    aria-hidden="true"
-    focusable="false"
-    viewBox="0 0 24 24"
-    className={className}
-  >
-    <path
-      d="M4 7h16M4 12h16M4 17h16"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    />
+// Inline SVG icons — no external icon library needed
+const MenuIcon = () => (
+  <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
+    <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
   </svg>
 );
 
-const CloseIcon = ({ className }) => (
-  <svg
-    aria-hidden="true"
-    focusable="false"
-    viewBox="0 0 24 24"
-    className={className}
-  >
-    <path
-      d="M6 6l12 12M18 6L6 18"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-    />
+const CloseIcon = () => (
+  <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="20" height="20">
+    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  </svg>
+);
+
+const UserIcon = () => (
+  <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" strokeWidth="2">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+    <circle cx="12" cy="7" r="4" />
+  </svg>
+);
+
+const LogoIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M9 18V5l12-2v13" />
+    <circle cx="6" cy="18" r="3" />
+    <circle cx="18" cy="16" r="3" />
   </svg>
 );
 
@@ -51,197 +36,146 @@ const Navbar = ({ user, onLogout }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
-  // Only show admin login on admin routes, not on public library views
   const isAdminRoute = location.pathname.startsWith("/admin");
   const showAdminLogin = !user && isAdminRoute;
 
-  const handleToggleMenu = () => {
-    setIsMenuOpen((open) => !open);
-  };
+  const isActive = (path) => location.pathname === path;
 
-  const handleCloseMenu = () => {
-    setIsMenuOpen(false);
-  };
+  const handleToggleMenu = () => setIsMenuOpen((open) => !open);
+  const handleCloseMenu = () => setIsMenuOpen(false);
 
   return (
-    <HeroUINavbar maxWidth="full" className="border-b border-default-100">
-      <NavbarBrand className="flex items-center gap-6 flex-grow-0">
-        {user && (
-          <Button
-            isIconOnly
-            variant="light"
-            size="sm"
-            aria-label="Open navigation menu"
-            onPress={handleToggleMenu}
-            className="sm:hidden"
-          >
-            <MenuIcon className="w-5 h-5" />
-          </Button>
-        )}
-        <Link to="/" style={{ textDecoration: "none" }}>
-          <h1
-            style={{
-              fontSize: "20px",
-              fontWeight: 700,
-              fontFamily: "var(--font-primary)",
-              color: "var(--foreground)",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              margin: 0,
-            }}
-          >
-            <div
-              style={{
-                width: "28px",
-                height: "28px",
-                backgroundColor: "#0066FF",
-                borderRadius: "6px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
+    <>
+      <nav className="navbar">
+        {/* Brand */}
+        <div className="navbar__brand">
+          {user && (
+            <button
+              type="button"
+              className="navbar__menu-btn"
+              aria-label="Open navigation menu"
+              aria-expanded={isMenuOpen}
+              onClick={handleToggleMenu}
             >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#FFFFFF"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M9 18V5l12-2v13" />
-                <circle cx="6" cy="18" r="3" />
-                <circle cx="18" cy="16" r="3" />
-              </svg>
+              <MenuIcon />
+            </button>
+          )}
+          <Link to="/" className="navbar__logo-link">
+            <div className="navbar__logo-icon">
+              <LogoIcon />
             </div>
-            Karaoke OS
-          </h1>
-        </Link>
-      </NavbarBrand>
+            <span className="navbar__logo-text">Karaoke OS</span>
+          </Link>
+        </div>
 
-      <NavbarContent className="hidden sm:flex gap-4 pl-20" justify="start">
+        {/* Desktop nav links — only when logged in */}
         {user && (
-          <>
-            <NavbarItem>
-              <HeroUILink as={Link} to="/admin/songs" color="foreground">
-                Manage Songs
-              </HeroUILink>
-            </NavbarItem>
-            <NavbarItem>
-              <HeroUILink as={Link} to="/admin/libraries" color="foreground">
-                Libraries
-              </HeroUILink>
-            </NavbarItem>
-          </>
+          <div className="navbar__links">
+            <Link
+              to="/admin/songs"
+              className={`navbar__link${isActive("/admin/songs") ? " navbar__link--active" : ""}`}
+            >
+              Manage Songs
+            </Link>
+            <Link
+              to="/admin/libraries"
+              className={`navbar__link${isActive("/admin/libraries") ? " navbar__link--active" : ""}`}
+            >
+              Libraries
+            </Link>
+          </div>
         )}
-      </NavbarContent>
 
-      {/* Desktop actions */}
-      <NavbarContent justify="end" className="hidden sm:flex">
-        {user ? (
-          <>
-            <NavbarItem>
-              <span className="text-sm text-default-600 mr-2 flex items-center gap-1">
-                <User className="w-4 h-4" fill="currentColor" />
+        {/* Desktop right actions */}
+        <div className="navbar__actions">
+          {user ? (
+            <>
+              <span className="navbar__user">
+                <UserIcon />
                 {user.username}
               </span>
-            </NavbarItem>
-            <NavbarItem>
-              <Button color="danger" variant="flat" onClick={onLogout}>
+              <Button variant="outline" onClick={onLogout} className="navbar__logout-btn">
                 Logout
               </Button>
-            </NavbarItem>
-          </>
-        ) : (
-          <>
-            {showAdminLogin && (
-              <NavbarItem className="hidden lg:flex">
-                <HeroUILink as={Link} to="/admin/login" color="foreground">
-                  Admin Login
-                </HeroUILink>
-              </NavbarItem>
-            )}
-          </>
-        )}
-        <NavbarItem>
+            </>
+          ) : (
+            showAdminLogin && (
+              <Link to="/admin/login" className="navbar__link">
+                Admin Login
+              </Link>
+            )
+          )}
           <ThemeToggle />
-        </NavbarItem>
-      </NavbarContent>
+        </div>
+      </nav>
 
-      {/* Mobile theme toggle - always visible */}
-      <NavbarContent justify="end" className="sm:hidden">
-        <NavbarItem>
-          <ThemeToggle />
-        </NavbarItem>
-      </NavbarContent>
-
-      {/* Mobile drawer menu - only for authenticated admins */}
+      {/* Mobile drawer overlay */}
       {user && (
-        <Drawer
-          isOpen={isMenuOpen}
-          onOpenChange={setIsMenuOpen}
-          placement="left"
-          size="xs"
-          className="sm:hidden"
-          hideCloseButton
-        >
-          <DrawerContent>
-            <DrawerHeader className="flex items-center justify-between gap-2">
+        <>
+          {/* Backdrop */}
+          <div
+            className={`navbar__backdrop${isMenuOpen ? " navbar__backdrop--open" : ""}`}
+            aria-hidden="true"
+            onClick={handleCloseMenu}
+          />
+
+          {/* Drawer */}
+          <div
+            className={`navbar__drawer${isMenuOpen ? " navbar__drawer--open" : ""}`}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Navigation menu"
+          >
+            <div className="navbar__drawer-header">
               <button
                 type="button"
+                className="navbar__drawer-close"
                 onClick={handleCloseMenu}
-                className="flex items-center gap-2 text-left text-base font-semibold"
+                aria-label="Close navigation menu"
               >
-                <CloseIcon className="w-5 h-5" />
+                <CloseIcon />
                 <span>Karaoke OS</span>
               </button>
-            </DrawerHeader>
-            <DrawerBody className="flex flex-col gap-4">
-              {user ? (
-                <>
-                  <div className="flex items-center gap-2 text-sm text-default-600">
-                    <User className="w-4 h-4" fill="currentColor" />
-                    {user.username}
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <HeroUILink
-                      as={Link}
-                      to="/admin/songs"
-                      color="foreground"
-                      onClick={handleCloseMenu}
-                    >
-                      Manage Songs
-                    </HeroUILink>
-                    <HeroUILink
-                      as={Link}
-                      to="/admin/libraries"
-                      color="foreground"
-                      onClick={handleCloseMenu}
-                    >
-                      Libraries
-                    </HeroUILink>
-                  </div>
-                  <Button
-                    color="danger"
-                    variant="flat"
-                    onClick={() => {
-                      handleCloseMenu();
-                      onLogout();
-                    }}
-                    className="w-full"
-                  >
-                    Logout
-                  </Button>
-                </>
-              ) : null}
-            </DrawerBody>
-          </DrawerContent>
-        </Drawer>
+            </div>
+
+            <div className="navbar__drawer-body">
+              <div className="navbar__drawer-user">
+                <UserIcon />
+                <span>{user.username}</span>
+              </div>
+
+              <nav className="navbar__drawer-nav">
+                <Link
+                  to="/admin/songs"
+                  className={`navbar__drawer-link${isActive("/admin/songs") ? " navbar__drawer-link--active" : ""}`}
+                  onClick={handleCloseMenu}
+                >
+                  Manage Songs
+                </Link>
+                <Link
+                  to="/admin/libraries"
+                  className={`navbar__drawer-link${isActive("/admin/libraries") ? " navbar__drawer-link--active" : ""}`}
+                  onClick={handleCloseMenu}
+                >
+                  Libraries
+                </Link>
+              </nav>
+
+              <Button
+                variant="outline"
+                className="navbar__drawer-logout"
+                onClick={() => {
+                  handleCloseMenu();
+                  onLogout();
+                }}
+              >
+                Logout
+              </Button>
+            </div>
+          </div>
+        </>
       )}
-    </HeroUINavbar>
+    </>
   );
 };
 
