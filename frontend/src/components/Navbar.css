@@ -112,6 +112,10 @@
   font-weight: 600;
 }
 
+[data-theme="dark"] .navbar__link--active {
+  color: var(--primary-foreground); /* white text on dark-blue bg */
+}
+
 /* ── Right-side actions ── */
 .navbar__actions {
   display: flex;
@@ -259,6 +263,10 @@
   background-color: var(--primary-subtle);
   color: var(--primary);
   font-weight: 600;
+}
+
+[data-theme="dark"] .navbar__drawer-link--active {
+  color: var(--primary-foreground); /* white text on dark-blue bg */
 }
 
 .navbar__drawer-logout {
