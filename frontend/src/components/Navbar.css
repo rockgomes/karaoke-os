@@ -145,11 +145,13 @@
   background: rgba(0, 0, 0, 0.4);
   z-index: calc(var(--z-fixed) - 1);
   opacity: 0;
+  pointer-events: none; /* closed: let taps pass through to elements beneath */
   transition: opacity var(--transition-base) var(--ease-in-out);
 }
 
 .navbar__backdrop--open {
   opacity: 1;
+  pointer-events: auto; /* open: intercept taps to close the drawer */
 }
 
 /* ── Mobile drawer ── */
