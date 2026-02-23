@@ -1,10 +1,21 @@
-import React from 'react';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button } from '@heroui/react';
-import { Badge } from './design-system';
+import React, { useEffect } from 'react';
+import ReactDOM from 'react-dom';
+import { Badge, Button } from './design-system';
 import './SongDetailModal.css';
 
 const SongDetailModal = ({ song, isOpen, onClose, onEdit, onDelete }) => {
-  if (!song) return null;
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', handleKeyDown);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !song) return null;
 
   const aiFields = [];
   if (song.genre) aiFields.push('Genre');
@@ -12,13 +23,25 @@ const SongDetailModal = ({ song, isOpen, onClose, onEdit, onDelete }) => {
   if (song.year) aiFields.push('Year');
   if (song.album) aiFields.push('Album');
 
-  return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg">
-      <ModalContent>
-        <ModalHeader className="flex flex-col gap-1">
-          Song Details
-        </ModalHeader>
-        <ModalBody>
+  return ReactDOM.createPortal(
+    <div className="song-modal__backdrop" onClick={onClose}>
+      <div
+        className="song-modal__panel"
+        onClick={(e) => e.stopPropagation()}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Song Details"
+      >
+        <div className="song-modal__header">
+          <h2 className="song-modal__title">Song Details</h2>
+          <button className="song-modal__close" onClick={onClose} aria-label="Close">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="song-modal__body">
           <div className="song-detail">
             <div className="song-detail__header">
               <div className="song-detail__cover"></div>
@@ -68,25 +91,28 @@ const SongDetailModal = ({ song, isOpen, onClose, onEdit, onDelete }) => {
               </div>
             )}
           </div>
-        </ModalBody>
-        <ModalFooter className="justify-center">
-          <Button variant="flat" onPress={() => {
-            onClose();
-            onEdit(song);
-          }}>
+        </div>
+
+        <div className="song-modal__footer">
+          <Button variant="outline" onClick={() => { onClose(); onEdit(song); }}>
             Edit Song
           </Button>
-          <Button color="danger" variant="flat" onPress={() => {
-            if (window.confirm(`Are you sure you want to delete "${song.title}"?`)) {
-              onDelete(song.id);
-              onClose();
-            }
-          }}>
+          <Button
+            variant="outline"
+            className="song-modal__delete-btn"
+            onClick={() => {
+              if (window.confirm(`Are you sure you want to delete "${song.title}"?`)) {
+                onDelete(song.id);
+                onClose();
+              }
+            }}
+          >
             Delete
           </Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
+        </div>
+      </div>
+    </div>,
+    document.body
   );
 };
 
