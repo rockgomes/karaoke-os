@@ -1,5 +1,5 @@
 /* ── Modal Wrapper (shared portal pattern) ── */
-.song-modal__backdrop {
+.pub-modal__backdrop {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
@@ -8,10 +8,10 @@
   align-items: center;
   z-index: var(--z-modal-backdrop);
   padding: 20px;
-  animation: song-modal-fade-in var(--transition-fast) var(--ease-out);
+  animation: pub-modal-fade-in var(--transition-fast) var(--ease-out);
 }
 
-.song-modal__panel {
+.pub-modal__panel {
   background: var(--card);
   border-radius: var(--radius-lg);
   max-width: 640px;
@@ -21,10 +21,10 @@
   flex-direction: column;
   box-shadow: var(--shadow-xl);
   z-index: var(--z-modal);
-  animation: song-modal-slide-in var(--transition-fast) var(--ease-out);
+  animation: pub-modal-slide-in var(--transition-fast) var(--ease-out);
 }
 
-.song-modal__header {
+.pub-modal__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -33,7 +33,7 @@
   flex-shrink: 0;
 }
 
-.song-modal__title {
+.pub-modal__title {
   margin: 0;
   color: var(--foreground);
   font-family: var(--font-primary);
@@ -42,7 +42,7 @@
   line-height: 1.2;
 }
 
-.song-modal__close {
+.pub-modal__close {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,18 +56,18 @@
   flex-shrink: 0;
 }
 
-.song-modal__close:hover {
+.pub-modal__close:hover {
   background-color: var(--surface);
   color: var(--foreground);
 }
 
-.song-modal__body {
+.pub-modal__body {
   padding: 24px;
   overflow-y: auto;
   flex: 1;
 }
 
-.song-modal__footer {
+.pub-modal__footer {
   display: flex;
   justify-content: flex-end;
   padding: 16px 24px 20px;
@@ -76,20 +76,20 @@
 }
 
 /* ── Content: Song Fields ── */
-.song-modal__fields {
+.pub-modal__fields {
   display: flex;
   flex-direction: column;
   gap: 12px;
   margin-bottom: 20px;
 }
 
-.song-modal__field {
+.pub-modal__field {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.song-modal__field-label {
+.pub-modal__field-label {
   color: var(--foreground);
   font-family: var(--font-secondary);
   font-size: 14px;
@@ -98,21 +98,21 @@
   flex-shrink: 0;
 }
 
-.song-modal__field-value {
+.pub-modal__field-value {
   color: var(--foreground-secondary);
   font-family: var(--font-secondary);
   font-size: 14px;
 }
 
 /* ── Divider ── */
-.song-modal__divider {
+.pub-modal__divider {
   border: none;
   border-top: 1px solid var(--border);
   margin: 0 0 20px;
 }
 
 /* ── Related Songs ── */
-.song-modal__related-title {
+.pub-modal__related-title {
   margin: 0 0 12px;
   color: var(--foreground);
   font-family: var(--font-primary);
@@ -120,7 +120,7 @@
   font-weight: 600;
 }
 
-.song-modal__loading {
+.pub-modal__loading {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -131,34 +131,34 @@
   font-size: 14px;
 }
 
-.song-modal__spinner {
+.pub-modal__spinner {
   display: inline-block;
   width: 16px;
   height: 16px;
   border: 2px solid var(--border);
   border-top-color: var(--primary);
   border-radius: 50%;
-  animation: song-modal-spin 0.6s linear infinite;
+  animation: pub-modal-spin 0.6s linear infinite;
   flex-shrink: 0;
 }
 
-.song-modal__related-list {
+.pub-modal__related-list {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.song-modal__related-item {
+.pub-modal__related-item {
   padding: 12px;
   border-radius: var(--radius-m);
   border: 1px solid var(--border);
 }
 
-.song-modal__related-item:hover {
+.pub-modal__related-item:hover {
   border-color: var(--primary);
 }
 
-.song-modal__related-item-title {
+.pub-modal__related-item-title {
   margin: 0 0 6px;
   color: var(--foreground);
   font-family: var(--font-primary);
@@ -166,20 +166,20 @@
   font-weight: 600;
 }
 
-.song-modal__related-item-meta {
+.pub-modal__related-item-meta {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
 }
 
-.song-modal__related-item-detail {
+.pub-modal__related-item-detail {
   color: var(--muted-foreground);
   font-family: var(--font-secondary);
   font-size: 12px;
 }
 
-.song-modal__related-empty {
+.pub-modal__related-empty {
   margin: 0;
   padding: 16px 0;
   text-align: center;
@@ -190,7 +190,7 @@
 }
 
 /* ── Close button in footer ── */
-.song-modal__close-btn {
+.pub-modal__close-btn {
   height: 40px;
   padding: 0 20px;
   border-radius: var(--radius-m);
@@ -203,41 +203,41 @@
   cursor: pointer;
 }
 
-.song-modal__close-btn:hover {
+.pub-modal__close-btn:hover {
   background-color: var(--surface);
 }
 
 /* ── Animations ── */
-@keyframes song-modal-fade-in {
+@keyframes pub-modal-fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-@keyframes song-modal-slide-in {
+@keyframes pub-modal-slide-in {
   from { opacity: 0; transform: scale(0.96) translateY(-8px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-@keyframes song-modal-slide-up {
+@keyframes pub-modal-slide-up {
   from { transform: translateY(100%); }
   to { transform: translateY(0); }
 }
 
-@keyframes song-modal-spin {
+@keyframes pub-modal-spin {
   to { transform: rotate(360deg); }
 }
 
 /* ── Mobile: bottom sheet ── */
 @media (max-width: 640px) {
-  .song-modal__backdrop {
+  .pub-modal__backdrop {
     align-items: flex-end;
     padding: 0;
   }
 
-  .song-modal__panel {
+  .pub-modal__panel {
     max-width: 100%;
     max-height: 90vh;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    animation: song-modal-slide-up var(--transition-base) var(--ease-out);
+    animation: pub-modal-slide-up var(--transition-base) var(--ease-out);
   }
 }
