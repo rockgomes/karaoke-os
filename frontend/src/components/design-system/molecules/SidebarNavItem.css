@@ -37,6 +37,10 @@
   font-weight: 600;
 }
 
+[data-theme="dark"] .ds-sidebar-nav-item--active {
+  color: var(--primary-foreground); /* white text on dark-blue bg */
+}
+
 /* Active Bar */
 .ds-sidebar-nav-item__bar {
   position: absolute;
