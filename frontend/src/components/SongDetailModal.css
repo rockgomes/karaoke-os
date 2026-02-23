@@ -1,3 +1,106 @@
+/* Modal Backdrop */
+.song-modal__backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--z-modal-backdrop);
+  padding: 20px;
+  animation: song-modal-fade-in var(--transition-fast) var(--ease-out);
+}
+
+/* Modal Panel */
+.song-modal__panel {
+  background: var(--card);
+  border-radius: var(--radius-lg);
+  max-width: 560px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-modal);
+  animation: song-modal-slide-in var(--transition-fast) var(--ease-out);
+}
+
+/* Modal Header */
+.song-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.song-modal__title {
+  margin: 0;
+  color: var(--foreground);
+  font-family: var(--font-primary);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.song-modal__close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--radius-m);
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+
+.song-modal__close:hover {
+  background-color: var(--surface);
+  color: var(--foreground);
+}
+
+/* Modal Body */
+.song-modal__body {
+  padding: 24px;
+}
+
+/* Modal Footer */
+.song-modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px 20px;
+  border-top: 1px solid var(--border);
+}
+
+/* Delete button */
+.song-modal__delete-btn {
+  color: var(--color-error) !important;
+  border-color: var(--color-error) !important;
+}
+
+.song-modal__delete-btn:hover {
+  background-color: rgba(239, 68, 68, 0.08) !important;
+}
+
+/* Animations */
+@keyframes song-modal-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes song-modal-slide-in {
+  from { opacity: 0; transform: scale(0.96) translateY(-8px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .song-modal__panel {
+    max-height: 90vh;
+  }
+}
+
 /* Song Detail Modal Styles */
 .song-detail {
   display: flex;
