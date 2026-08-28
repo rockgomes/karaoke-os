@@ -66,6 +66,20 @@ function initializeDatabase() {
     )
   `);
 
+  // Album art, added after the table already existed in the wild. SQLite has
+  // no "ADD COLUMN IF NOT EXISTS", so the duplicate-column error is the
+  // expected result on every run after the first and is ignored.
+  for (const column of [
+    "musicbrainz_id TEXT",
+    "cover_url TEXT",
+  ]) {
+    db.run(`ALTER TABLE songs ADD COLUMN ${column}`, (err) => {
+      if (err && !/duplicate column name/i.test(err.message)) {
+        console.error(`Could not add songs.${column}:`, err.message);
+      }
+    });
+  }
+
   // Create admin table (keeping for backward compatibility, but we'll use users table)
   db.run(
     `
@@ -1493,13 +1507,51 @@ class MusicMetadataService {
         }
       }
 
+      // Last.fm returns an image array ordered small -> mega. Take the
+      // largest one that actually has a URL; entries are often blank.
+      let image = null;
+      if (Array.isArray(albumData.image)) {
+        for (const size of ["extralarge", "large", "medium"]) {
+          const match = albumData.image.find(
+            (i) => i.size === size && i["#text"]
+          );
+          if (match) {
+            image = match["#text"];
+            break;
+          }
+        }
+      }
+
       return {
         title: albumData.name,
         year: year,
         genre: this.extractGenres(albumData.toptags?.tag),
+        image: image,
       };
     } catch (error) {
       console.log(`Error fetching album info:`, error.message);
+      return null;
+    }
+  }
+
+  // Cover art from the iTunes Search API: no key, no rate limit worth
+  // worrying about, and it resolves for effectively every mainstream
+  // track — which is what a karaoke list is made of.
+  async fetchCoverArt(artist, title) {
+    try {
+      const term = encodeURIComponent(`${artist} ${title}`);
+      const response = await axios.get(
+        `https://itunes.apple.com/search?term=${term}&media=music&entity=song&limit=1`,
+        { timeout: 5000 }
+      );
+
+      const hit = response.data?.results?.[0];
+      if (!hit?.artworkUrl100) return null;
+
+      // The same path serves other sizes; 100px is too small for the UI.
+      return hit.artworkUrl100.replace("100x100bb", "400x400bb");
+    } catch (error) {
+      console.log(`Error fetching cover art:`, error.message);
       return null;
     }
   }
@@ -1595,14 +1647,19 @@ class MusicMetadataService {
       duration: existingData.duration || null,
       year: existingData.year || null,
       album: existingData.album || null,
+      musicbrainz_id: existingData.musicbrainz_id || null,
+      cover_url: existingData.cover_url || null,
     };
 
-    // Try to fetch from Last.fm if we're missing key information
+    // Try to fetch from Last.fm if we're missing key information.
+    // cover_url counts: a song enriched before album art existed has every
+    // other field filled, and would otherwise never get artwork.
     const needsLookup =
       !metadata.genre ||
       !metadata.duration ||
       !metadata.album ||
-      !metadata.year;
+      !metadata.year ||
+      !metadata.cover_url;
 
     if (needsLookup) {
       // Try MusicBrainz first (primary source)
@@ -1614,6 +1671,8 @@ class MusicMetadataService {
         metadata.year = metadata.year || mbMetadata.year;
         metadata.album = metadata.album || mbMetadata.album;
         metadata.genre = metadata.genre || mbMetadata.genre;
+        metadata.musicbrainz_id =
+          metadata.musicbrainz_id || mbMetadata.musicbrainz_id;
       }
 
       // If still missing data, try Last.fm as fallback
@@ -1643,6 +1702,18 @@ class MusicMetadataService {
             );
           }
         }
+      }
+
+      // Cover art last, once the album name is as good as it is going to get.
+      // iTunes first because it needs no key and resolves almost everything;
+      // Last.fm's album.getInfo image is the fallback when it does not.
+      if (!metadata.cover_url) {
+        metadata.cover_url = await this.fetchCoverArt(artist, title);
+      }
+
+      if (!metadata.cover_url && this.lastfmApiKey && metadata.album) {
+        const albumInfo = await this.fetchAlbumInfo(artist, metadata.album);
+        metadata.cover_url = albumInfo?.image || null;
       }
     }
 
@@ -1750,17 +1821,21 @@ app.post(
 
           await new Promise((resolve, reject) => {
             db.run(
-              `UPDATE songs SET 
-             genre = ?, 
-             duration = ?, 
-             year = ?, 
-             album = ?
+              `UPDATE songs SET
+             genre = ?,
+             duration = ?,
+             year = ?,
+             album = ?,
+             musicbrainz_id = ?,
+             cover_url = ?
              WHERE id = ?`,
               [
                 newMetadata.genre,
                 newMetadata.duration,
                 newMetadata.year,
                 newMetadata.album,
+                newMetadata.musicbrainz_id || null,
+                newMetadata.cover_url || null,
                 song.id,
               ],
               (err) => {
@@ -1894,7 +1969,7 @@ app.post(
             // Insert into database using Promise wrapper
             const insertResult = await new Promise((resolve, reject) => {
               db.run(
-                "INSERT INTO songs (library_id, title, artist, genre, duration, year, album) VALUES (?, ?, ?, ?, ?, ?, ?)",
+                "INSERT INTO songs (library_id, title, artist, genre, duration, year, album, musicbrainz_id, cover_url) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
                 [
                   libraryId,
                   finalMetadata.title,
@@ -1903,6 +1978,8 @@ app.post(
                   finalMetadata.duration,
                   finalMetadata.year,
                   finalMetadata.album,
+                  finalMetadata.musicbrainz_id || null,
+                  finalMetadata.cover_url || null,
                 ],
                 function (err) {
                   if (err) {

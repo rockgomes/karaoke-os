@@ -34,7 +34,18 @@ const MobileSongCard = ({
       {...props}
     >
       <div className={`${baseClass}__cover`}>
-        {coverUrl && <img src={coverUrl} alt="" />}
+        {coverUrl && (
+          <img
+            src={coverUrl}
+            alt=""
+            loading="lazy"
+            // Not every release has artwork. Hiding a failed image leaves
+            // the empty cover slot behind it, which is the intended look.
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        )}
       </div>
       <div className={`${baseClass}__info`}>
         <h3 className={`${baseClass}__title`}>{title}</h3>

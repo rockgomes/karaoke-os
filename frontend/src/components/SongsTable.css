@@ -203,6 +203,14 @@
   flex-shrink: 0;
 }
 
+.songs-table__cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+  display: block;
+}
+
 .songs-table__song-info {
   display: flex;
   flex-direction: column;

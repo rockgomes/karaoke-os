@@ -231,6 +231,7 @@ const PublicLibraryView = () => {
                 key={song.id}
                 title={song.title}
                 artist={song.artist}
+                coverUrl={song.cover_url}
                 onClick={() => handleSongClick(song)}
               />
             ))}

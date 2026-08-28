@@ -211,7 +211,22 @@ const SongsTable = ({
                 </td>
                 <td className="songs-table__td songs-table__td--song">
                   <div className="songs-table__song-cell">
-                    <div className="songs-table__cover"></div>
+                    <div className="songs-table__cover">
+                      {song.cover_url && (
+                        <img
+                          src={song.cover_url}
+                          alt=""
+                          className="songs-table__cover-img"
+                          loading="lazy"
+                          // Cover Art Archive has no artwork for every
+                          // release. Hiding the image leaves the empty
+                          // slot behind it, which is the intended look.
+                          onError={(e) => {
+                            e.currentTarget.style.display = "none";
+                          }}
+                        />
+                      )}
+                    </div>
                     <div className="songs-table__song-info">
                       <div className="songs-table__song-title">
                         {song.title}
