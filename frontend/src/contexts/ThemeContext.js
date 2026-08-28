@@ -6,6 +6,8 @@ import React, {
   useLayoutEffect,
 } from "react";
 
+import { IS_DEMO } from "../demo";
+
 const ThemeContext = createContext();
 
 export const useTheme = () => {
@@ -18,6 +20,13 @@ export const useTheme = () => {
 
 export const ThemeProvider = ({ children }) => {
   const [isDark, setIsDark] = useState(() => {
+    // The demo ships light only while the dark theme is unfinished. Hiding
+    // the toggle is not enough on its own: without this, a visitor whose OS
+    // is set to dark would still land in it.
+    if (IS_DEMO) {
+      return false;
+    }
+
     // Check localStorage first, then system preference
     const saved = localStorage.getItem("theme");
     if (saved) {

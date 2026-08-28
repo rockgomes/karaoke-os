@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Button } from "./design-system";
 import ThemeToggle from "./ThemeToggle";
+import { IS_DEMO } from "../demo";
 import "./Navbar.css";
 
 // Inline SVG icons — no external icon library needed
@@ -105,7 +106,8 @@ const Navbar = ({ user, onLogout }) => {
               </Link>
             )
           )}
-          <ThemeToggle />
+          {/* Dark mode is unfinished, so the demo does not offer it. */}
+          {!IS_DEMO && <ThemeToggle />}
         </div>
       </nav>
 
