@@ -74,7 +74,7 @@ dist
 
 # Gatsby files
 .cache/
-public
+/public   # Gatsby output at the repo root only — not frontend/public (CRA needs it)
 
 # Storybook build outputs
 .out
@@ -102,3 +102,5 @@ Thumbs.db
 
 # Custom
 uploads/
+# Local Netlify folder
+.netlify
