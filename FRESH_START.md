@@ -43,7 +43,7 @@ pkill -f "node.*server.js"
 pkill -f "react-scripts"
 
 # Start fresh
-cd /Users/rockgomes/karaoke-zen
+cd ~/Dev/karaoke-zen
 npm run dev
 ```
 
