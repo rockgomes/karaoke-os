@@ -23,33 +23,21 @@ export async function addSong(
 ): Promise<SongState> {
   const slug = String(formData.get("slug") ?? "");
   const libraryId = String(formData.get("library_id") ?? "");
-  const title = String(formData.get("title") ?? "").trim();
-  const artist = String(formData.get("artist") ?? "").trim();
-
-  if (!title || !artist) return { error: "A song needs a title and an artist." };
   if (!libraryId) return { error: "This venue has no song list yet." };
 
   await requireMembership(slug);
 
-  const yearRaw = String(formData.get("year") ?? "").trim();
-  const year = yearRaw ? Number(yearRaw) : null;
-  if (year !== null && (!Number.isInteger(year) || year < 1850 || year > 2100)) {
-    return { error: "Year must be a whole number between 1850 and 2100." };
-  }
+  const parsed = readSongFields(formData);
+  if (!parsed.values) return { error: parsed.error };
 
   // Look up what the person did not type. Anything they did type is kept.
-  const filled = await enrichSong({
-    title,
-    artist,
-    genre: String(formData.get("genre") ?? "").trim() || null,
-    year,
-  });
+  const filled = await enrichSong(parsed.values);
 
   const supabase = await createClient();
   const { error } = await supabase.from("songs").insert({
     library_id: libraryId,
-    title,
-    artist,
+    title: parsed.values.title,
+    artist: parsed.values.artist,
     genre: filled.genre,
     year: filled.year,
     album: filled.album,
@@ -140,6 +128,85 @@ export async function fillMissingDetails(formData: FormData) {
       })
       .eq("id", song.id);
   }
+
+  revalidatePath(`/admin/${slug}`);
+  revalidatePath(`/v/${slug}`);
+}
+
+type SongFields = {
+  title: string;
+  artist: string;
+  year: number | null;
+  genre: string | null;
+  album: string | null;
+  duration: string | null;
+};
+
+/** Shared by add and edit, so the two cannot drift apart. */
+function readSongFields(
+  formData: FormData,
+): { error: string; values?: undefined } | { error: null; values: SongFields } {
+  const title = String(formData.get("title") ?? "").trim();
+  const artist = String(formData.get("artist") ?? "").trim();
+  const yearRaw = String(formData.get("year") ?? "").trim();
+  const year = yearRaw ? Number(yearRaw) : null;
+
+  if (!title || !artist) return { error: "A song needs a title and an artist." };
+  if (year !== null && (!Number.isInteger(year) || year < 1850 || year > 2100)) {
+    return { error: "Year must be a whole number between 1850 and 2100." };
+  }
+
+  return {
+    error: null,
+    values: {
+      title,
+      artist,
+      year,
+      genre: String(formData.get("genre") ?? "").trim() || null,
+      album: String(formData.get("album") ?? "").trim() || null,
+      duration: String(formData.get("duration") ?? "").trim() || null,
+    },
+  };
+}
+
+export async function updateSong(
+  _prev: SongState,
+  formData: FormData,
+): Promise<SongState> {
+  const slug = String(formData.get("slug") ?? "");
+  const songId = String(formData.get("song_id") ?? "");
+  if (!songId) return { error: "No song to save." };
+
+  await requireMembership(slug);
+
+  const parsed = readSongFields(formData);
+  // Guard on values, not on error: `string` is not a literal type, so it
+  // cannot narrow the union the way a discriminant would.
+  if (!parsed.values) return { error: parsed.error };
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("songs")
+    .update(parsed.values)
+    .eq("id", songId);
+
+  if (error) return { error: error.message };
+
+  revalidatePath(`/admin/${slug}`);
+  revalidatePath(`/v/${slug}`);
+  return { error: null };
+}
+
+/** Remove several songs at once, from the checkboxes in the table. */
+export async function deleteSongs(formData: FormData) {
+  const slug = String(formData.get("slug") ?? "");
+  const ids = formData.getAll("song_id").map(String).filter(Boolean);
+  if (!ids.length) return;
+
+  await requireMembership(slug);
+
+  const supabase = await createClient();
+  await supabase.from("songs").delete().in("id", ids);
 
   revalidatePath(`/admin/${slug}`);
   revalidatePath(`/v/${slug}`);

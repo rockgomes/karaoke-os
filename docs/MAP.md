@@ -34,13 +34,15 @@ The whole app as a list. `+` means not built yet.
   * add a venue *(in the header, on every staff screen)*
   * open or close karaoke
   * add a song
+  * edit a song
   * remove a song
+  * remove several songs at once
+  * search by title or artist
+  * sort by title, artist, genre or year
+  * page through a long list
   * fill in missing song details
   * view the guest page
   * sign out
-  * + edit a song
-  * + search, sort and page the song list
-  * + delete several songs at once
   * + import a CSV
   * + show the QR code and copy the link
   * + manage several song lists
@@ -194,8 +196,8 @@ Anything a person typed is never overwritten.
 | Fill in song details automatically | built |
 | Open and close a karaoke session | built |
 | One venue cannot touch another | built, tested |
-| Edit a song | **to port** |
-| Song table: search, sort, pages, bulk delete | **to port** |
+| Edit a song | built |
+| Song table: search, sort, pages, bulk delete | built |
 | CSV import | **to port** |
 | QR code and share link | **to port** |
 | Several libraries per venue | **to port** |
