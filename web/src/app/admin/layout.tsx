@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { requireUser } from "@/lib/auth";
+import { getMemberships, requireUser } from "@/lib/auth";
 import { signOut } from "@/app/login/actions";
 
 export default async function AdminLayout({
@@ -8,6 +8,7 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const user = await requireUser();
+  const memberships = await getMemberships();
 
   return (
     <div className="min-h-full">
@@ -20,6 +21,27 @@ export default async function AdminLayout({
           >
             Karaoke OS
           </Link>
+          {/* "Add a venue" lives here because /admin skips the venue list
+              when you own exactly one, which otherwise left the button with
+              nowhere to be reached from. */}
+          <Link
+            href="/admin/new"
+            className="text-sm text-neutral-500 underline-offset-4 hover:underline
+                       focus-visible:outline-2 focus-visible:outline-blue-600"
+          >
+            Add a venue
+          </Link>
+
+          {memberships.length > 1 && (
+            <Link
+              href="/admin"
+              className="text-sm text-neutral-500 underline-offset-4 hover:underline
+                         focus-visible:outline-2 focus-visible:outline-blue-600"
+            >
+              Your venues
+            </Link>
+          )}
+
           <span className="ml-auto truncate text-sm text-neutral-500">
             {user.email}
           </span>

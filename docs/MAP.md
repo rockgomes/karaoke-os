@@ -13,7 +13,8 @@ The whole app as a list. `+` means not built yet.
 **Anyone — no account**
 
 * **Home** `/`
-  * see the list of venues *(wrong — should be a landing page)*
+  * read what Karaoke OS is
+  * go to venue sign in
 * **Venue song list** `/v/the-blue-note`
   * search by song or artist
   * see whether karaoke is on tonight
@@ -26,10 +27,11 @@ The whole app as a list. `+` means not built yet.
 
 * **Your venues** `/admin`
   * open a venue
-  * add a venue
+  * *(skipped when you own exactly one)*
 * **Add a venue** `/admin/new`
   * name it and claim its web address
 * **Manage a venue** `/admin/the-blue-note`
+  * add a venue *(in the header, on every staff screen)*
   * open or close karaoke
   * add a song
   * remove a song
@@ -114,7 +116,7 @@ Every route that exists. CI checks this list.
 
 | Route | Who | What it does |
 |---|---|---|
-| `/` | anyone | Lists venues. **See problem 1 below.** |
+| `/` | anyone | Landing page. Says what this is, and sends staff to sign in. |
 | `/v/[slug]` | anyone | The song list a guest browses. No login. |
 | `/login` | anyone | Sign in or create a staff account. |
 | `/admin` | staff | Your venues. Skips straight through if you have one. |
@@ -247,17 +249,16 @@ Five faults, all confirmed in the code:
 navigation. A page has exactly one route and exactly one name, used everywhere.
 Nothing appears in a menu before the page behind it works.
 
-### What is wrong with the new navigation
+### Faults found and fixed
 
-Being honest about the current build, not only the old one.
+Both were in the first build of these screens, and both are corrected.
 
-| # | Problem | Severity |
-|---|---|---|
-| 1 | `/` lists every venue publicly. That publishes the customer list, and a guest never needs it — they arrive by QR code. It should be a landing page. | high |
-| 2 | Owning one venue makes `/admin` redirect past the venue list, so the "Add a venue" button cannot be reached except by typing `/admin/new`. A dead end. | high |
-| 3 | The staff header has no navigation at all — brand, email, sign out. No way back to the venue list from inside a venue except the brand link. | medium |
-| 4 | Two pages list venues (`/` for everyone, `/admin` for you) with the same shape and different meanings. | medium |
-| 5 | No venue switcher, so running two bars means returning to `/admin` every time. | low, until someone runs two |
+| Problem | Fix |
+|---|---|
+| `/` listed every venue, publishing the customer list to anyone. A guest arrives by QR code and never needs it. | `/` is a landing page. No venue is named on it. |
+| Owning exactly one venue made `/admin` skip the venue list, leaving "Add a venue" unreachable without typing the URL. | "Add a venue" sits in the staff header, on every staff screen. |
 
-Problems 1 and 2 are worth fixing before any more screens are added, because
-every new page inherits the shape.
+### Still open
+
+- No venue switcher. Running two bars means going back to **Your venues**.
+  Worth doing when someone actually runs two.
