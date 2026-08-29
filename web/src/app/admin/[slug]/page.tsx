@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getMembershipBySlug, requireUser } from "@/lib/auth";
-import { toggleSession } from "./actions";
+import { fillMissingDetails, toggleSession } from "./actions";
 import AddSongForm from "./add-song-form";
 import SongRow from "./song-row";
 
@@ -38,11 +38,15 @@ export default async function VenueAdminPage({
   const { data: songs } = library
     ? await supabase
         .from("songs")
-        .select("id, title, artist, genre, year")
+        .select("id, title, artist, genre, year, album, duration, cover_url")
         .eq("library_id", library.id)
         .order("artist")
         .order("title")
     : { data: [] };
+
+  const incomplete = (songs ?? []).filter(
+    (s) => !s.genre || !s.duration || !s.album || !s.year || !s.cover_url,
+  ).length;
 
   return (
     <main className="mx-auto w-full max-w-3xl px-4 py-8">
@@ -98,12 +102,29 @@ export default async function VenueAdminPage({
       </section>
 
       <section className="mt-10">
-        <h2 className="text-lg font-semibold">
-          Songs{" "}
-          <span className="font-normal text-neutral-500">
-            ({songs?.length ?? 0})
-          </span>
-        </h2>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-lg font-semibold">
+            Songs{" "}
+            <span className="font-normal text-neutral-500">
+              ({songs?.length ?? 0})
+            </span>
+          </h2>
+
+          {incomplete > 0 && (
+            <form action={fillMissingDetails}>
+              <input type="hidden" name="slug" value={slug} />
+              <button
+                type="submit"
+                className="rounded-lg border border-neutral-300 px-3 py-2 text-sm
+                           font-medium hover:bg-neutral-50 focus-visible:outline-2
+                           focus-visible:outline-blue-600
+                           dark:border-neutral-700 dark:hover:bg-neutral-900"
+              >
+                Fill in details ({incomplete})
+              </button>
+            </form>
+          )}
+        </div>
 
         {songs && songs.length > 0 ? (
           <ul className="mt-3 divide-y divide-neutral-200 dark:divide-neutral-800">
