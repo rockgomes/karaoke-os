@@ -19,7 +19,10 @@ The whole app as a list. `+` means not built yet.
   * go to venue sign in
 * **Venue song list** `/v/blue-note`
   * search by song or artist
+  * filter by genre
+  * show more of a long list
   * see whether karaoke is on tonight
+  * tap a song for a card to show the DJ
   * + save a favourite (needs an account)
 * **Sign in** `/login`
   * sign in
@@ -206,6 +209,8 @@ Anything a person typed is never overwritten.
 | Feature | State |
 |---|---|
 | Guest song list, search | built |
+| Guest genre filter | built |
+| Card a guest shows the DJ | built |
 | Guest sees whether karaoke is on | built |
 | Staff sign in and sign out | built |
 | Create a venue | built |
