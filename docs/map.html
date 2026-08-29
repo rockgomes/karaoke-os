@@ -311,10 +311,10 @@
       manage one bar. The platform tier sees them all, and does not exist yet.
     </p>
     <div class="stats">
-      <span class="stat"><b>8</b> screens built</span>
-      <span class="stat"><b>1</b> planned</span>
-      <span class="stat"><b>27</b> actions working</span>
-      <span class="stat"><b>5</b> actions to come</span>
+      <span class="stat"><b>9</b> screens built</span>
+      <span class="stat"><b>0</b> planned</span>
+      <span class="stat"><b>31</b> actions working</span>
+      <span class="stat"><b>3</b> actions to come</span>
     </div>
   </header>
 
@@ -527,19 +527,25 @@
           You — platform
         </h2>
         
-        <article class="card card--todo" data-route="/platform">
+        <article class="card" data-route="/platform">
           <header class="card__head">
             <h3 class="card__name">All venues</h3>
-            <span class="chip chip--todo">planned</span>
+            
           </header>
           <p class="card__route">/platform</p>
           <ul class="card__actions">
-            <li class="act act--todo">
-                     <span class="act__text">see every venue</span>
-                     <span class="chip chip--todo">planned</span>
-                   </li><li class="act act--todo">
-                     <span class="act__text">suspend one</span>
-                     <span class="chip chip--todo">planned</span>
+            <li class="act">
+                     <span class="act__text">see every venue, its owner and its size</span>
+                     
+                   </li><li class="act">
+                     <span class="act__text">see which bars have karaoke on right now</span>
+                     
+                   </li><li class="act">
+                     <span class="act__text">suspend a venue, which hides it from guests</span>
+                     
+                   </li><li class="act">
+                     <span class="act__text">restore a suspended venue</span>
+                     
                    </li>
           </ul>
         </article>
@@ -554,7 +560,7 @@
 </div>
 
 <script>
-  const EDGES = [["/","/login","sign in"],["/login","/admin","on success"],["/admin","/admin/new",""],["/admin","/admin/the-blue-note","your venue"],["/admin/new","/admin/the-blue-note","after creating"],["/admin/the-blue-note","/v/the-blue-note","view as guest"],["/admin/the-blue-note/share","/v/the-blue-note","guests scan"]];
+  const EDGES = [["/","/login","sign in"],["/login","/admin","on success"],["/admin","/admin/new",""],["/admin","/admin/the-blue-note","your venue"],["/admin/new","/admin/the-blue-note","after creating"],["/admin/the-blue-note","/v/the-blue-note","view as guest"],["/admin/the-blue-note/share","/v/the-blue-note","guests scan"],["/platform","/admin/the-blue-note","suspend"]];
 
   const svg = document.querySelector(".connectors");
   const board = document.querySelector(".board");

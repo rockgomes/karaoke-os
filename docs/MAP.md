@@ -57,9 +57,11 @@ The whole app as a list. `+` means not built yet.
 
 **You — platform**
 
-* + **All venues** `/platform`
-  * + see every venue
-  * + suspend one
+* **All venues** `/platform`
+  * see every venue, its owner and its size
+  * see which bars have karaoke on right now
+  * suspend a venue, which hides it from guests
+  * restore a suspended venue
 
 ---
 
@@ -77,10 +79,9 @@ flowchart TD
     S -->|"signs in"| AD["/admin/:slug<br/>manage the bar"]
     AD --> GP
 
-    P -.->|"not built yet"| PA["/platform<br/>see every bar"]
+    P -->|"signs in"| PA["/platform<br/>every bar"]
 
-    classDef unbuilt stroke-dasharray: 5 5,color:#888
-    class PA unbuilt
+    PA -.->|"suspend"| AD
 ```
 
 A guest needs no account. Staff need one. You are a staff account with
@@ -123,6 +124,7 @@ Every route that exists. CI checks this list.
 /admin/[slug]
 /admin/[slug]/import
 /admin/[slug]/share
+/platform
 /v/[slug]
 ```
 
@@ -136,6 +138,7 @@ Every route that exists. CI checks this list.
 | `/admin/[slug]` | staff of that venue | Songs, and open or close karaoke. |
 | `/admin/[slug]/import` | staff of that venue | Load a CSV of songs, with a preview first. |
 | `/admin/[slug]/share` | staff of that venue | The QR code and link guests use. Printable. |
+| `/platform` | platform staff only | Every venue, with the power to suspend one. |
 
 ---
 
@@ -216,7 +219,7 @@ Anything a person typed is never overwritten.
 | Dark mode | **to port** |
 | Favourites for guests | schema ready, no screen |
 | Song requests to the DJ | schema sketched, not built |
-| Platform tier | not started |
+| Platform tier | built |
 | Playback | out of scope, needs karaoke hardware |
 
 ---
