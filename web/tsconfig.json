@@ -6,6 +6,10 @@
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
+    // Node's test runner strips types and resolves the real file, so the test
+    // files import "./csv.ts" with the extension. tsc rejects that unless it
+    // is told to allow it. Safe here because nothing is emitted.
+    "allowImportingTsExtensions": true,
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",

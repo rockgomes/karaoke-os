@@ -155,7 +155,16 @@ export default async function VenueAdminPage({
       </p>
 
       <section className="mt-10">
-        <h2 className="text-lg font-semibold">Add a song</h2>
+        <div className="flex flex-wrap items-center gap-3">
+          <h2 className="text-lg font-semibold">Add a song</h2>
+          <Link
+            href={`/admin/${slug}/import`}
+            className="text-sm text-neutral-500 underline-offset-4 hover:underline
+                       focus-visible:outline-2 focus-visible:outline-blue-600"
+          >
+            or import a CSV
+          </Link>
+        </div>
         {library ? (
           <AddSongForm slug={slug} libraryId={library.id} />
         ) : (
