@@ -56,6 +56,9 @@ jobs:
       - name: Typecheck
         run: npx tsc --noEmit
 
+      - name: Unit tests
+        run: npm test
+
       - name: Build
         # The build reads these at module load. They are publishable keys,
         # not secrets, but CI has no project attached, so placeholders keep
