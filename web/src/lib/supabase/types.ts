@@ -82,7 +82,14 @@ export type Database = {
       favorites: Table<Favorite, "user_id" | "song_id">;
     };
     Views: Record<never, never>;
-    Functions: Record<never, never>;
+    Functions: {
+      // Creating a venue and its first membership must be one transaction.
+      // See the create_venue_rpc migration for why.
+      create_venue: {
+        Args: { venue_name: string; venue_slug: string };
+        Returns: Venue;
+      };
+    };
     Enums: Record<never, never>;
     CompositeTypes: Record<never, never>;
   };
