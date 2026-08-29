@@ -46,7 +46,7 @@ function getServerSnapshot(): Theme {
   return "system";
 }
 
-function applyTheme(next: Theme) {
+function commit(next: Theme) {
   const root = document.documentElement;
 
   if (next === "system") root.removeAttribute("data-theme");
@@ -60,6 +60,35 @@ function applyTheme(next: Theme) {
   }
 
   for (const listener of listeners) listener();
+}
+
+/**
+ * Swapping every colour on the page in one frame reads as a flash, which is
+ * unpleasant on a screen someone is looking at in a dark room.
+ *
+ * A view transition cross-fades the whole composition — album art and text
+ * included — which a CSS transition cannot do. Where it is unsupported, a
+ * class on <html> fades the colours instead; that covers backgrounds, text
+ * and borders, which is most of what changes. Either way it is skipped when
+ * the visitor asks for reduced motion, where an instant swap is the correct
+ * behaviour rather than a lesser one.
+ */
+function applyTheme(next: Theme) {
+  const root = document.documentElement;
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    commit(next);
+    return;
+  }
+
+  if (typeof document.startViewTransition === "function") {
+    document.startViewTransition(() => commit(next));
+    return;
+  }
+
+  root.classList.add("theme-fade");
+  commit(next);
+  window.setTimeout(() => root.classList.remove("theme-fade"), 320);
 }
 
 const OPTIONS: { value: Theme; label: string; icon: React.ReactNode }[] = [

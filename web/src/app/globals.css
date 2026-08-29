@@ -203,6 +203,40 @@ body {
   }
 }
 
+/*
+ * Changing the theme. Swapping every colour in one frame reads as a flash,
+ * so the change is cross-faded — see applyTheme in theme-toggle.tsx.
+ */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 260ms;
+  animation-timing-function: ease;
+}
+
+/* Fallback where view transitions are unsupported. Deliberately narrow: only
+   the properties a theme change actually touches, so no hover or layout
+   animation is caught up in it. */
+.theme-fade,
+.theme-fade *:not(svg):not(svg *) {
+  transition:
+    background-color 260ms ease,
+    border-color 260ms ease,
+    color 260ms ease,
+    fill 260ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
+
+  .theme-fade,
+  .theme-fade * {
+    transition: none;
+  }
+}
+
 @media print {
   .no-print {
     display: none !important;
