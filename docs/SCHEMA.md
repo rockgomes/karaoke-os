@@ -235,3 +235,32 @@ on a mode change does nothing — the login form went on calling sign up after
 the button had switched to "Sign in", and only the server log revealed it.
 
 Carry the mode in the form as a hidden field and branch inside one action.
+
+## The platform tier
+
+`users.is_platform_admin` is not a role in `memberships`. It is a flag on the
+person, and it is set in SQL only — there is no screen for it, deliberately:
+
+```sql
+update public.users set is_platform_admin = true where email = 'you@example.com';
+```
+
+`venues.suspended_at` hides a venue from guests. Its own staff keep seeing it,
+so whatever caused the suspension can be sorted out.
+
+Two functions serve this tier, both SECURITY DEFINER and both checking
+`private.is_platform_admin()` before doing anything:
+
+- `public.platform_venues()` — one row per venue with owner, staff count, song
+  count and whether karaoke is running.
+- `public.set_venue_suspended(target_venue, suspended)` — the only way to
+  change `suspended_at`.
+
+**Why a function and not a view.** A Supabase view runs as its owner, so it
+would bypass row level security and hand every venue to every caller. A
+function states the check in the open, once.
+
+**Why an owner cannot lift their own suspension.** A table-level `UPDATE`
+grant covers every column, so `venues_update` alone would have let an owner
+clear the flag. `UPDATE` is revoked on the table and granted back only on
+`name` and `slug` — the same trap as `users.is_platform_admin`, met twice.

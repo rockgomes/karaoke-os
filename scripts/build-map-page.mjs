@@ -73,6 +73,7 @@ const EDGES = [
   ["/admin/new", "/admin/the-blue-note", "after creating"],
   ["/admin/the-blue-note", "/v/the-blue-note", "view as guest"],
   ["/admin/the-blue-note/share", "/v/the-blue-note", "guests scan"],
+  ["/platform", "/admin/the-blue-note", "suspend"],
 ];
 
 const built = tiers.flatMap((t) => t.screens).filter((s) => !s.todo).length;

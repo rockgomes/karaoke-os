@@ -5,6 +5,7 @@ export type Venue = {
   name: string;
   slug: string;
   created_at: string;
+  suspended_at: string | null;
 };
 
 export type AppUser = {
@@ -87,6 +88,26 @@ export type Database = {
       // See the create_venue_rpc migration for why.
       create_venue: {
         Args: { venue_name: string; venue_slug: string };
+        Returns: Venue;
+      };
+      // Refuses anyone who is not platform staff. See the platform_overview_rpc
+      // migration for why this is a function and not a view.
+      platform_venues: {
+        Args: Record<string, never>;
+        Returns: {
+          id: string;
+          name: string;
+          slug: string;
+          created_at: string;
+          suspended_at: string | null;
+          owner_email: string | null;
+          staff_count: number;
+          song_count: number;
+          karaoke_open: boolean;
+        }[];
+      };
+      set_venue_suspended: {
+        Args: { target_venue: string; suspended: boolean };
         Returns: Venue;
       };
     };

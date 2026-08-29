@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getMemberships, requireUser } from "@/lib/auth";
+import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/login/actions";
 
 export default async function AdminLayout({
@@ -9,6 +10,14 @@ export default async function AdminLayout({
 }) {
   const user = await requireUser();
   const memberships = await getMemberships();
+
+  // Only platform staff get the link, and only they can open the page.
+  const supabase = await createClient();
+  const { data: profile } = await supabase
+    .from("users")
+    .select("is_platform_admin")
+    .eq("id", user.id)
+    .maybeSingle();
 
   return (
     <div className="min-h-full">
@@ -39,6 +48,16 @@ export default async function AdminLayout({
                          focus-visible:outline-2 focus-visible:outline-blue-600"
             >
               Your venues
+            </Link>
+          )}
+
+          {profile?.is_platform_admin && (
+            <Link
+              href="/platform"
+              className="text-sm text-neutral-500 underline-offset-4 hover:underline
+                         focus-visible:outline-2 focus-visible:outline-blue-600"
+            >
+              All venues
             </Link>
           )}
 
