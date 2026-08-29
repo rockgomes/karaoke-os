@@ -1,39 +1,43 @@
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/server";
 
-export default async function Home() {
-  const supabase = await createClient();
-  const { data: venues } = await supabase
-    .from("venues")
-    .select("name, slug")
-    .order("name");
+export const metadata = {
+  title: "Karaoke OS",
+  description: "The song list for your karaoke night.",
+};
 
+// Deliberately not a list of venues. That would publish the customer list,
+// and a guest arrives by the QR code on their table, never through here.
+export default function Home() {
   return (
-    <main className="mx-auto w-full max-w-2xl px-4 py-12">
-      <h1 className="text-3xl font-bold tracking-tight">Karaoke OS</h1>
-      <p className="mt-2 text-neutral-500">
-        Scan the code at your table to see the songs the bar has.
+    <main className="mx-auto w-full max-w-xl px-4 py-20">
+      <h1 className="text-4xl font-bold tracking-tight">Karaoke OS</h1>
+      <p className="mt-4 text-lg text-neutral-600 dark:text-neutral-400">
+        The song list for your karaoke night. Guests scan the code on the table
+        and see everything the bar can play.
       </p>
 
-      <h2 className="mt-10 text-sm font-semibold uppercase tracking-wide text-neutral-500">
-        Venues
-      </h2>
-      <ul className="mt-3 divide-y divide-neutral-200 dark:divide-neutral-800">
-        {(venues ?? []).map((venue) => (
-          <li key={venue.slug}>
-            <Link
-              href={`/v/${venue.slug}`}
-              className="block py-3 font-medium underline-offset-4 hover:underline
-                         focus-visible:outline-2 focus-visible:outline-blue-600"
-            >
-              {venue.name}
-            </Link>
-          </li>
-        ))}
-      </ul>
-      {(venues ?? []).length === 0 && (
-        <p className="mt-3 text-neutral-500">No venues yet.</p>
-      )}
+      <div className="mt-10 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+        <h2 className="font-semibold">Looking for a song list?</h2>
+        <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+          Scan the code on your table. There is nothing to install and no
+          account to make.
+        </p>
+      </div>
+
+      <div className="mt-4 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+        <h2 className="font-semibold">Run a venue?</h2>
+        <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+          Manage your list, and open karaoke when the night starts.
+        </p>
+        <Link
+          href="/login"
+          className="mt-4 inline-block rounded-lg bg-blue-600 px-4 py-2.5 font-medium
+                     text-white hover:bg-blue-700 focus-visible:outline-2
+                     focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        >
+          Venue sign in
+        </Link>
+      </div>
     </main>
   );
 }
