@@ -121,13 +121,22 @@ export default async function VenueAdminPage({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">{membership.venues.name}</h1>
-          <Link
-            href={`/v/${slug}`}
-            className="text-sm text-neutral-500 underline-offset-4 hover:underline
-                       focus-visible:outline-2 focus-visible:outline-blue-600"
-          >
-            View what guests see → /v/{slug}
-          </Link>
+          <div className="flex flex-wrap items-center gap-3 text-sm text-neutral-500">
+            <Link
+              href={`/v/${slug}`}
+              className="underline-offset-4 hover:underline
+                         focus-visible:outline-2 focus-visible:outline-blue-600"
+            >
+              View what guests see → /v/{slug}
+            </Link>
+            <Link
+              href={`/admin/${slug}/share`}
+              className="underline-offset-4 hover:underline
+                         focus-visible:outline-2 focus-visible:outline-blue-600"
+            >
+              QR code for the tables
+            </Link>
+          </div>
         </div>
 
         <form action={toggleSession}>

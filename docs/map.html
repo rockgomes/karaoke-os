@@ -311,9 +311,9 @@
       manage one bar. The platform tier sees them all, and does not exist yet.
     </p>
     <div class="stats">
-      <span class="stat"><b>7</b> screens built</span>
+      <span class="stat"><b>8</b> screens built</span>
       <span class="stat"><b>1</b> planned</span>
-      <span class="stat"><b>23</b> actions working</span>
+      <span class="stat"><b>27</b> actions working</span>
       <span class="stat"><b>5</b> actions to come</span>
     </div>
   </header>
@@ -446,6 +446,25 @@
                    </li>
           </ul>
         </article>
+        <article class="card" data-route="/admin/the-blue-note/share">
+          <header class="card__head">
+            <h3 class="card__name">Code for the tables</h3>
+            
+          </header>
+          <p class="card__route">/admin/the-blue-note/share</p>
+          <ul class="card__actions">
+            <li class="act">
+                     <span class="act__text">print a card for each table</span>
+                     
+                   </li><li class="act">
+                     <span class="act__text">copy the guest link</span>
+                     
+                   </li><li class="act">
+                     <span class="act__text">download the code as PNG or SVG</span>
+                     
+                   </li>
+          </ul>
+        </article>
         <article class="card" data-route="/admin/the-blue-note">
           <header class="card__head">
             <h3 class="card__name">Manage a venue</h3>
@@ -485,6 +504,9 @@
                      
                    </li><li class="act">
                      <span class="act__text">view the guest page</span>
+                     
+                   </li><li class="act">
+                     <span class="act__text">get the QR code for the tables</span>
                      
                    </li><li class="act">
                      <span class="act__text">sign out</span>
@@ -532,7 +554,7 @@
 </div>
 
 <script>
-  const EDGES = [["/","/login","sign in"],["/login","/admin","on success"],["/admin","/admin/new",""],["/admin","/admin/the-blue-note","your venue"],["/admin/new","/admin/the-blue-note","after creating"],["/admin/the-blue-note","/v/the-blue-note","view as guest"]];
+  const EDGES = [["/","/login","sign in"],["/login","/admin","on success"],["/admin","/admin/new",""],["/admin","/admin/the-blue-note","your venue"],["/admin/new","/admin/the-blue-note","after creating"],["/admin/the-blue-note","/v/the-blue-note","view as guest"],["/admin/the-blue-note/share","/v/the-blue-note","guests scan"]];
 
   const svg = document.querySelector(".connectors");
   const board = document.querySelector(".board");
