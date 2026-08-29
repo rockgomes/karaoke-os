@@ -5,7 +5,7 @@ import { authenticate, type AuthState } from "./actions";
 
 const EMPTY: AuthState = { error: null, notice: null };
 
-export default function LoginForm() {
+export default function LoginForm({ next }: { next: string }) {
   const [mode, setMode] = useState<"in" | "up">("in");
   const [state, formAction, pending] = useActionState(authenticate, EMPTY);
 
@@ -13,6 +13,7 @@ export default function LoginForm() {
     <form action={formAction} className="mt-8 space-y-4">
       {/* The mode travels with the form. See the comment in actions.ts. */}
       <input type="hidden" name="mode" value={mode === "up" ? "signup" : "signin"} />
+      <input type="hidden" name="next" value={next} />
 
       <div>
         <label htmlFor="email" className="block text-sm font-medium">
@@ -52,7 +53,7 @@ export default function LoginForm() {
         </p>
       )}
       {state.notice && (
-        <p role="status" className="text-sm text-ok ">
+        <p role="status" className="text-sm text-ok">
           {state.notice}
         </p>
       )}
@@ -60,8 +61,8 @@ export default function LoginForm() {
       <button
         type="submit"
         disabled={pending}
-        className="w-full rounded-lg bg-accent px-4 py-2.5 font-medium text-white
- hover:bg-accent-hover disabled:opacity-60"
+        className="w-full rounded-lg bg-accent px-4 py-2.5 font-medium text-accent-ink
+                   hover:bg-accent-hover disabled:opacity-60"
       >
         {pending ? "Working…" : mode === "in" ? "Sign in" : "Create account"}
       </button>
