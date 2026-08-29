@@ -37,6 +37,12 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # Next 16 generates global types such as LayoutProps into .next/types.
+      # Without this, tsc fails on a fresh checkout with "Cannot find name
+      # 'LayoutProps'" while the same code compiles locally after a build.
+      - name: Generate route types
+        run: npx next typegen
+
       - name: Typecheck
         run: npx tsc --noEmit
 
