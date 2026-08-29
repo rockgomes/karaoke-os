@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { signOut } from "@/app/login/actions";
+import ThemeToggle from "./theme-toggle";
 
 export type IconName =
   | "songs"
@@ -171,6 +172,9 @@ export default function SideNav({
 
   const identity = (
     <div className="border-t border-rail-line px-3 py-3">
+      <div className="px-3 pb-2">
+        <ThemeToggle tone="rail" />
+      </div>
       <p className="truncate px-3 text-xs text-rail-ink-soft" title={email}>
         {email}
       </p>
