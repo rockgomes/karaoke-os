@@ -116,6 +116,12 @@ export type Database = {
         Args: { target_library: string };
         Returns: { genre: string; songs: number }[];
       };
+      // The genres a guest can filter by, across a venue's public libraries.
+      // Callable by signed-out visitors; RLS decides what it counts.
+      venue_genres: {
+        Args: { target_venue: string };
+        Returns: { genre: string; songs: number }[];
+      };
       // The four venue admin numbers in one round trip. "Added this week" uses
       // the database clock, so the count does not shift between renders.
       library_stats: {
