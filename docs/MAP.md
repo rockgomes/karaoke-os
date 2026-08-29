@@ -1,0 +1,220 @@
+# Karaoke OS — the map
+
+What exists, how it connects, and who may reach it.
+
+**This file is checked by CI.** `scripts/check-map.mjs` compares the `routes`
+block below against the real page files. Add a page without listing it and the
+build fails. So this map cannot quietly go stale.
+
+---
+
+## 1. The three tiers
+
+```mermaid
+flowchart TD
+    G["🎤 Guest<br/>in the bar"]
+    S["🍸 Venue staff<br/>owner or DJ"]
+    P["🛠 Platform<br/>you"]
+
+    G -->|"scans the QR at the table"| GP["/v/:slug<br/>the bar's song list"]
+    G -.->|"optional account,<br/>only to save favourites"| FAV[("favorites")]
+
+    S -->|"signs in"| AD["/admin/:slug<br/>manage the bar"]
+    AD --> GP
+
+    P -.->|"not built yet"| PA["/platform<br/>see every bar"]
+
+    classDef unbuilt stroke-dasharray: 5 5,color:#888
+    class PA unbuilt
+```
+
+A guest needs no account. Staff need one. You are a staff account with
+`is_platform_admin` set — see [SCHEMA.md](SCHEMA.md).
+
+---
+
+## 2. Sitemap
+
+```mermaid
+flowchart LR
+    subgraph Public["Open to anyone"]
+        ROOT["/"]
+        VSLUG["/v/:slug"]
+        LOGIN["/login"]
+    end
+
+    subgraph Staff["Sign in required"]
+        ADMIN["/admin"]
+        NEW["/admin/new"]
+        VENUE["/admin/:slug"]
+    end
+
+    ROOT --> VSLUG
+    LOGIN -->|"on success"| ADMIN
+    ADMIN -->|"exactly one venue,<br/>skips the list"| VENUE
+    ADMIN --> NEW
+    NEW -->|"after creating"| VENUE
+    VENUE -->|"view as a guest"| VSLUG
+    VENUE -->|"sign out"| LOGIN
+```
+
+Every route that exists. CI checks this list.
+
+```routes
+/
+/login
+/admin
+/admin/new
+/admin/[slug]
+/v/[slug]
+```
+
+| Route | Who | What it does |
+|---|---|---|
+| `/` | anyone | Lists venues. **See problem 1 below.** |
+| `/v/[slug]` | anyone | The song list a guest browses. No login. |
+| `/login` | anyone | Sign in or create a staff account. |
+| `/admin` | staff | Your venues. Skips straight through if you have one. |
+| `/admin/new` | staff | Create a venue and become its owner. |
+| `/admin/[slug]` | staff of that venue | Songs, and open or close karaoke. |
+
+---
+
+## 3. Data model
+
+```mermaid
+erDiagram
+    venues ||--o{ libraries : "has"
+    venues ||--o{ memberships : "is staffed by"
+    venues ||--o{ sessions : "runs"
+    users ||--o{ memberships : "works at"
+    users ||--o{ favorites : "saves"
+    libraries ||--o{ songs : "holds"
+    songs ||--o{ favorites : "is saved as"
+
+    venues { uuid id PK; text name; text slug UK }
+    users { uuid id PK; text email UK; bool is_platform_admin }
+    memberships { uuid user_id FK; uuid venue_id FK; text role }
+    libraries { uuid id PK; uuid venue_id FK; bool is_public }
+    songs { uuid id PK; uuid library_id FK; text title; text artist }
+    sessions { uuid id PK; uuid venue_id FK; timestamptz closed_at }
+    favorites { uuid user_id FK; uuid song_id FK }
+```
+
+A guest has no row anywhere. A patron with favourites is a `users` row with no
+`memberships` row. That absence is the whole definition.
+
+---
+
+## 4. Where song details come from
+
+```mermaid
+flowchart TD
+    ADD["Someone types<br/>a title and an artist"] --> MISS{"Anything<br/>missing?"}
+    MISS -->|no| DONE["Save"]
+    MISS -->|yes| IT["iTunes Search<br/>no key needed"]
+
+    IT --> F1["album · year<br/>running time · cover art"]
+    F1 --> GEN{"Genre<br/>found?"}
+
+    GEN -->|no| LFM["Last.fm<br/>track → album → artist"]
+    LFM --> F2["a real breakdown, e.g.<br/>Rock, Hard Rock, Glam Rock"]
+
+    GEN -->|yes| REST
+    F2 --> REST{"Still<br/>blank?"}
+    REST -->|yes| MB["MusicBrainz<br/>1 request per second"]
+    REST -->|no| DONE
+    MB --> DONE
+```
+
+**Why iTunes leads.** MusicBrainz indexes every recording that exists. Asked
+for "Bohemian Rhapsody" by Queen it returns ten live bootlegs and no studio
+track, so taking the first hit gave the album *Live USA* and the year 1991.
+iTunes indexes the commercial catalogue and returned 1975 and 5:55. Checked
+against five standards, iTunes got the year and running time right on all five.
+
+Anything a person typed is never overwritten.
+
+---
+
+## 5. What is built
+
+| Feature | State |
+|---|---|
+| Guest song list, search | built |
+| Guest sees whether karaoke is on | built |
+| Staff sign in and sign out | built |
+| Create a venue | built |
+| Add and remove songs | built |
+| Fill in song details automatically | built |
+| Open and close a karaoke session | built |
+| One venue cannot touch another | built, tested |
+| Edit a song | **to port** |
+| Song table: search, sort, pages, bulk delete | **to port** |
+| CSV import | **to port** |
+| QR code and share link | **to port** |
+| Several libraries per venue | **to port** |
+| Dark mode | **to port** |
+| Favourites for guests | schema ready, no screen |
+| Song requests to the DJ | schema sketched, not built |
+| Platform tier | not started |
+| Playback | out of scope, needs karaoke hardware |
+
+---
+
+## 6. Navigation problems
+
+### What went wrong before
+
+The old app ran two navigations at once, and they disagreed.
+
+```mermaid
+flowchart TD
+    subgraph Old["Old app, on every /admin page"]
+        direction LR
+        NAV["Top navbar<br/>Manage Songs · Libraries"]
+        SIDE["Sidebar<br/>Dashboard · Songs Library<br/>AI Generator · Customers<br/>Appearance · Venue Settings"]
+    end
+
+    NAV -->|"Manage Songs"| A["/admin/songs"]
+    SIDE -->|"Songs Library"| A
+    NAV -->|"Libraries"| B["/admin/libraries"]
+    SIDE -->|"Venue Settings"| B
+
+    style A fill:#fee,stroke:#c33
+    style B fill:#fee,stroke:#c33
+```
+
+Five faults, all confirmed in the code:
+
+1. **Two menus, same destinations.** The navbar rendered on admin pages too, so
+   `/admin/songs` was reachable from "Manage Songs" and from "Songs Library".
+2. **One page, two names.** `/admin/libraries` was "Libraries" at the top and
+   "Venue Settings" in the sidebar. This is the thing you noticed.
+3. **Four of six sidebar items were empty.** Dashboard, AI Generator, Customers
+   and Appearance all rendered "Coming Soon".
+4. **"Home" meant two places.** The navbar logo went to `/`. The sidebar brand
+   went to `/admin/songs`.
+5. **Guest and staff shared one navbar.** A signed-in visitor browsing the
+   guest page still saw staff links.
+
+### The rule from now on
+
+**One surface, one menu.** The guest pages and the staff pages do not share
+navigation. A page has exactly one route and exactly one name, used everywhere.
+Nothing appears in a menu before the page behind it works.
+
+### What is wrong with the new navigation
+
+Being honest about the current build, not only the old one.
+
+| # | Problem | Severity |
+|---|---|---|
+| 1 | `/` lists every venue publicly. That publishes the customer list, and a guest never needs it — they arrive by QR code. It should be a landing page. | high |
+| 2 | Owning one venue makes `/admin` redirect past the venue list, so the "Add a venue" button cannot be reached except by typing `/admin/new`. A dead end. | high |
+| 3 | The staff header has no navigation at all — brand, email, sign out. No way back to the venue list from inside a venue except the brand link. | medium |
+| 4 | Two pages list venues (`/` for everyone, `/admin` for you) with the same shape and different meanings. | medium |
+| 5 | No venue switcher, so running two bars means returning to `/admin` every time. | low, until someone runs two |
+
+Problems 1 and 2 are worth fixing before any more screens are added, because
+every new page inherits the shape.

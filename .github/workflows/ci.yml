@@ -11,6 +11,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  map:
+    name: docs/MAP.md matches the routes
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: node scripts/check-map.mjs
+
   web:
     name: web (lint, typecheck, build)
     runs-on: ubuntu-latest
