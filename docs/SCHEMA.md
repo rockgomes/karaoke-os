@@ -264,3 +264,27 @@ function states the check in the open, once.
 grant covers every column, so `venues_update` alone would have let an owner
 clear the flag. `UPDATE` is revoked on the table and granted back only on
 `name` and `slug` — the same trap as `users.is_platform_admin`, met twice.
+
+## Security advisor: what is expected
+
+Supabase sets `ALTER DEFAULT PRIVILEGES` so every new function in `public` is
+granted to `anon` and `authenticated`. Revoking `PUBLIC` does **not** remove
+that explicit `anon` grant — it has to be named:
+
+```sql
+revoke execute on function public.some_rpc() from anon;
+```
+
+That is done for all three RPCs. None of them were exploitable — each checks
+the caller and raises for a signed-out one — but a stranger should not reach
+the body at all.
+
+Three warnings remain, and are expected. "Signed-in users can execute" is
+raised for `create_venue`, `platform_venues` and `set_venue_suspended`. That
+is exactly how the app calls them; each one checks the caller in its first
+statement. Silencing these would mean breaking the feature.
+
+One warning is worth acting on and cannot be set from SQL: **leaked password
+protection is disabled**. Turn it on in the Supabase dashboard under
+Authentication → Policies, so a password already known to be breached is
+refused at sign-up.
