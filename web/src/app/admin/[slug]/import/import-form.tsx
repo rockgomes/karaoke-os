@@ -31,25 +31,24 @@ export default function ImportForm({
 
   if (state.added !== undefined && !state.error) {
     return (
-      <div className="mt-8 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+      <div className="mt-8 rounded-xl border border-line p-5">
         <h2 className="text-lg font-semibold">
           Imported {state.added} {state.added === 1 ? "song" : "songs"}
         </h2>
         {state.duplicates ? (
-          <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+          <p className="mt-1 text-sm text-ink-soft">
             {state.duplicates} were already on the list, so they were left alone.
           </p>
         ) : null}
-        <p className="mt-3 text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="mt-3 text-sm text-ink-soft">
           Genre, year, album and cover art were not looked up. Use{" "}
           <strong>Fill in details</strong> on the venue page to do that in
           batches.
         </p>
         <Link
           href={`/admin/${slug}`}
-          className="mt-4 inline-block rounded-lg bg-blue-600 px-4 py-2.5 font-medium
-                     text-white hover:bg-blue-700 focus-visible:outline-2
-                     focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          className="mt-4 inline-block rounded-lg bg-accent px-4 py-2.5 font-medium
+ text-white hover:bg-accent-hover"
         >
           Back to the song list
         </Link>
@@ -65,16 +64,15 @@ export default function ImportForm({
 
       <div className="flex flex-wrap items-center gap-3">
         <label
-          className="cursor-pointer rounded-lg border border-neutral-300 px-4 py-2.5 text-sm
-                     font-medium hover:bg-neutral-50 focus-within:outline-2
-                     focus-within:outline-blue-600 dark:border-neutral-700
-                     dark:hover:bg-neutral-900"
+          className="cursor-pointer rounded-lg border border-line px-4 py-2.5 text-sm
+ font-medium hover:bg-surface-2
+ hover:bg-surface-2"
         >
           Choose a CSV file
           <input type="file" accept=".csv,text/csv" onChange={onFile} className="sr-only" />
         </label>
         {fileName && (
-          <span className="text-sm text-neutral-500">{fileName}</span>
+          <span className="text-sm text-ink-soft">{fileName}</span>
         )}
       </div>
 
@@ -91,9 +89,8 @@ export default function ImportForm({
         rows={8}
         spellCheck={false}
         placeholder={'Africa,Toto,Rock,4:55,1982,Toto IV\n"1, 2 Step",Ciara'}
-        className="mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 font-mono
-                   text-sm outline-none focus-visible:ring-2 focus-visible:ring-blue-600
-                   dark:border-neutral-700 dark:bg-neutral-900"
+        className="mt-1 w-full rounded-lg border border-line px-3 py-2 font-mono
+ text-sm"
       />
 
       {parsed && (
@@ -101,17 +98,17 @@ export default function ImportForm({
           <h2 className="text-sm font-semibold">
             {parsed.rows.length} {parsed.rows.length === 1 ? "song" : "songs"} ready
             {parsed.hadHeader && (
-              <span className="ml-2 font-normal text-neutral-500">
+              <span className="ml-2 font-normal text-ink-soft">
                 header row skipped
               </span>
             )}
           </h2>
 
           {parsed.rows.length > 0 && (
-            <div className="mt-2 overflow-x-auto rounded-lg border border-neutral-200 dark:border-neutral-800">
+            <div className="mt-2 overflow-x-auto rounded-lg border border-line">
               <table className="w-full border-collapse text-sm">
                 <thead>
-                  <tr className="border-b border-neutral-200 text-left dark:border-neutral-800">
+                  <tr className="border-b border-line text-left">
                     <th scope="col" className="px-3 py-2 font-medium">Title</th>
                     <th scope="col" className="px-3 py-2 font-medium">Artist</th>
                     <th scope="col" className="px-3 py-2 font-medium">Genre</th>
@@ -122,16 +119,16 @@ export default function ImportForm({
                   {parsed.rows.slice(0, PREVIEW).map((row) => (
                     <tr
                       key={row.line}
-                      className="border-b border-neutral-100 last:border-0 dark:border-neutral-900"
+                      className="border-b border-line last:border-0"
                     >
                       <td className="px-3 py-1.5">{row.title}</td>
-                      <td className="px-3 py-1.5 text-neutral-600 dark:text-neutral-400">
+                      <td className="px-3 py-1.5 text-ink-soft">
                         {row.artist}
                       </td>
-                      <td className="px-3 py-1.5 text-neutral-600 dark:text-neutral-400">
+                      <td className="px-3 py-1.5 text-ink-soft">
                         {row.genre ?? "—"}
                       </td>
-                      <td className="px-3 py-1.5 tabular-nums text-neutral-600 dark:text-neutral-400">
+                      <td className="px-3 py-1.5 tabular-nums text-ink-soft">
                         {row.year ?? "—"}
                       </td>
                     </tr>
@@ -139,7 +136,7 @@ export default function ImportForm({
                 </tbody>
               </table>
               {parsed.rows.length > PREVIEW && (
-                <p className="px-3 py-2 text-xs text-neutral-500">
+                <p className="px-3 py-2 text-xs text-ink-soft">
                   and {parsed.rows.length - PREVIEW} more
                 </p>
               )}
@@ -148,15 +145,15 @@ export default function ImportForm({
 
           {parsed.skipped.length > 0 && (
             <details className="mt-3 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2
-                                text-sm dark:border-amber-900/60 dark:bg-amber-950/30">
+ text-sm dark:border-amber-900/60 dark:bg-amber-950/30">
               <summary className="cursor-pointer font-medium">
                 {parsed.skipped.length}{" "}
                 {parsed.skipped.length === 1 ? "line" : "lines"} will be skipped
               </summary>
-              <ul className="mt-2 space-y-1 text-neutral-700 dark:text-neutral-300">
+              <ul className="mt-2 space-y-1 text-ink-soft">
                 {parsed.skipped.slice(0, 20).map((s) => (
                   <li key={s.line}>
-                    <span className="tabular-nums text-neutral-500">line {s.line}</span>{" "}
+                    <span className="tabular-nums text-ink-soft">line {s.line}</span>{" "}
                     — {s.reason}: <code className="text-xs">{s.raw}</code>
                   </li>
                 ))}
@@ -167,7 +164,7 @@ export default function ImportForm({
       )}
 
       {state.error && (
-        <p role="alert" className="mt-4 text-sm text-red-600 dark:text-red-400">
+        <p role="alert" className="mt-4 text-sm text-danger">
           {state.error}
         </p>
       )}
@@ -175,9 +172,8 @@ export default function ImportForm({
       <button
         type="submit"
         disabled={pending || !parsed?.rows.length}
-        className="mt-6 rounded-lg bg-blue-600 px-4 py-2.5 font-medium text-white
-                   hover:bg-blue-700 disabled:opacity-60 focus-visible:outline-2
-                   focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        className="mt-6 rounded-lg bg-accent px-4 py-2.5 font-medium text-white
+ hover:bg-accent-hover disabled:opacity-60"
       >
         {pending
           ? "Importing…"

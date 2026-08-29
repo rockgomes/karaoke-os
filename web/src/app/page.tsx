@@ -11,29 +11,28 @@ export default function Home() {
   return (
     <main className="mx-auto w-full max-w-xl px-4 py-20">
       <h1 className="text-4xl font-bold tracking-tight">Karaoke OS</h1>
-      <p className="mt-4 text-lg text-neutral-600 dark:text-neutral-400">
+      <p className="mt-4 text-lg text-ink-soft">
         The song list for your karaoke night. Guests scan the code on the table
         and see everything the bar can play.
       </p>
 
-      <div className="mt-10 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+      <div className="mt-10 rounded-xl border border-line p-5">
         <h2 className="font-semibold">Looking for a song list?</h2>
-        <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="mt-1 text-sm text-ink-soft">
           Scan the code on your table. There is nothing to install and no
           account to make.
         </p>
       </div>
 
-      <div className="mt-4 rounded-xl border border-neutral-200 p-5 dark:border-neutral-800">
+      <div className="mt-4 rounded-xl border border-line p-5">
         <h2 className="font-semibold">Run a venue?</h2>
-        <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
+        <p className="mt-1 text-sm text-ink-soft">
           Manage your list, and open karaoke when the night starts.
         </p>
         <Link
           href="/login"
-          className="mt-4 inline-block rounded-lg bg-blue-600 px-4 py-2.5 font-medium
-                     text-white hover:bg-blue-700 focus-visible:outline-2
-                     focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          className="mt-4 inline-block rounded-lg bg-accent px-4 py-2.5 font-medium
+ text-white hover:bg-accent-hover"
         >
           Venue sign in
         </Link>

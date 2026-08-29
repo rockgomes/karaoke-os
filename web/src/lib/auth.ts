@@ -17,19 +17,24 @@ export async function requireUser() {
   return user;
 }
 
-/** Sends anyone who is not platform staff to a 404 rather than a hint. */
-export async function requirePlatformAdmin() {
-  const user = await requireUser();
+/** Whether this user is platform staff. Used to decide what the rail shows. */
+export async function isPlatformAdmin(userId: string): Promise<boolean> {
   const supabase = await createClient();
   const { data } = await supabase
     .from("users")
     .select("is_platform_admin")
-    .eq("id", user.id)
+    .eq("id", userId)
     .maybeSingle();
+  return Boolean(data?.is_platform_admin);
+}
+
+/** Sends anyone who is not platform staff to a 404 rather than a hint. */
+export async function requirePlatformAdmin() {
+  const user = await requireUser();
 
   // notFound, not a message: someone poking at /platform learns nothing
   // about whether the page exists.
-  if (!data?.is_platform_admin) notFound();
+  if (!(await isPlatformAdmin(user.id))) notFound();
   return user;
 }
 

@@ -1,6 +1,5 @@
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import QRCode from "qrcode";
 import { getMembershipBySlug, requireUser } from "@/lib/auth";
 import ShareActions from "./share-actions";
@@ -34,28 +33,25 @@ export default async function SharePage({
   });
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-8">
+    <>
       <div className="no-print">
-        <Link
-          href={`/admin/${slug}`}
-          className="text-sm text-neutral-500 underline-offset-4 hover:underline
-                     focus-visible:outline-2 focus-visible:outline-blue-600"
-        >
-          ← {membership.venues.name}
-        </Link>
 
-        <h1 className="mt-3 text-2xl font-bold tracking-tight">Code for the tables</h1>
-        <p className="mt-2 max-w-prose text-sm text-neutral-600 dark:text-neutral-400">
+        <h1 className="font-display text-3xl font-semibold tracking-tight">Code for the tables</h1>
+        <p className="mt-2 max-w-prose text-sm text-ink-soft">
           Guests scan this and see your song list. No app, no account. Print the
           card below and put one on each table.
         </p>
       </div>
 
-      {/* The card is what gets printed. Everything else is hidden on paper. */}
+      {/*
+        The card is what gets printed. Everything else is hidden on paper.
+        Its colours are literal rather than themed: this is a preview of a
+        piece of paper, so it must stay black on white in either theme.
+      */}
       <section
         id="table-card"
-        className="mx-auto mt-8 max-w-sm rounded-2xl border border-neutral-300 bg-white
-                   p-8 text-center text-neutral-900 dark:border-neutral-700"
+        className="mx-auto mt-8 max-w-sm rounded-2xl border border-line bg-white p-8
+                   text-center text-neutral-900"
       >
         <p className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
           Karaoke tonight
@@ -79,15 +75,9 @@ export default async function SharePage({
 
       <style>{`
         @media print {
-          .no-print { display: none !important; }
-          #table-card {
-            border: none;
-            max-width: none;
-            margin: 0 auto;
-            padding: 0;
-          }
+          #table-card { border: none; max-width: none; margin: 0 auto; padding: 0; }
         }
       `}</style>
-    </main>
+    </>
   );
 }

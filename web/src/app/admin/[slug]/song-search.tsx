@@ -44,13 +44,12 @@ export default function SongSearch({ total }: { total: number }) {
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={`Search ${total} songs by title or artist`}
-        className="w-full rounded-lg border border-neutral-300 px-3 py-2 text-sm
-                   outline-none focus-visible:ring-2 focus-visible:ring-blue-600
-                   dark:border-neutral-700 dark:bg-neutral-900"
+        className="w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm
+ text-ink placeholder:text-ink-faint"
       />
       {pending && (
         <span
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-neutral-500"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-ink-faint"
           role="status"
         >
           searching

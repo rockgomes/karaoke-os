@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getMembershipBySlug, requireUser } from "@/lib/auth";
 import ImportForm from "./import-form";
@@ -27,17 +26,10 @@ export default async function ImportPage({
   const library = libraries?.[0] ?? null;
 
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-8">
-      <Link
-        href={`/admin/${slug}`}
-        className="text-sm text-neutral-500 underline-offset-4 hover:underline
-                   focus-visible:outline-2 focus-visible:outline-blue-600"
-      >
-        ← {membership.venues.name}
-      </Link>
+    <>
 
-      <h1 className="mt-3 text-2xl font-bold tracking-tight">Import songs</h1>
-      <p className="mt-2 max-w-prose text-sm text-neutral-600 dark:text-neutral-400">
+      <h1 className="font-display text-3xl font-semibold tracking-tight">Import songs</h1>
+      <p className="mt-2 max-w-prose text-sm text-ink-soft">
         Choose a CSV file or paste the rows. Columns go{" "}
         <strong>title, artist, genre, length, year, album</strong> — only the
         first two are needed. A header row is detected and skipped.
@@ -46,8 +38,8 @@ export default async function ImportPage({
       {library ? (
         <ImportForm slug={slug} libraryId={library.id} />
       ) : (
-        <p className="mt-6 text-neutral-500">This venue has no song list.</p>
+        <p className="mt-6 text-ink-soft">This venue has no song list.</p>
       )}
-    </main>
+    </>
   );
 }
