@@ -6,6 +6,49 @@ What exists, how it connects, and who may reach it.
 block below against the real page files. Add a page without listing it and the
 build fails. So this map cannot quietly go stale.
 
+## 0. Screens at a glance
+
+The whole app as a list. `+` means not built yet.
+
+**Anyone — no account**
+
+* **Home** `/`
+  * see the list of venues *(wrong — should be a landing page)*
+* **Venue song list** `/v/the-blue-note`
+  * search by song or artist
+  * see whether karaoke is on tonight
+  * + save a favourite (needs an account)
+* **Sign in** `/login`
+  * sign in
+  * create a staff account
+
+**Venue staff — sign in required**
+
+* **Your venues** `/admin`
+  * open a venue
+  * add a venue
+* **Add a venue** `/admin/new`
+  * name it and claim its web address
+* **Manage a venue** `/admin/the-blue-note`
+  * open or close karaoke
+  * add a song
+  * remove a song
+  * fill in missing song details
+  * view the guest page
+  * sign out
+  * + edit a song
+  * + search, sort and page the song list
+  * + delete several songs at once
+  * + import a CSV
+  * + show the QR code and copy the link
+  * + manage several song lists
+
+**You — platform**
+
+* + **All venues** `/platform`
+  * + see every venue
+  * + suspend one
+
 ---
 
 ## 1. The three tiers
