@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { safeNext } from "@/lib/safe-next";
 
 export type AuthState = { error: string | null; notice?: string | null };
 
@@ -18,6 +19,8 @@ export async function authenticate(
   formData: FormData,
 ): Promise<AuthState> {
   const mode = formData.get("mode") === "signup" ? "signup" : "signin";
+  // Validated, not trusted: this value came from a query string.
+  const next = safeNext(String(formData.get("next") ?? ""));
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
 
@@ -49,7 +52,7 @@ export async function authenticate(
   }
 
   revalidatePath("/", "layout");
-  redirect("/admin");
+  redirect(next);
 }
 
 export async function signOut() {

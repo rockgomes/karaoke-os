@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { toggleFavorite } from "./actions";
 
 export type GuestSong = {
   id: string;
@@ -19,8 +21,11 @@ export type GuestSong = {
  * The job is not "browse a catalogue". It is: find a song, then tell the DJ
  * which one. So picking a song opens a card built to be held up and read
  * across a loud, dark room — that is the point of the screen, not a detail.
+ *
+ * An account is never required. It only buys you the hearts.
  */
 export default function SongBrowser({
+  slug,
   venueName,
   live,
   songs,
@@ -31,7 +36,12 @@ export default function SongBrowser({
   genres,
   query,
   genre,
+  onlyFavourites,
+  favouriteIds,
+  favouritesHere,
+  signedIn,
 }: {
+  slug: string;
   venueName: string;
   live: boolean;
   songs: GuestSong[];
@@ -42,6 +52,10 @@ export default function SongBrowser({
   genres: string[];
   query: string;
   genre: string;
+  onlyFavourites: boolean;
+  favouriteIds: string[];
+  favouritesHere: number;
+  signedIn: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -50,6 +64,11 @@ export default function SongBrowser({
 
   const [value, setValue] = useState(query);
   const [picked, setPicked] = useState<GuestSong | null>(null);
+
+  const favourites = new Set(favouriteIds);
+  // Where sign-in should send someone back to: this exact view.
+  const here = params.toString() ? `${pathname}?${params}` : pathname;
+  const signInHref = `/login?next=${encodeURIComponent(here)}`;
 
   useEffect(() => {
     // Compared against the URL rather than guarded on first render, for the
@@ -70,10 +89,10 @@ export default function SongBrowser({
     return () => clearTimeout(timer);
   }, [value, query, params, pathname, router]);
 
-  function chooseGenre(next: string) {
+  function apply(key: "genre" | "fav", next: string) {
     const p = new URLSearchParams(params);
-    if (next) p.set("genre", next);
-    else p.delete("genre");
+    if (next) p.set(key, next);
+    else p.delete(key);
     p.delete("show");
     startTransition(() => router.replace(`${pathname}?${p}`, { scroll: false }));
   }
@@ -84,7 +103,7 @@ export default function SongBrowser({
     startTransition(() => router.replace(`${pathname}?${p}`, { scroll: false }));
   }
 
-  const filtered = Boolean(query || genre);
+  const filtered = Boolean(query || genre || onlyFavourites);
 
   return (
     <div className="min-h-full bg-ground">
@@ -139,26 +158,46 @@ export default function SongBrowser({
             )}
           </div>
 
-          {genres.length > 0 && (
-            <div
-              className="-mx-5 mt-3 flex gap-2 overflow-x-auto px-5 pb-1"
-              role="group"
-              aria-label="Filter by genre"
+          <div
+            className="-mx-5 mt-3 flex gap-2 overflow-x-auto px-5 pb-1"
+            role="group"
+            aria-label="Filter the list"
+          >
+            <Pill
+              active={!genre && !onlyFavourites}
+              onClick={() => {
+                const p = new URLSearchParams(params);
+                p.delete("genre");
+                p.delete("fav");
+                p.delete("show");
+                startTransition(() =>
+                  router.replace(`${pathname}?${p}`, { scroll: false }),
+                );
+              }}
             >
-              <Pill active={!genre} onClick={() => chooseGenre("")}>
-                Everything
+              Everything
+            </Pill>
+
+            {signedIn && favouritesHere > 0 && (
+              <Pill
+                active={onlyFavourites}
+                onClick={() => apply("fav", onlyFavourites ? "" : "1")}
+              >
+                <Heart filled className="mr-1.5 inline h-3.5 w-3.5" /> Yours (
+                {favouritesHere})
               </Pill>
-              {genres.map((g) => (
-                <Pill
-                  key={g}
-                  active={genre === g}
-                  onClick={() => chooseGenre(genre === g ? "" : g)}
-                >
-                  {g}
-                </Pill>
-              ))}
-            </div>
-          )}
+            )}
+
+            {genres.map((g) => (
+              <Pill
+                key={g}
+                active={genre === g}
+                onClick={() => apply("genre", genre === g ? "" : g)}
+              >
+                {g}
+              </Pill>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -171,18 +210,23 @@ export default function SongBrowser({
 
         {songs.length === 0 ? (
           <p className="rounded-xl border border-line bg-surface px-5 py-16 text-center text-ink-soft">
-            {filtered
-              ? "Nothing matches that. Try the artist instead."
-              : "This venue has not added any songs yet."}
+            {onlyFavourites
+              ? "You have not saved a song here yet."
+              : filtered
+                ? "Nothing matches that. Try the artist instead."
+                : "This venue has not added any songs yet."}
           </p>
         ) : (
           <ul className="overflow-hidden rounded-xl border border-line bg-surface">
             {songs.map((song) => (
-              <li key={song.id} className="border-b border-line last:border-0">
+              <li
+                key={song.id}
+                className="flex items-center border-b border-line last:border-0"
+              >
                 <button
                   type="button"
                   onClick={() => setPicked(song)}
-                  className="flex w-full items-center gap-3 px-3 py-3 text-left
+                  className="flex min-w-0 flex-1 items-center gap-3 py-3 pl-3 text-left
                              transition-colors hover:bg-surface-2 active:bg-surface-2"
                 >
                   <Cover song={song} className="h-12 w-12" />
@@ -196,13 +240,15 @@ export default function SongBrowser({
                       {song.year ? ` · ${song.year}` : ""}
                     </span>
                   </span>
-                  <span
-                    aria-hidden="true"
-                    className="shrink-0 text-sm text-ink-faint"
-                  >
-                    →
-                  </span>
                 </button>
+
+                <FavouriteButton
+                  slug={slug}
+                  song={song}
+                  saved={favourites.has(song.id)}
+                  signedIn={signedIn}
+                  signInHref={signInHref}
+                />
               </li>
             ))}
           </ul>
@@ -218,40 +264,112 @@ export default function SongBrowser({
             Show more — {shown.toLocaleString()} of {matching.toLocaleString()}
           </button>
         )}
+
+        <p className="mt-8 text-center text-xs text-ink-faint">
+          {signedIn ? (
+            <>Your favourites are saved to your account.</>
+          ) : (
+            <>
+              <Link
+                href={signInHref}
+                className="text-accent underline-offset-4 hover:underline"
+              >
+                Sign in
+              </Link>{" "}
+              to keep favourites. You never need an account to browse.
+            </>
+          )}
+        </p>
       </main>
 
       <DjCard
+        slug={slug}
         song={picked}
         venueName={venueName}
+        saved={picked ? favourites.has(picked.id) : false}
+        signedIn={signedIn}
+        signInHref={signInHref}
         onClose={() => setPicked(null)}
       />
     </div>
   );
 }
 
-function Pill({
-  active,
-  onClick,
-  children,
+function Heart({
+  filled,
+  className = "h-5 w-5",
 }: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
+  filled: boolean;
+  className?: string;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={`shrink-0 whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm
-                  transition-colors ${
-                    active
-                      ? "border-accent bg-accent text-accent-ink"
-                      : "border-line bg-surface text-ink-soft hover:bg-surface-2"
-                  }`}
+    <svg
+      viewBox="0 0 24 24"
+      fill={filled ? "currentColor" : "none"}
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
     >
-      {children}
-    </button>
+      <path d="M12 20.5 4.2 12.9a4.6 4.6 0 1 1 6.5-6.5l1.3 1.3 1.3-1.3a4.6 4.6 0 1 1 6.5 6.5Z" />
+    </svg>
+  );
+}
+
+/**
+ * Signed out this is a link to the sign-in page, not a dead button: tapping a
+ * heart and having nothing happen is the worst of the three options.
+ */
+function FavouriteButton({
+  slug,
+  song,
+  saved,
+  signedIn,
+  signInHref,
+}: {
+  slug: string;
+  song: GuestSong;
+  saved: boolean;
+  signedIn: boolean;
+  signInHref: string;
+}) {
+  const shared =
+    "flex h-12 w-12 shrink-0 items-center justify-center rounded-lg transition-colors";
+
+  if (!signedIn) {
+    return (
+      <Link
+        href={signInHref}
+        aria-label={`Sign in to save ${song.title}`}
+        className={`${shared} mr-1 text-ink-faint hover:bg-surface-2 hover:text-ink-soft`}
+      >
+        <Heart filled={false} />
+      </Link>
+    );
+  }
+
+  return (
+    <form action={toggleFavorite} className="mr-1">
+      <input type="hidden" name="slug" value={slug} />
+      <input type="hidden" name="song_id" value={song.id} />
+      <input type="hidden" name="on" value={String(!saved)} />
+      <button
+        type="submit"
+        aria-pressed={saved}
+        aria-label={
+          saved ? `Remove ${song.title} from favourites` : `Save ${song.title}`
+        }
+        className={`${shared} ${
+          saved
+            ? "text-accent hover:bg-accent-soft"
+            : "text-ink-faint hover:bg-surface-2 hover:text-ink-soft"
+        }`}
+      >
+        <Heart filled={saved} />
+      </button>
+    </form>
   );
 }
 
@@ -299,12 +417,20 @@ function Cover({ song, className }: { song: GuestSong; className: string }) {
  * to lock itself.
  */
 function DjCard({
+  slug,
   song,
   venueName,
+  saved,
+  signedIn,
+  signInHref,
   onClose,
 }: {
+  slug: string;
   song: GuestSong | null;
   venueName: string;
+  saved: boolean;
+  signedIn: boolean;
+  signInHref: string;
   onClose: () => void;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
@@ -386,6 +512,14 @@ function DjCard({
                 </p>
               )}
             </div>
+
+            <FavouriteOnCard
+              slug={slug}
+              song={song}
+              saved={saved}
+              signedIn={signedIn}
+              signInHref={signInHref}
+            />
           </div>
 
           <div className="flex flex-col items-center gap-3 px-6 pb-8">
@@ -404,5 +538,80 @@ function DjCard({
         </div>
       )}
     </dialog>
+  );
+}
+
+function FavouriteOnCard({
+  slug,
+  song,
+  saved,
+  signedIn,
+  signInHref,
+}: {
+  slug: string;
+  song: GuestSong;
+  saved: boolean;
+  signedIn: boolean;
+  signInHref: string;
+}) {
+  const shared =
+    "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors";
+
+  if (!signedIn) {
+    return (
+      <Link
+        href={signInHref}
+        className={`${shared} border-line text-ink-soft hover:bg-surface-2`}
+      >
+        <Heart filled={false} className="h-4 w-4" />
+        Sign in to save this
+      </Link>
+    );
+  }
+
+  return (
+    <form action={toggleFavorite}>
+      <input type="hidden" name="slug" value={slug} />
+      <input type="hidden" name="song_id" value={song.id} />
+      <input type="hidden" name="on" value={String(!saved)} />
+      <button
+        type="submit"
+        aria-pressed={saved}
+        className={`${shared} ${
+          saved
+            ? "border-accent bg-accent-soft text-accent"
+            : "border-line text-ink-soft hover:bg-surface-2"
+        }`}
+      >
+        <Heart filled={saved} className="h-4 w-4" />
+        {saved ? "Saved" : "Save this song"}
+      </button>
+    </form>
+  );
+}
+
+function Pill({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`shrink-0 whitespace-nowrap rounded-full border px-3.5 py-1.5 text-sm
+                  transition-colors ${
+                    active
+                      ? "border-accent bg-accent text-accent-ink"
+                      : "border-line bg-surface text-ink-soft hover:bg-surface-2"
+                  }`}
+    >
+      {children}
+    </button>
   );
 }

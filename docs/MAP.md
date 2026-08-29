@@ -23,10 +23,12 @@ The whole app as a list. `+` means not built yet.
   * show more of a long list
   * see whether karaoke is on tonight
   * tap a song for a card to show the DJ
-  * + save a favourite (needs an account)
+  * save a favourite *(the one thing an account buys)*
+  * show only your favourites
 * **Sign in** `/login`
   * sign in
-  * create a staff account
+  * create an account — staff or guest, the same form
+  * return to the page you came from
 
 **Venue staff — sign in required**
 
@@ -224,7 +226,7 @@ Anything a person typed is never overwritten.
 | QR code and share link | built |
 | Several libraries per venue | **to port** |
 | Dark mode | **to port** |
-| Favourites for guests | schema ready, no screen |
+| Favourites for guests | built |
 | Song requests to the DJ | schema sketched, not built |
 | Platform tier | built |
 | Playback | out of scope, needs karaoke hardware |
