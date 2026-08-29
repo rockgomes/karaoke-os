@@ -178,14 +178,9 @@ flowchart TD
     MISS -->|no| DONE["Save"]
     MISS -->|yes| IT["iTunes Search<br/>no key needed"]
 
-    IT --> F1["album · year<br/>running time · cover art"]
-    F1 --> GEN{"Genre<br/>found?"}
+    IT --> F1["album · year · genre<br/>running time · cover art"]
+    F1 --> REST{"Still<br/>blank?"}
 
-    GEN -->|no| LFM["Last.fm<br/>track → album → artist"]
-    LFM --> F2["a real breakdown, e.g.<br/>Rock, Hard Rock, Glam Rock"]
-
-    GEN -->|yes| REST
-    F2 --> REST{"Still<br/>blank?"}
     REST -->|yes| MB["MusicBrainz<br/>1 request per second"]
     REST -->|no| DONE
     MB --> DONE

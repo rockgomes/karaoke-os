@@ -39,8 +39,8 @@ export async function lookupItunes(artist: string, title: string) {
     duration: hit.trackTimeMillis
       ? formatDurationFromSeconds(hit.trackTimeMillis / 1000)
       : null,
-    // One broad word, e.g. "Rock". Last.fm gives a better breakdown, so this
-    // is only used when Last.fm has nothing.
+    // One broad word, e.g. "Rock". The only genre source unless MusicBrainz
+    // is also consulted for a song that is still missing other fields.
     genre: hit.primaryGenreName ?? null,
     // The same path serves other sizes; 100px is too small for the UI.
     cover_url: hit.artworkUrl100?.replace("100x100bb", "400x400bb") ?? null,
