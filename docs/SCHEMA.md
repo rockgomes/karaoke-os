@@ -214,3 +214,24 @@ Fixtures were deleted afterwards. The database is empty.
 Watch out when writing your own tests: `set_config('request.jwt.claims', ..., true)`
 lasts for the whole transaction. Clear it before testing as `anon`, or the
 anon check silently runs as the logged-in user and appears to leak.
+
+## create_venue, and the chicken-and-egg it solves
+
+A new venue has no owner, so `memberships_write` — which requires
+`is_venue_owner(venue_id)` — refuses the very first membership. The venue
+could be created and then never claimed.
+
+`public.create_venue(venue_name, venue_slug)` does all three inserts in one
+transaction as SECURITY DEFINER: the venue, an `owner` membership for the
+caller, and a default "Main list" library. It validates the slug against the
+same shape the client uses.
+
+Granted to `authenticated` only, and revoked from `PUBLIC`.
+
+## A React trap worth knowing
+
+`useActionState` keeps the action it was first given. Swapping the function
+on a mode change does nothing — the login form went on calling sign up after
+the button had switched to "Sign in", and only the server log revealed it.
+
+Carry the mode in the form as a hidden field and branch inside one action.
