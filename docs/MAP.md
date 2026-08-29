@@ -2,6 +2,8 @@
 
 What exists, how it connects, and who may reach it.
 
+Live at **https://karaoke-os.netlify.app**. See [DEPLOY.md](DEPLOY.md).
+
 **This file is checked by CI.** `scripts/check-map.mjs` compares the `routes`
 block below against the real page files. Add a page without listing it and the
 build fails. So this map cannot quietly go stale.
@@ -15,7 +17,7 @@ The whole app as a list. `+` means not built yet.
 * **Home** `/`
   * read what Karaoke OS is
   * go to venue sign in
-* **Venue song list** `/v/the-blue-note`
+* **Venue song list** `/v/blue-note`
   * search by song or artist
   * see whether karaoke is on tonight
   * + save a favourite (needs an account)
@@ -30,15 +32,15 @@ The whole app as a list. `+` means not built yet.
   * *(skipped when you own exactly one)*
 * **Add a venue** `/admin/new`
   * name it and claim its web address
-* **Import songs** `/admin/the-blue-note/import`
+* **Import songs** `/admin/blue-note/import`
   * choose a CSV file, or paste rows
   * see what will be imported before it happens
   * skip songs the venue already has
-* **Code for the tables** `/admin/the-blue-note/share`
+* **Code for the tables** `/admin/blue-note/share`
   * print a card for each table
   * copy the guest link
   * download the code as PNG or SVG
-* **Manage a venue** `/admin/the-blue-note`
+* **Manage a venue** `/admin/blue-note`
   * add a venue *(in the header, on every staff screen)*
   * open or close karaoke
   * add a song
