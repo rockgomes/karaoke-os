@@ -40,22 +40,27 @@ The whole app as a list. `+` means not built yet.
   * print a card for each table
   * copy the guest link
   * download the code as PNG or SVG
-* **Manage a venue** `/admin/blue-note`
-  * add a venue *(in the header, on every staff screen)*
-  * open or close karaoke
+* **Songs** `/admin/blue-note`
+  * see how many songs, how many are missing details, how many were added
+    this week, and how many genres
   * add a song
   * edit a song
   * remove a song
   * remove several songs at once
   * search by title or artist
+  * filter by genre
+  * filter by whether a song is missing details
   * sort by title, artist, genre or year
   * page through a long list
   * fill in missing song details
-  * view the guest page
-  * get the QR code for the tables
-  * sign out
-  * + show the QR code and copy the link
   * + manage several song lists
+* **The rail** *(the one menu, on every staff screen)*
+  * open or close karaoke, beside the lamp that shows whether it is on
+  * go to Songs, Import a CSV or the QR code
+  * open the guest page in a new tab
+  * go to your other venue, or add one
+  * go to all venues *(platform staff only)*
+  * sign out
 
 **You — platform**
 
@@ -270,9 +275,10 @@ Both were in the first build of these screens, and both are corrected.
 | Problem | Fix |
 |---|---|
 | `/` listed every venue, publishing the customer list to anyone. A guest arrives by QR code and never needs it. | `/` is a landing page. No venue is named on it. |
-| Owning exactly one venue made `/admin` skip the venue list, leaving "Add a venue" unreachable without typing the URL. | "Add a venue" sits in the staff header, on every staff screen. |
+| Owning exactly one venue made `/admin` skip the venue list, leaving "Add a venue" unreachable without typing the URL. | "Add a venue" sits in the rail, on every staff screen. |
+| The rail's way back was called "Your venues", which for a single-venue owner was a list of one — so **Add a venue** was a dead end for exactly the people most likely to open it. | With one venue the rail names that venue instead. With several it says "Your venues". |
 
 ### Still open
 
-- No venue switcher. Running two bars means going back to **Your venues**.
-  Worth doing when someone actually runs two.
+- No venue switcher in the rail. Running two bars means going back to
+  **Your venues**. Worth doing when someone actually runs two.

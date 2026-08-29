@@ -6,9 +6,7 @@ import { addSong, type SongState } from "./actions";
 const EMPTY: SongState = { error: null };
 
 const field =
-  "mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2 outline-none " +
-  "focus-visible:ring-2 focus-visible:ring-blue-600 " +
-  "dark:border-neutral-700 dark:bg-neutral-900";
+  "mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-ink";
 
 export default function AddSongForm({
   slug,
@@ -26,7 +24,7 @@ export default function AddSongForm({
   }, [state, pending]);
 
   return (
-    <form ref={formRef} action={formAction} className="mt-3">
+    <form ref={formRef} action={formAction}>
       <input type="hidden" name="slug" value={slug} />
       <input type="hidden" name="library_id" value={libraryId} />
 
@@ -45,13 +43,13 @@ export default function AddSongForm({
         </div>
         <div>
           <label htmlFor="genre" className="block text-sm font-medium">
-            Genre <span className="text-neutral-500">(optional)</span>
+            Genre <span className="text-ink-faint">(optional)</span>
           </label>
           <input id="genre" name="genre" className={field} />
         </div>
         <div>
           <label htmlFor="year" className="block text-sm font-medium">
-            Year <span className="text-neutral-500">(optional)</span>
+            Year <span className="text-ink-faint">(optional)</span>
           </label>
           <input
             id="year"
@@ -66,7 +64,7 @@ export default function AddSongForm({
       </div>
 
       {state.error && (
-        <p role="alert" className="mt-3 text-sm text-red-600 dark:text-red-400">
+        <p role="alert" className="mt-3 text-sm text-danger">
           {state.error}
         </p>
       )}
@@ -74,9 +72,8 @@ export default function AddSongForm({
       <button
         type="submit"
         disabled={pending}
-        className="mt-4 rounded-lg bg-blue-600 px-4 py-2.5 font-medium text-white
-                   hover:bg-blue-700 disabled:opacity-60 focus-visible:outline-2
-                   focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        className="mt-4 rounded-lg bg-accent px-4 py-2.5 font-medium text-accent-ink
+ hover:bg-accent-hover disabled:opacity-60"
       >
         {pending ? "Adding…" : "Add song"}
       </button>

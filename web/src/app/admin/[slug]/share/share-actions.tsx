@@ -3,9 +3,9 @@
 import { useState } from "react";
 
 const button =
-  "rounded-lg border border-neutral-300 px-4 py-2.5 text-sm font-medium " +
-  "hover:bg-neutral-50 focus-visible:outline-2 focus-visible:outline-offset-2 " +
-  "focus-visible:outline-blue-600 dark:border-neutral-700 dark:hover:bg-neutral-900";
+  "rounded-lg border border-line px-4 py-2.5 text-sm font-medium " +
+  "hover:bg-surface-2 focus-visible:outline-offset-2 " +
+  "  hover:bg-surface-2";
 
 export default function ShareActions({ url, slug }: { url: string; slug: string }) {
   const [copied, setCopied] = useState(false);

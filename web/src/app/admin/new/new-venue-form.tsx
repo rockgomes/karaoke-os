@@ -28,9 +28,7 @@ export default function NewVenueForm() {
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="The Blue Note"
-          className="mt-1 w-full rounded-lg border border-neutral-300 px-3 py-2
-                     outline-none focus-visible:ring-2 focus-visible:ring-blue-600
-                     dark:border-neutral-700 dark:bg-neutral-900"
+          className="mt-1 w-full rounded-lg border border-line px-3 py-2"
         />
       </div>
 
@@ -39,7 +37,7 @@ export default function NewVenueForm() {
           Web address
         </label>
         <div className="mt-1 flex items-center gap-1">
-          <span className="shrink-0 text-sm text-neutral-500">/v/</span>
+          <span className="shrink-0 text-sm text-ink-soft">/v/</span>
           <input
             id="slug"
             name="slug"
@@ -48,18 +46,16 @@ export default function NewVenueForm() {
               setSlugTouched(true);
               setSlug(e.target.value);
             }}
-            className="w-full rounded-lg border border-neutral-300 px-3 py-2
-                       outline-none focus-visible:ring-2 focus-visible:ring-blue-600
-                       dark:border-neutral-700 dark:bg-neutral-900"
+            className="w-full rounded-lg border border-line px-3 py-2"
           />
         </div>
-        <p className="mt-1 text-xs text-neutral-500">
+        <p className="mt-1 text-xs text-ink-soft">
           This is what the QR code at the table points to.
         </p>
       </div>
 
       {state.error && (
-        <p role="alert" className="text-sm text-red-600 dark:text-red-400">
+        <p role="alert" className="text-sm text-danger">
           {state.error}
         </p>
       )}
@@ -67,9 +63,8 @@ export default function NewVenueForm() {
       <button
         type="submit"
         disabled={pending || !name.trim()}
-        className="rounded-lg bg-blue-600 px-4 py-2.5 font-medium text-white
-                   hover:bg-blue-700 disabled:opacity-60 focus-visible:outline-2
-                   focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+        className="rounded-lg bg-accent px-4 py-2.5 font-medium text-white
+ hover:bg-accent-hover disabled:opacity-60"
       >
         {pending ? "Creating…" : "Create venue"}
       </button>

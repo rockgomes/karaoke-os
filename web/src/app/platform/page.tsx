@@ -1,7 +1,8 @@
 import Link from "next/link";
+import AppFrame from "@/components/app-frame";
 import { createClient } from "@/lib/supabase/server";
-import { requirePlatformAdmin } from "@/lib/auth";
-import { signOut } from "@/app/login/actions";
+import { getMemberships, requirePlatformAdmin } from "@/lib/auth";
+import { accountNav } from "@/lib/nav";
 import { setVenueSuspended } from "./actions";
 
 export const metadata = { title: "All venues — Karaoke OS" };
@@ -35,42 +36,25 @@ export default async function PlatformPage() {
   const songs = venues.reduce((sum, v) => sum + Number(v.song_count), 0);
   const openNow = venues.filter((v) => v.karaoke_open && !v.suspended_at).length;
 
-  return (
-    <div className="min-h-full">
-      <header className="border-b border-neutral-200 dark:border-neutral-800">
-        <div className="mx-auto flex w-full max-w-4xl items-center gap-4 px-4 py-3">
-          <span className="font-semibold">Karaoke OS</span>
-          <span className="rounded-md bg-neutral-900 px-2 py-0.5 text-xs font-medium text-white dark:bg-neutral-100 dark:text-neutral-900">
-            Platform
-          </span>
-          <Link
-            href="/admin"
-            className="text-sm text-neutral-500 underline-offset-4 hover:underline
-                       focus-visible:outline-2 focus-visible:outline-blue-600"
-          >
-            Your venues
-          </Link>
-          <span className="ml-auto truncate text-sm text-neutral-500">{user.email}</span>
-          <form action={signOut}>
-            <button
-              type="submit"
-              className="rounded-md px-2 py-1 text-sm text-neutral-500 underline-offset-4
-                         hover:underline focus-visible:outline-2 focus-visible:outline-blue-600"
-            >
-              Sign out
-            </button>
-          </form>
-        </div>
-      </header>
+  const memberships = await getMemberships();
 
-      <main className="mx-auto w-full max-w-4xl px-4 py-8">
-        <h1 className="text-2xl font-bold tracking-tight">All venues</h1>
-        <p className="mt-1 text-sm text-neutral-500">
+  return (
+    <AppFrame
+      title="Karaoke OS"
+      subtitle="Platform"
+      email={user.email ?? ""}
+      groups={accountNav({
+        venues: memberships.map((m) => m.venues),
+        isPlatformAdmin: true,
+      })}
+    >
+        <h1 className="font-display text-3xl font-semibold tracking-tight">All venues</h1>
+        <p className="mt-1 text-sm text-ink-soft">
           Every bar signed up to Karaoke OS.
         </p>
 
         {error && (
-          <p role="alert" className="mt-4 text-sm text-red-600 dark:text-red-400">
+          <p role="alert" className="mt-4 text-sm text-danger">
             Could not load the venues: {error.message}
           </p>
         )}
@@ -85,9 +69,9 @@ export default async function PlatformPage() {
           ].map((stat) => (
             <div
               key={stat.label}
-              className="rounded-lg border border-neutral-200 p-3 dark:border-neutral-800"
+              className="rounded-lg border border-line p-3"
             >
-              <dt className="text-xs text-neutral-500">{stat.label}</dt>
+              <dt className="text-xs text-ink-soft">{stat.label}</dt>
               <dd className="mt-0.5 text-xl font-semibold tabular-nums">{stat.value}</dd>
             </div>
           ))}
@@ -96,7 +80,7 @@ export default async function PlatformPage() {
         <div className="mt-8 overflow-x-auto">
           <table className="w-full border-collapse text-sm">
             <thead>
-              <tr className="border-b border-neutral-200 text-left dark:border-neutral-800">
+              <tr className="border-b border-line text-left">
                 <th scope="col" className="py-2 pr-3 font-medium">Venue</th>
                 <th scope="col" className="hidden py-2 pr-3 font-medium sm:table-cell">Owner</th>
                 <th scope="col" className="py-2 pr-3 text-right font-medium">Songs</th>
@@ -113,43 +97,42 @@ export default async function PlatformPage() {
                 return (
                   <tr
                     key={venue.id}
-                    className="border-b border-neutral-100 last:border-0 dark:border-neutral-900"
+                    className="border-b border-line last:border-0"
                   >
                     <td className="py-2.5 pr-3">
                       <span className="font-medium">{venue.name}</span>
                       <Link
                         href={`/v/${venue.slug}`}
-                        className="block font-mono text-xs text-neutral-500 underline-offset-4
-                                   hover:underline focus-visible:outline-2
-                                   focus-visible:outline-blue-600"
+                        className="block font-mono text-xs text-ink-soft underline-offset-4
+ hover:underline"
                       >
                         /v/{venue.slug}
                       </Link>
                     </td>
-                    <td className="hidden py-2.5 pr-3 text-neutral-600 sm:table-cell dark:text-neutral-400">
+                    <td className="hidden py-2.5 pr-3 text-ink-soft sm:table-cell dark:text-ink-faint">
                       {venue.owner_email ?? (
-                        <span className="text-neutral-400">no owner</span>
+                        <span className="text-ink-faint">no owner</span>
                       )}
                     </td>
-                    <td className="py-2.5 pr-3 text-right tabular-nums text-neutral-600 dark:text-neutral-400">
+                    <td className="py-2.5 pr-3 text-right tabular-nums text-ink-soft dark:text-ink-faint">
                       {venue.song_count}
                     </td>
-                    <td className="hidden py-2.5 pr-3 text-neutral-600 md:table-cell dark:text-neutral-400">
+                    <td className="hidden py-2.5 pr-3 text-ink-soft md:table-cell dark:text-ink-faint">
                       {dateFormat.format(new Date(venue.created_at))}
                     </td>
                     <td className="py-2.5 pr-3">
                       {suspended ? (
                         <span className="rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium
-                                         text-red-800 dark:bg-red-950 dark:text-red-300">
+ text-red-800 dark:bg-red-950 dark:text-red-300">
                           Suspended
                         </span>
                       ) : venue.karaoke_open ? (
-                        <span className="rounded-full bg-green-100 px-2 py-0.5 text-xs font-medium
-                                         text-green-800 dark:bg-green-950 dark:text-green-300">
+                        <span className="rounded-full bg-ok-soft px-2 py-0.5 text-xs font-medium
+ text-ok  ">
                           Karaoke on
                         </span>
                       ) : (
-                        <span className="text-xs text-neutral-500">Closed</span>
+                        <span className="text-xs text-ink-soft">Closed</span>
                       )}
                     </td>
                     <td className="py-2.5 text-right">
@@ -159,11 +142,10 @@ export default async function PlatformPage() {
                         <input type="hidden" name="suspend" value={String(!suspended)} />
                         <button
                           type="submit"
-                          className={`rounded-md px-2 py-1 text-sm underline-offset-4 hover:underline
-                                      focus-visible:outline-2 ${
+                          className={`rounded-md px-2 py-1 text-sm underline-offset-4 hover:underline ${
                                         suspended
-                                          ? "text-green-700 focus-visible:outline-green-700 dark:text-green-400"
-                                          : "text-red-600 focus-visible:outline-red-600 dark:text-red-400"
+                                          ? "text-ok "
+                                          : "text-danger dark:text-red-400"
                                       }`}
                         >
                           {suspended ? "Restore" : "Suspend"}
@@ -178,14 +160,13 @@ export default async function PlatformPage() {
         </div>
 
         {venues.length === 0 && !error && (
-          <p className="py-10 text-center text-neutral-500">No venues yet.</p>
+          <p className="py-10 text-center text-ink-soft">No venues yet.</p>
         )}
 
-        <p className="mt-8 max-w-prose text-xs text-neutral-500">
+        <p className="mt-8 max-w-prose text-xs text-ink-soft">
           Suspending hides a venue from guests. Its own staff keep seeing it, so
           they can sort out whatever caused it.
         </p>
-      </main>
-    </div>
+    </AppFrame>
   );
 }

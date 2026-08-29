@@ -1,10 +1,13 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { getMemberships } from "@/lib/auth";
+import AppFrame from "@/components/app-frame";
+import { getMemberships, isPlatformAdmin, requireUser } from "@/lib/auth";
+import { accountNav } from "@/lib/nav";
 
 export const metadata = { title: "Your venues — Karaoke OS" };
 
 export default async function AdminHome() {
+  const user = await requireUser();
   const memberships = await getMemberships();
 
   // One venue is the common case. Do not make them click through a list of one.
@@ -12,39 +15,66 @@ export default async function AdminHome() {
     redirect(`/admin/${memberships[0].venues.slug}`);
   }
 
+  const platform = await isPlatformAdmin(user.id);
+
   return (
-    <main className="mx-auto w-full max-w-3xl px-4 py-8">
-      <h1 className="text-2xl font-bold tracking-tight">Your venues</h1>
+    <AppFrame
+      title="Karaoke OS"
+      subtitle="Your venues"
+      email={user.email ?? ""}
+      groups={accountNav({
+        venues: memberships.map((m) => m.venues),
+        isPlatformAdmin: platform,
+      })}
+    >
+      <h1 className="font-display text-3xl font-semibold tracking-tight">
+        Your venues
+      </h1>
 
       {memberships.length === 0 ? (
-        <p className="mt-4 text-neutral-500">
-          You do not manage a venue yet.
-        </p>
+        <div className="mt-6 rounded-xl border border-line bg-surface px-4 py-12 text-center">
+          <p className="text-ink-soft">You do not manage a venue yet.</p>
+          <Link
+            href="/admin/new"
+            className="mt-4 inline-block rounded-lg bg-accent px-4 py-2.5 font-medium
+ text-accent-ink hover:bg-accent-hover"
+          >
+            Add your first venue
+          </Link>
+        </div>
       ) : (
-        <ul className="mt-6 divide-y divide-neutral-200 dark:divide-neutral-800">
-          {memberships.map((m) => (
-            <li key={m.venue_id} className="py-3">
-              <Link
-                href={`/admin/${m.venues.slug}`}
-                className="font-medium underline-offset-4 hover:underline
-                           focus-visible:outline-2 focus-visible:outline-blue-600"
-              >
-                {m.venues.name}
-              </Link>
-              <span className="ml-2 text-sm text-neutral-500">{m.role}</span>
-            </li>
-          ))}
-        </ul>
-      )}
+        <>
+          <ul className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {memberships.map((m) => (
+              <li key={m.venue_id}>
+                <Link
+                  href={`/admin/${m.venues.slug}`}
+                  className="block rounded-xl border border-line bg-surface p-4
+ transition-colors hover:border-line-strong hover:bg-surface-2"
+                >
+                  <p className="font-display text-lg font-semibold text-ink">
+                    {m.venues.name}
+                  </p>
+                  <p className="mt-0.5 font-mono text-xs text-ink-faint">
+                    /v/{m.venues.slug}
+                  </p>
+                  <p className="mt-3 text-xs uppercase tracking-[0.08em] text-ink-faint">
+                    {m.role}
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
 
-      <Link
-        href="/admin/new"
-        className="mt-8 inline-block rounded-lg bg-blue-600 px-4 py-2.5 font-medium
-                   text-white hover:bg-blue-700 focus-visible:outline-2
-                   focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-      >
-        Add a venue
-      </Link>
-    </main>
+          <Link
+            href="/admin/new"
+            className="mt-6 inline-block rounded-lg bg-accent px-4 py-2.5 font-medium
+ text-accent-ink hover:bg-accent-hover"
+          >
+            Add a venue
+          </Link>
+        </>
+      )}
+    </AppFrame>
   );
 }

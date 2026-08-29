@@ -44,7 +44,7 @@ export default async function VenuePage({
     <main className="mx-auto w-full max-w-2xl px-4 py-8">
       <header className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight">{venue.name}</h1>
-        <p className="mt-1 text-sm text-neutral-500">
+        <p className="mt-1 text-sm text-ink-soft">
           {openSession ? "Karaoke is on tonight" : "Karaoke is not running right now"}
         </p>
       </header>

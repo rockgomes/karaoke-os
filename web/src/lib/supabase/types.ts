@@ -110,6 +110,23 @@ export type Database = {
         Args: { target_venue: string; suspended: boolean };
         Returns: Venue;
       };
+      // Splits the comma-joined genre column and counts the labels, so the
+      // filter can be built without shipping every song to the browser.
+      library_genres: {
+        Args: { target_library: string };
+        Returns: { genre: string; songs: number }[];
+      };
+      // The four venue admin numbers in one round trip. "Added this week" uses
+      // the database clock, so the count does not shift between renders.
+      library_stats: {
+        Args: { target_library: string };
+        Returns: {
+          total: number;
+          incomplete: number;
+          added_this_week: number;
+          genres: number;
+        }[];
+      };
     };
     Enums: Record<never, never>;
     CompositeTypes: Record<never, never>;
