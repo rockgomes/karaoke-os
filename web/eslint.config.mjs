@@ -11,6 +11,8 @@ const eslintConfig = defineConfig([
     ".next/**",
     "out/**",
     "build/**",
+    // Written by @netlify/plugin-nextjs during a local `netlify build`.
+    ".netlify/**",
     "next-env.d.ts",
   ]),
 ]);

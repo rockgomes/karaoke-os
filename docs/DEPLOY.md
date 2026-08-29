@@ -26,7 +26,6 @@ Set on the Netlify project, not in the repo:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-- `LASTFM_API_KEY`
 
 The first two are publishable. Row Level Security, not key secrecy, is what
 keeps one venue out of another venue's data.
@@ -58,6 +57,3 @@ netlify deploy --prod   # publish to karaoke-os.netlify.app
   `http://localhost:3000`. Confirmation and password reset links will send
   people to their own machine until `https://karaoke-os.netlify.app` is added
   under Authentication → URL Configuration.
-- **Last.fm key.** The key in use is Last.fm's own public example key. It is
-  shared and rate limited. Get a private one at
-  https://www.last.fm/api/account/create.
