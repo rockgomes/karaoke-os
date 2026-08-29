@@ -34,6 +34,10 @@ The whole app as a list. `+` means not built yet.
   * choose a CSV file, or paste rows
   * see what will be imported before it happens
   * skip songs the venue already has
+* **Code for the tables** `/admin/the-blue-note/share`
+  * print a card for each table
+  * copy the guest link
+  * download the code as PNG or SVG
 * **Manage a venue** `/admin/the-blue-note`
   * add a venue *(in the header, on every staff screen)*
   * open or close karaoke
@@ -46,6 +50,7 @@ The whole app as a list. `+` means not built yet.
   * page through a long list
   * fill in missing song details
   * view the guest page
+  * get the QR code for the tables
   * sign out
   * + show the QR code and copy the link
   * + manage several song lists
@@ -117,6 +122,7 @@ Every route that exists. CI checks this list.
 /admin/new
 /admin/[slug]
 /admin/[slug]/import
+/admin/[slug]/share
 /v/[slug]
 ```
 
@@ -129,6 +135,7 @@ Every route that exists. CI checks this list.
 | `/admin/new` | staff | Create a venue and become its owner. |
 | `/admin/[slug]` | staff of that venue | Songs, and open or close karaoke. |
 | `/admin/[slug]/import` | staff of that venue | Load a CSV of songs, with a preview first. |
+| `/admin/[slug]/share` | staff of that venue | The QR code and link guests use. Printable. |
 
 ---
 
@@ -204,7 +211,7 @@ Anything a person typed is never overwritten.
 | Edit a song | built |
 | Song table: search, sort, pages, bulk delete | built |
 | CSV import | built |
-| QR code and share link | **to port** |
+| QR code and share link | built |
 | Several libraries per venue | **to port** |
 | Dark mode | **to port** |
 | Favourites for guests | schema ready, no screen |
