@@ -25,6 +25,7 @@ The whole app as a list. `+` means not built yet.
   * tap a song for a card to show the DJ
   * save a favourite *(the one thing an account buys)*
   * show only your favourites
+  * switch between light, dark, and the system setting
 * **Sign in** `/login`
   * sign in
   * create an account — staff or guest, the same form
@@ -65,6 +66,7 @@ The whole app as a list. `+` means not built yet.
   * open the guest page in a new tab
   * go to your other venue, or add one
   * go to all venues *(platform staff only)*
+  * switch between light, dark, and the system setting
   * sign out
 
 **You — platform**
@@ -225,7 +227,7 @@ Anything a person typed is never overwritten.
 | CSV import | built |
 | QR code and share link | built |
 | Several libraries per venue | **to port** |
-| Dark mode | **to port** |
+| Dark mode | built |
 | Favourites for guests | built |
 | Song requests to the DJ | schema sketched, not built |
 | Platform tier | built |

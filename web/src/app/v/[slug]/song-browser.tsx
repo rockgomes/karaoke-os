@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import ThemeToggle from "@/components/theme-toggle";
 import { toggleFavorite } from "./actions";
 
 export type GuestSong = {
@@ -119,6 +120,9 @@ export default function SongBrowser({
             <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink-soft">
               {live ? "Karaoke is on" : "Karaoke is off right now"}
             </p>
+            <div className="ml-auto">
+              <ThemeToggle />
+            </div>
           </div>
 
           <h1 className="mt-2 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink">

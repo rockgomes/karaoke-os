@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
+import { THEME_SCRIPT } from "@/components/theme-toggle";
 import "./globals.css";
 
 /*
@@ -29,7 +30,19 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       className={`${display.variable} ${body.variable} h-full antialiased`}
+      // The script below stamps data-theme before React hydrates, so the
+      // server's HTML and the browser's disagree by design on this one
+      // attribute.
+      suppressHydrationWarning
     >
+      <head>
+        {/*
+          Blocking on purpose, and before anything paints: a stored dark
+          choice must apply to the first frame, or the visitor gets a white
+          flash on every navigation.
+        */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
