@@ -38,20 +38,37 @@ export async function requirePlatformAdmin() {
   return user;
 }
 
-/** The venues this user works at. Empty for a patron. */
+/**
+ * The venues this user works at. Empty for a patron, and empty for an
+ * operator who staffs nowhere.
+ *
+ * The user filter is not redundant. Row level security says who *may* read a
+ * membership row, and it lets platform staff read all of them — which is
+ * reasonable for a support view. Leaving the query unfiltered made the app
+ * treat everything readable as "mine", so an operator with no memberships at
+ * all was handed every venue in the database and walked straight into
+ * /admin/[slug]. Readable is not the same as mine, and the query should say
+ * which one it means.
+ */
 export async function getMemberships(): Promise<VenueMembership[]> {
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return [];
+
   const { data } = await supabase
     .from("memberships")
     .select("venue_id, role, venues(id, name, slug)")
+    .eq("user_id", user.id)
     .order("venue_id");
   return (data ?? []) as unknown as VenueMembership[];
 }
 
 /**
  * The membership for one venue slug, or null if this user does not work there.
- * Row level security would hide the data anyway; this gives a clean 404
- * instead of an empty screen.
+ * This is the gate on /admin/[slug], so it has to mean "works here" rather
+ * than "may read".
  */
 export async function getMembershipBySlug(
   slug: string,
