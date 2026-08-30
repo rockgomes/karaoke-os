@@ -131,11 +131,14 @@ export default function SongBrowser({
                 />
               ))}
             </div>
-            {/* The scrim is what keeps the type readable over anything. The
-                gradient ramps to solid before the name starts, so the venue's
-                title always sits on flat colour. */}
+            {/*
+              Two layers, and the second one matters. A very dark sleeve under
+              a light theme would otherwise darken the backdrop beneath dark
+              title text and eat the contrast, so the gradient is 90% surface
+              by halfway down — above where the venue's name begins.
+            */}
             <div className="marquee-wash absolute inset-0" />
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-surface/70 to-surface" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-surface/90 to-surface" />
           </div>
         )}
 
