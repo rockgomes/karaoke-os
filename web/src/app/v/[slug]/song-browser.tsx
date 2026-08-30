@@ -34,6 +34,7 @@ export default function SongBrowser({
   total,
   shown,
   helping,
+  wall,
   genres,
   query,
   genre,
@@ -50,6 +51,8 @@ export default function SongBrowser({
   total: number;
   shown: number;
   helping: number;
+  /** A handful of this venue's covers, used as the header's texture. */
+  wall: string[];
   genres: string[];
   query: string;
   genre: string;
@@ -108,8 +111,33 @@ export default function SongBrowser({
 
   return (
     <div className="min-h-full bg-ground">
-      <header className="border-b border-line bg-surface">
-        <div className="mx-auto w-full max-w-2xl px-5 pb-5 pt-8">
+      <header className="relative isolate overflow-hidden border-b border-line bg-surface">
+        {/*
+         * The texture is the venue's own album art, blurred hard and pushed
+         * back behind a scrim. Not decoration: it is literally what this bar
+         * has. A venue with no artwork yet gets a plain band instead.
+         */}
+        {wall.length > 0 && (
+          <div aria-hidden="true" className="absolute inset-0 -z-10">
+            <div className="flex h-full w-full scale-125 blur-2xl saturate-150">
+              {wall.slice(0, 8).map((src, i) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={`${src}-${i}`}
+                  src={src}
+                  alt=""
+                  aria-hidden="true"
+                  className="h-full min-w-0 flex-1 object-cover opacity-60"
+                />
+              ))}
+            </div>
+            {/* The scrim is what keeps the type readable over anything. */}
+            <div className="absolute inset-0 bg-surface/80" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent to-surface" />
+          </div>
+        )}
+
+        <div className="mx-auto w-full max-w-2xl px-5 pb-7 pt-8">
           <div className="flex items-center gap-2">
             <span
               aria-hidden="true"
@@ -117,7 +145,7 @@ export default function SongBrowser({
                 live ? "lamp-live" : "bg-line-strong"
               }`}
             />
-            <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink-soft">
+            <p className="text-xs font-medium uppercase tracking-[0.16em] text-ink-soft">
               {live ? "Karaoke is on" : "Karaoke is off right now"}
             </p>
             <div className="ml-auto">
@@ -125,10 +153,15 @@ export default function SongBrowser({
             </div>
           </div>
 
-          <h1 className="mt-2 font-display text-4xl font-semibold leading-[1.05] tracking-tight text-ink">
+          {/* This is the bar's screen, so the bar's name is the loudest thing
+              on it. */}
+          <h1
+            className="mt-3 text-balance font-display text-5xl font-semibold
+                       leading-[0.95] tracking-tight text-ink sm:text-6xl"
+          >
             {venueName}
           </h1>
-          <p className="mt-2 text-sm text-ink-soft">
+          <p className="mt-3 text-sm text-ink-soft">
             Find your song, then show it to the DJ.
           </p>
         </div>
@@ -230,18 +263,20 @@ export default function SongBrowser({
                 <button
                   type="button"
                   onClick={() => setPicked(song)}
-                  className="flex min-w-0 flex-1 items-center gap-3 py-3 pl-3 text-left
+                  className="flex min-w-0 flex-1 items-center gap-4 py-3 pl-3 text-left
                              transition-colors hover:bg-surface-2 active:bg-surface-2"
                 >
-                  <Cover song={song} className="h-12 w-12" />
+                  <Cover song={song} className="h-16 w-16 sm:h-[72px] sm:w-[72px]" />
                   <span className="min-w-0 flex-1">
                     {/* Big and plain: this is read in a dark room. */}
-                    <span className="block truncate text-base font-semibold text-ink">
+                    <span className="block truncate text-[17px] font-semibold leading-tight text-ink">
                       {song.title}
                     </span>
-                    <span className="block truncate text-sm text-ink-soft">
+                    <span className="mt-0.5 block truncate text-sm text-ink-soft">
                       {song.artist}
-                      {song.year ? ` · ${song.year}` : ""}
+                    </span>
+                    <span className="mt-0.5 block truncate text-xs tabular-nums text-ink-faint">
+                      {[song.year, song.genre, song.duration].filter(Boolean).join(" · ")}
                     </span>
                   </span>
                 </button>
@@ -377,7 +412,30 @@ function FavouriteButton({
   );
 }
 
-function Cover({ song, className }: { song: GuestSong; className: string }) {
+/** Same song, same colour, every time. */
+function hueFor(text: string): number {
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) hash = (hash * 31 + text.charCodeAt(i)) % 360;
+  return hash;
+}
+
+/** The one or two letters that stand in for a missing sleeve. */
+function initials(title: string): string {
+  const words = title.replace(/[^\p{L}\p{N} ]/gu, " ").trim().split(/\s+/);
+  if (words.length === 0) return "?";
+  if (words.length === 1) return words[0].slice(0, 2).toUpperCase();
+  return (words[0][0] + words[1][0]).toUpperCase();
+}
+
+function Cover({
+  song,
+  className,
+  text = "text-base",
+}: {
+  song: GuestSong;
+  className: string;
+  text?: string;
+}) {
   if (song.cover_url) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
@@ -389,25 +447,17 @@ function Cover({ song, className }: { song: GuestSong; className: string }) {
       />
     );
   }
+
   return (
     <div
       aria-hidden="true"
-      className={`${className} flex shrink-0 items-center justify-center rounded-lg
-                  border border-line bg-surface-2 text-ink-faint`}
+      style={{ "--tint": hueFor(song.artist + song.title) } as React.CSSProperties}
+      className={`${className} cover-tint flex shrink-0 items-center justify-center
+                  rounded-lg border border-line`}
     >
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="h-1/3 w-1/3"
-      >
-        <path d="M9 18V5l10-2v13" />
-        <circle cx="6" cy="18" r="3" />
-        <circle cx="16" cy="16" r="3" />
-      </svg>
+      <span className={`font-display font-semibold text-ink-soft ${text}`}>
+        {initials(song.title)}
+      </span>
     </div>
   );
 }
@@ -499,7 +549,7 @@ function DjCard({
               Ask the DJ for
             </p>
 
-            <Cover song={song} className="h-24 w-24 sm:h-32 sm:w-32" />
+            <Cover song={song} className="h-32 w-32 sm:h-40 sm:w-40" text="text-3xl" />
 
             <div className="min-w-0">
               <h2

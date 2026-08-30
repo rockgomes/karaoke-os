@@ -245,6 +245,23 @@ body {
   }
 }
 
+/*
+ * A song with no artwork yet.
+ *
+ * A real catalogue always has some, so the empty state has to look chosen
+ * rather than broken. The hue comes from the title, so the same song is
+ * always the same colour, and it is mixed into the surface rather than
+ * painted over it — which keeps it working in both themes without a second
+ * palette.
+ */
+.cover-tint {
+  background: color-mix(
+    in oklab,
+    hsl(var(--tint, 0) 65% 55%) 16%,
+    var(--surface-2)
+  );
+}
+
 @media print {
   .no-print {
     display: none !important;

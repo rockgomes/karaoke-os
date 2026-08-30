@@ -88,6 +88,8 @@ export default async function VenuePage({
   let matching = 0;
   let total = 0;
   let favouritesHere = 0;
+  /** A few real covers, used as the texture behind the venue's name. */
+  let wall: string[] = [];
 
   // Asking for favourites when there are none would send an empty IN () list
   // to PostgREST, so answer it without a query.
@@ -135,6 +137,18 @@ export default async function VenuePage({
     matching = result.count ?? 0;
     total = totalResult.count ?? 0;
     favouritesHere = favouriteCount.count ?? 0;
+
+    // The header's backdrop is the venue's own records, not stock texture.
+    // A venue with no artwork yet simply gets a plain band.
+    const covers = await supabase
+      .from("songs")
+      .select("cover_url")
+      .in("library_id", libraryIds)
+      .not("cover_url", "is", null)
+      .limit(12);
+    wall = (covers.data ?? [])
+      .map((c) => c.cover_url)
+      .filter((c): c is string => Boolean(c));
   } else if (libraryIds.length) {
     const totalResult = await supabase
       .from("songs")
@@ -153,6 +167,7 @@ export default async function VenuePage({
       total={total}
       shown={songs.length}
       helping={HELPING}
+      wall={wall}
       genres={(genreRows ?? []).map((g) => g.genre)}
       query={query}
       genre={genre}
