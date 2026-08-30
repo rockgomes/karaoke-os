@@ -85,7 +85,7 @@ export default async function Home({
           </p>
           {demoSwept && (
             <p role="status" className="mt-2 text-xs text-ink-soft">
-              That demo has been cleaned up, as promised. Start another one.
+              That demo has been cleaned up. Start another one.
             </p>
           )}
           {demoFailed && (
