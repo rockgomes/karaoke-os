@@ -15,6 +15,7 @@ export default async function Home({
 }) {
   const search = await searchParams;
   const demoFailed = search.demo === "unavailable";
+  const demoSwept = search.demo === "expired";
 
   return (
     <main className="mx-auto w-full max-w-xl px-4 py-20">
@@ -82,6 +83,11 @@ export default async function Home({
           <p className="mt-2 text-xs text-ink-faint">
             No account. You get your own copy of a venue, wiped tonight.
           </p>
+          {demoSwept && (
+            <p role="status" className="mt-2 text-xs text-ink-soft">
+              That demo has been cleaned up, as promised. Start another one.
+            </p>
+          )}
           {demoFailed && (
             <p role="alert" className="mt-2 text-xs text-danger">
               The demo could not start just now. Please try again shortly.

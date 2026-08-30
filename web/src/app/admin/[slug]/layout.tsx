@@ -1,6 +1,6 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import AppFrame from "@/components/app-frame";
-import { getMemberships, getMembershipBySlug, requireUser } from "@/lib/auth";
+import { getMemberships, getMembershipBySlug } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { venueNav } from "@/lib/nav";
 import SessionToggle from "./session-toggle";
@@ -14,12 +14,32 @@ export default async function VenueLayout({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const user = await requireUser();
 
-  const membership = await getMembershipBySlug(slug);
-  if (!membership) notFound();
+  /*
+   * A swept demo leaves live bookmarks and shared links behind it.
+   *
+   * The default answers are both wrong for whoever follows one. The staff
+   * sign-in form tells the one person we know is not staff that they need an
+   * account, and a bare 404 does not explain itself either. Send them back to
+   * the front door, which can offer them a fresh one.
+   *
+   * Only demo- slugs take this path, and create_venue reserves that prefix,
+   * so no real venue can ever be sitting on one.
+   */
+  const swept = slug.startsWith("demo-") ? "/?demo=expired" : null;
 
   const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect(swept ?? "/login");
+
+  const membership = await getMembershipBySlug(slug);
+  if (!membership) {
+    if (swept) redirect(swept);
+    notFound();
+  }
+
   const [memberships, { data: openSession }] = await Promise.all([
     getMemberships(),
     supabase
