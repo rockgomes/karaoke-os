@@ -71,12 +71,13 @@ The whole app as a list. `+` means not built yet.
   * go to Songs, Import a CSV or the QR code
   * open the guest page in a new tab
   * go to your other venue, or add one
-  * go to all venues *(platform staff only)*
+  * cross to the platform *(platform staff only, set apart from the menu —
+    it is a different surface, not another item)*
   * switch between light, dark, and the system setting
     *(the rail follows the theme)*
   * sign out
 
-**You — platform**
+**You — platform** *(its own surface and its own rail, not a tab inside a venue)*
 
 * **All venues** `/platform`
   * see every venue, its owner and its size

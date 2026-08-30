@@ -10,15 +10,19 @@ export type NavContext = {
   currentSlug?: string;
 };
 
+/** Where the rail offers to take you when you leave this surface entirely. */
+export type SurfaceSwitch = { href: string; label: string };
+
 /**
- * The account group is the same everywhere, so the rail does not rearrange
- * itself as you move between a venue and the venue list.
+ * Two surfaces, two rails.
+ *
+ * Running a bar and running Karaoke OS are different jobs. The platform used
+ * to be a link in the venue rail, sitting between "Add a venue" and the rest,
+ * so choosing it silently moved you into a different product. Now each
+ * surface has its own navigation, and the way across is a switch set apart
+ * from it rather than an item within it.
  */
-function accountGroup({
-  venues,
-  isPlatformAdmin,
-  currentSlug,
-}: NavContext): NavGroup {
+function accountGroup({ venues, currentSlug }: NavContext): NavGroup {
   const items: NavGroup["items"] = [];
 
   if (venues.length > 1) {
@@ -35,10 +39,6 @@ function accountGroup({
   }
 
   items.push({ href: "/admin/new", label: "Add a venue", icon: "add" });
-
-  if (isPlatformAdmin) {
-    items.push({ href: "/platform", label: "All venues", icon: "platform" });
-  }
 
   return { label: "Account", items };
 }
@@ -66,3 +66,21 @@ export function venueNav(slug: string, context: NavContext): NavGroup[] {
 export function accountNav(context: NavContext): NavGroup[] {
   return [accountGroup(context)];
 }
+
+/** The operator's own rail. No venue navigation belongs here. */
+export function platformNav(): NavGroup[] {
+  return [
+    {
+      label: "Platform",
+      items: [{ href: "/platform", label: "Venues", icon: "platform" }],
+    },
+  ];
+}
+
+/** From a venue or the account pages, into the operator surface. */
+export function toPlatform(isPlatformAdmin: boolean): SurfaceSwitch | undefined {
+  return isPlatformAdmin ? { href: "/platform", label: "Platform" } : undefined;
+}
+
+/** And back again. */
+export const TO_VENUES: SurfaceSwitch = { href: "/admin", label: "Your venues" };
