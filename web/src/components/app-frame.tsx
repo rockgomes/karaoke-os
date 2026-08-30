@@ -1,3 +1,4 @@
+import type { SurfaceSwitch } from "@/lib/nav";
 import SideNav, { type NavGroup } from "./side-nav";
 
 /**
@@ -11,6 +12,7 @@ export default function AppFrame({
   groups,
   email,
   sessionControl,
+  switchTo,
   children,
 }: {
   title: string;
@@ -19,6 +21,7 @@ export default function AppFrame({
   groups: NavGroup[];
   email: string;
   sessionControl?: React.ReactNode;
+  switchTo?: SurfaceSwitch;
   children: React.ReactNode;
 }) {
   return (
@@ -30,6 +33,7 @@ export default function AppFrame({
         groups={groups}
         email={email}
         sessionControl={sessionControl}
+        switchTo={switchTo}
       />
       <main className="min-w-0 flex-1 bg-ground">
         <div className="mx-auto w-full max-w-[1280px] px-5 py-8 sm:px-8 lg:px-10">

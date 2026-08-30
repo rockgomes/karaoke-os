@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import AppFrame from "@/components/app-frame";
 import { getMemberships, isPlatformAdmin, requireUser } from "@/lib/auth";
-import { accountNav } from "@/lib/nav";
+import { accountNav, toPlatform } from "@/lib/nav";
 
 export const metadata = { title: "Your venues — Karaoke OS" };
 
@@ -22,6 +22,7 @@ export default async function AdminHome() {
       title="Karaoke OS"
       subtitle="Your venues"
       email={user.email ?? ""}
+      switchTo={toPlatform(platform)}
       groups={accountNav({
         venues: memberships.map((m) => m.venues),
         isPlatformAdmin: platform,

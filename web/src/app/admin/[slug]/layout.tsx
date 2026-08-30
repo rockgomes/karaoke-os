@@ -7,7 +7,7 @@ import {
   requireUser,
 } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { venueNav } from "@/lib/nav";
+import { toPlatform, venueNav } from "@/lib/nav";
 import SessionToggle from "./session-toggle";
 
 export default async function VenueLayout({
@@ -44,6 +44,7 @@ export default async function VenueLayout({
         venues: memberships.map((m) => m.venues),
         isPlatformAdmin: platform,
       })}
+      switchTo={toPlatform(platform)}
       sessionControl={
         <SessionToggle slug={slug} openSessionId={openSession?.id ?? null} />
       }
