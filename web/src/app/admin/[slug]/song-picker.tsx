@@ -96,7 +96,7 @@ export default function SongPicker({
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Title and artist, e.g. thunderstruck acdc"
         autoComplete="off"
-        className="mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink"
+        className="mt-1 h-11 w-full rounded-lg border border-line bg-surface px-3 text-sm text-ink"
       />
 
       <p className="mt-1 text-xs text-ink-faint" aria-live="polite">

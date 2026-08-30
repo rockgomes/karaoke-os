@@ -122,16 +122,18 @@ export default function SongTable({
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="border-b border-line text-left">
-              <th scope="col" className="w-11 py-2.5 pl-4">
-                <input
-                  type="checkbox"
-                  checked={allShown}
-                  onChange={() =>
-                    setSelected(allShown ? new Set() : new Set(songs.map((s) => s.id)))
-                  }
-                  aria-label="Select every song on this page"
-                  className="h-4 w-4 accent-[var(--accent)]"
-                />
+              <th scope="col" className="w-11 p-0">
+                <label className="flex h-11 w-11 cursor-pointer items-center justify-center">
+                  <input
+                    type="checkbox"
+                    checked={allShown}
+                    onChange={() =>
+                      setSelected(allShown ? new Set() : new Set(songs.map((s) => s.id)))
+                    }
+                    aria-label="Select every song on this page"
+                    className="h-4 w-4 accent-[var(--accent)]"
+                  />
+                </label>
               </th>
               {COLUMNS.map((col) => (
                 <th
@@ -151,7 +153,7 @@ export default function SongTable({
                     <Link
                       href={sortHrefs[col.key]}
                       scroll={false}
-                      className="inline-flex items-center gap-1 underline-offset-4 hover:underline"
+                      className="inline-flex h-11 items-center gap-1 underline-offset-4 hover:underline"
                     >
                       {col.label}
                       <span aria-hidden="true" className="text-accent">
@@ -175,21 +177,26 @@ export default function SongTable({
                 key={song.id}
                 className="cursor-pointer border-b border-line last:border-0 hover:bg-surface-2"
               >
-                <td className="py-2 pl-4">
-                  <input
-                    type="checkbox"
-                    checked={selected.has(song.id)}
-                    onChange={() => toggle(song.id)}
-                    aria-label={`Select ${song.title}`}
-                    className="h-4 w-4 accent-[var(--accent)]"
-                  />
+                <td className="p-0">
+                  {/* A 16px box is unhittable on a phone. The label gives it a
+                      44px target without making the tick any bigger. */}
+                  <label className="flex h-11 w-11 cursor-pointer items-center justify-center">
+                    <input
+                      type="checkbox"
+                      checked={selected.has(song.id)}
+                      onChange={() => toggle(song.id)}
+                      aria-label={`Select ${song.title}`}
+                      className="h-4 w-4 accent-[var(--accent)]"
+                    />
+                  </label>
                 </td>
 
                 <td className="p-0">
                   <button
                     type="button"
                     onClick={() => setEditing(song)}
-                    className="flex w-full items-center gap-3 py-2 pr-4 text-left"
+                    className="group/song flex w-full cursor-pointer items-center gap-3
+                               py-2 pr-4 text-left"
                   >
                     {song.cover_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
@@ -205,7 +212,10 @@ export default function SongTable({
                       <CoverFallback />
                     )}
                     <div className="min-w-0">
-                      <p className="truncate font-medium text-ink">{song.title}</p>
+                      <p className="truncate font-medium text-ink underline-offset-4
+                                    group-hover/song:underline">
+                        {song.title}
+                      </p>
                       <p className="truncate text-xs text-ink-faint">
                         {/* On a narrow screen this line carries the artist,
                             because the artist column is hidden there. */}
@@ -235,8 +245,9 @@ export default function SongTable({
                   <button
                     type="button"
                     onClick={() => setEditing(song)}
-                    className="rounded-md px-2 py-1 text-sm text-ink-soft
- underline-offset-4 hover:text-ink hover:underline"
+                    className="inline-flex h-11 cursor-pointer items-center rounded-md px-3
+                               text-sm text-ink-soft underline-offset-4
+                               hover:text-ink hover:underline"
                   >
                     Edit
                   </button>

@@ -199,15 +199,13 @@ export default async function VenueAdminPage({
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <Link
-            href={`/admin/${slug}/import`}
-            className="rounded-lg border border-line bg-surface px-4 py-2.5 text-sm
- font-medium text-ink hover:bg-surface-2"
-          >
-            Import a CSV
-          </Link>
-        </div>
+        <Link
+          href={`/admin/${slug}/import`}
+          className="inline-flex h-11 items-center text-sm text-ink-soft
+                     underline-offset-4 hover:text-ink hover:underline"
+        >
+          Import a CSV instead
+        </Link>
       </div>
 
       <div className="mt-6">
@@ -215,17 +213,19 @@ export default async function VenueAdminPage({
       </div>
 
       {library ? (
-        <details className="group mt-6 rounded-xl border border-line bg-surface">
+        <details className="group mt-6">
+          {/* The one filled control on the screen. Adding a song is the job
+              this page exists for; importing is the occasional alternative. */}
           <summary
-            className="cursor-pointer list-none px-4 py-3 text-sm font-medium text-ink
- marker:content-none"
+            className="inline-flex h-11 cursor-pointer list-none items-center gap-2
+                       rounded-lg bg-accent px-4 text-sm font-medium text-accent-ink
+                       marker:content-none hover:bg-accent-hover"
           >
-            <span className="text-accent">＋</span> Add a song
-            <span className="ml-2 font-normal text-ink-faint group-open:hidden">
-              title and artist are enough — the rest is filled in for you
-            </span>
+            <span aria-hidden="true" className="text-base leading-none">+</span>
+            <span className="group-open:hidden">Add a song</span>
+            <span className="hidden group-open:inline">Close</span>
           </summary>
-          <div className="border-t border-line px-4 py-4">
+          <div className="mt-3 rounded-xl border border-line bg-surface p-4">
             <AddSongForm slug={slug} libraryId={library.id} />
           </div>
         </details>
@@ -248,8 +248,8 @@ export default async function VenueAdminPage({
               </span>
               <button
                 type="submit"
-                className="rounded-lg border border-line bg-surface px-3 py-2 text-sm
-                           font-medium text-ink hover:bg-surface-2"
+                className="inline-flex h-11 items-center rounded-lg border border-line bg-surface
+                           px-3 text-sm font-medium text-ink hover:bg-surface-2"
               >
                 Fill in the next {Math.min(BATCH_SIZE, incomplete)}
               </button>
@@ -284,12 +284,13 @@ export default async function VenueAdminPage({
               <Link
                 href={hrefWith({ page: page - 1 === 1 ? null : String(page - 1) })}
                 scroll={false}
-                className="rounded-md px-2 py-1 text-ink underline-offset-4 hover:underline"
+                className="inline-flex h-11 items-center rounded-md px-2 text-ink
+                           underline-offset-4 hover:underline"
               >
                 ← Previous
               </Link>
             ) : (
-              <span className="px-2 py-1 text-ink-faint">← Previous</span>
+              <span className="inline-flex h-11 items-center px-2 text-ink-faint">← Previous</span>
             )}
 
             <span className="tabular-nums text-ink-soft">
@@ -300,12 +301,13 @@ export default async function VenueAdminPage({
               <Link
                 href={hrefWith({ page: String(page + 1) })}
                 scroll={false}
-                className="rounded-md px-2 py-1 text-ink underline-offset-4 hover:underline"
+                className="inline-flex h-11 items-center rounded-md px-2 text-ink
+                           underline-offset-4 hover:underline"
               >
                 Next →
               </Link>
             ) : (
-              <span className="px-2 py-1 text-ink-faint">Next →</span>
+              <span className="inline-flex h-11 items-center px-2 text-ink-faint">Next →</span>
             )}
           </nav>
         )}
