@@ -1,140 +1,468 @@
-// Database types.
-// Regenerate with:  npx supabase gen types typescript --project-id tczjrhcnufvehcthsens
-export type Venue = {
-  id: string;
-  name: string;
-  slug: string;
-  created_at: string;
-  suspended_at: string | null;
-};
-
-export type AppUser = {
-  id: string;
-  email: string;
-  display_name: string | null;
-  is_platform_admin: boolean;
-  created_at: string;
-};
-
-export type Role = "owner" | "dj";
-
-export type Membership = {
-  id: string;
-  user_id: string;
-  venue_id: string;
-  role: Role;
-};
-
-export type Library = {
-  id: string;
-  venue_id: string;
-  name: string;
-  is_public: boolean;
-  created_at: string;
-};
-
-export type Difficulty = "easy" | "medium" | "hard";
-
-export type Song = {
-  id: string;
-  library_id: string;
-  title: string;
-  artist: string;
-  album: string | null;
-  genre: string | null;
-  duration: string | null;
-  year: number | null;
-  language: string | null;
-  difficulty: Difficulty | null;
-  cover_url: string | null;
-  musicbrainz_id: string | null;
-  created_at: string;
-};
-
-export type Session = {
-  id: string;
-  venue_id: string;
-  opened_at: string;
-  closed_at: string | null;
-};
-
-export type Favorite = {
-  user_id: string;
-  song_id: string;
-  created_at: string;
-};
-
-type Table<Row, Required extends keyof Row> = {
-  Row: Row;
-  Insert: Pick<Row, Required> & Partial<Row>;
-  Update: Partial<Row>;
-  Relationships: [];
-};
+export type Json =
+  | string
+  | number
+  | boolean
+  | null
+  | { [key: string]: Json | undefined }
+  | Json[]
 
 export type Database = {
+  // Allows to automatically instantiate createClient with right options
+  // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
+  __InternalSupabase: {
+    PostgrestVersion: "14.5"
+  }
   public: {
     Tables: {
-      venues: Table<Venue, "name" | "slug">;
-      users: Table<AppUser, "id" | "email">;
-      memberships: Table<Membership, "user_id" | "venue_id" | "role">;
-      libraries: Table<Library, "venue_id" | "name">;
-      songs: Table<Song, "library_id" | "title" | "artist">;
-      sessions: Table<Session, "venue_id">;
-      favorites: Table<Favorite, "user_id" | "song_id">;
-    };
-    Views: Record<never, never>;
+      favorites: {
+        Row: {
+          created_at: string
+          song_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          song_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          song_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "favorites_song_id_fkey"
+            columns: ["song_id"]
+            isOneToOne: false
+            referencedRelation: "songs"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "favorites_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      libraries: {
+        Row: {
+          created_at: string
+          id: string
+          is_public: boolean
+          name: string
+          venue_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          name: string
+          venue_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_public?: boolean
+          name?: string
+          venue_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "libraries_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      memberships: {
+        Row: {
+          id: string
+          role: string
+          user_id: string
+          venue_id: string
+        }
+        Insert: {
+          id?: string
+          role: string
+          user_id: string
+          venue_id: string
+        }
+        Update: {
+          id?: string
+          role?: string
+          user_id?: string
+          venue_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "memberships_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "memberships_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sessions: {
+        Row: {
+          closed_at: string | null
+          id: string
+          opened_at: string
+          venue_id: string
+        }
+        Insert: {
+          closed_at?: string | null
+          id?: string
+          opened_at?: string
+          venue_id: string
+        }
+        Update: {
+          closed_at?: string | null
+          id?: string
+          opened_at?: string
+          venue_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sessions_venue_id_fkey"
+            columns: ["venue_id"]
+            isOneToOne: false
+            referencedRelation: "venues"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      songs: {
+        Row: {
+          album: string | null
+          artist: string
+          cover_url: string | null
+          created_at: string
+          difficulty: string | null
+          duration: string | null
+          genre: string | null
+          id: string
+          language: string | null
+          library_id: string
+          musicbrainz_id: string | null
+          title: string
+          year: number | null
+        }
+        Insert: {
+          album?: string | null
+          artist: string
+          cover_url?: string | null
+          created_at?: string
+          difficulty?: string | null
+          duration?: string | null
+          genre?: string | null
+          id?: string
+          language?: string | null
+          library_id: string
+          musicbrainz_id?: string | null
+          title: string
+          year?: number | null
+        }
+        Update: {
+          album?: string | null
+          artist?: string
+          cover_url?: string | null
+          created_at?: string
+          difficulty?: string | null
+          duration?: string | null
+          genre?: string | null
+          id?: string
+          language?: string | null
+          library_id?: string
+          musicbrainz_id?: string | null
+          title?: string
+          year?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "songs_library_id_fkey"
+            columns: ["library_id"]
+            isOneToOne: false
+            referencedRelation: "libraries"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      users: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          email: string | null
+          id: string
+          is_platform_admin: boolean
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id: string
+          is_platform_admin?: boolean
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          email?: string | null
+          id?: string
+          is_platform_admin?: boolean
+        }
+        Relationships: []
+      }
+      venues: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_demo: boolean
+          name: string
+          slug: string
+          suspended_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_demo?: boolean
+          name: string
+          slug: string
+          suspended_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_demo?: boolean
+          name?: string
+          slug?: string
+          suspended_at?: string | null
+        }
+        Relationships: []
+      }
+    }
+    Views: {
+      [_ in never]: never
+    }
     Functions: {
-      // Creating a venue and its first membership must be one transaction.
-      // See the create_venue_rpc migration for why.
       create_venue: {
-        Args: { venue_name: string; venue_slug: string };
-        Returns: Venue;
-      };
-      // Refuses anyone who is not platform staff. See the platform_overview_rpc
-      // migration for why this is a function and not a view.
-      platform_venues: {
-        Args: Record<string, never>;
+        Args: { venue_name: string; venue_slug: string }
         Returns: {
-          id: string;
-          name: string;
-          slug: string;
-          created_at: string;
-          suspended_at: string | null;
-          owner_email: string | null;
-          staff_count: number;
-          song_count: number;
-          karaoke_open: boolean;
-        }[];
-      };
-      set_venue_suspended: {
-        Args: { target_venue: string; suspended: boolean };
-        Returns: Venue;
-      };
-      // Splits the comma-joined genre column and counts the labels, so the
-      // filter can be built without shipping every song to the browser.
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_demo: boolean
+          name: string
+          slug: string
+          suspended_at: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "venues"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       library_genres: {
-        Args: { target_library: string };
-        Returns: { genre: string; songs: number }[];
-      };
-      // The genres a guest can filter by, across a venue's public libraries.
-      // Callable by signed-out visitors; RLS decides what it counts.
-      venue_genres: {
-        Args: { target_venue: string };
-        Returns: { genre: string; songs: number }[];
-      };
-      // The four venue admin numbers in one round trip. "Added this week" uses
-      // the database clock, so the count does not shift between renders.
-      library_stats: {
-        Args: { target_library: string };
+        Args: { target_library: string }
         Returns: {
-          total: number;
-          incomplete: number;
-          added_this_week: number;
-          genres: number;
-        }[];
-      };
-    };
-    Enums: Record<never, never>;
-    CompositeTypes: Record<never, never>;
-  };
-};
+          genre: string
+          songs: number
+        }[]
+      }
+      library_stats: {
+        Args: { target_library: string }
+        Returns: {
+          added_this_week: number
+          genres: number
+          incomplete: number
+          total: number
+        }[]
+      }
+      platform_venues: {
+        Args: never
+        Returns: {
+          created_at: string
+          id: string
+          karaoke_open: boolean
+          name: string
+          owner_email: string
+          slug: string
+          song_count: number
+          staff_count: number
+          suspended_at: string
+        }[]
+      }
+      set_venue_suspended: {
+        Args: { suspended: boolean; target_venue: string }
+        Returns: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_demo: boolean
+          name: string
+          slug: string
+          suspended_at: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "venues"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      start_demo: { Args: never; Returns: string }
+      sweep_demo_venues: { Args: never; Returns: number }
+      venue_genres: {
+        Args: { target_venue: string }
+        Returns: {
+          genre: string
+          songs: number
+        }[]
+      }
+    }
+    Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
+      [_ in never]: never
+    }
+  }
+}
+
+type DatabaseWithoutInternals = Omit<Database, "__InternalSupabase">
+
+type DefaultSchema = DatabaseWithoutInternals[Extract<keyof Database, "public">]
+
+export type Tables<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof (DefaultSchema["Tables"] & DefaultSchema["Views"])
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+        DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? (DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"] &
+      DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Views"])[TableName] extends {
+      Row: infer R
+    }
+    ? R
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])
+    ? (DefaultSchema["Tables"] &
+        DefaultSchema["Views"])[DefaultSchemaTableNameOrOptions] extends {
+        Row: infer R
+      }
+      ? R
+      : never
+    : never
+
+export type TablesInsert<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Insert: infer I
+    }
+    ? I
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Insert: infer I
+      }
+      ? I
+      : never
+    : never
+
+export type TablesUpdate<
+  DefaultSchemaTableNameOrOptions extends
+    | keyof DefaultSchema["Tables"]
+    | { schema: keyof DatabaseWithoutInternals },
+  TableName extends DefaultSchemaTableNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"]
+    : never = never,
+> = DefaultSchemaTableNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaTableNameOrOptions["schema"]]["Tables"][TableName] extends {
+      Update: infer U
+    }
+    ? U
+    : never
+  : DefaultSchemaTableNameOrOptions extends keyof DefaultSchema["Tables"]
+    ? DefaultSchema["Tables"][DefaultSchemaTableNameOrOptions] extends {
+        Update: infer U
+      }
+      ? U
+      : never
+    : never
+
+export type Enums<
+  DefaultSchemaEnumNameOrOptions extends
+    | keyof DefaultSchema["Enums"]
+    | { schema: keyof DatabaseWithoutInternals },
+  EnumName extends DefaultSchemaEnumNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"]
+    : never = never,
+> = DefaultSchemaEnumNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[DefaultSchemaEnumNameOrOptions["schema"]]["Enums"][EnumName]
+  : DefaultSchemaEnumNameOrOptions extends keyof DefaultSchema["Enums"]
+    ? DefaultSchema["Enums"][DefaultSchemaEnumNameOrOptions]
+    : never
+
+export type CompositeTypes<
+  PublicCompositeTypeNameOrOptions extends
+    | keyof DefaultSchema["CompositeTypes"]
+    | { schema: keyof DatabaseWithoutInternals },
+  CompositeTypeName extends PublicCompositeTypeNameOrOptions extends {
+    schema: keyof DatabaseWithoutInternals
+  }
+    ? keyof DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"]
+    : never = never,
+> = PublicCompositeTypeNameOrOptions extends {
+  schema: keyof DatabaseWithoutInternals
+}
+  ? DatabaseWithoutInternals[PublicCompositeTypeNameOrOptions["schema"]]["CompositeTypes"][CompositeTypeName]
+  : PublicCompositeTypeNameOrOptions extends keyof DefaultSchema["CompositeTypes"]
+    ? DefaultSchema["CompositeTypes"][PublicCompositeTypeNameOrOptions]
+    : never
+
+export const Constants = {
+  public: {
+    Enums: {},
+  },
+} as const

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { startDemo } from "./demo/actions";
 
 export const metadata = {
   title: "Karaoke OS",
@@ -7,7 +8,14 @@ export const metadata = {
 
 // Deliberately not a list of venues. That would publish the customer list,
 // and a guest arrives by the QR code on their table, never through here.
-export default function Home() {
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const search = await searchParams;
+  const demoFailed = search.demo === "unavailable";
+
   return (
     <main className="mx-auto w-full max-w-xl px-4 py-20">
       <h1 className="text-4xl font-bold tracking-tight">Karaoke OS</h1>
@@ -55,6 +63,31 @@ export default function Home() {
         >
           Venue sign in
         </Link>
+
+        {/*
+         * A form, not a link. This builds a venue and copies 55 songs into
+         * it, and a GET that does that fires on its own the first time
+         * something prefetches the page.
+         */}
+        <form action={startDemo} className="mt-4 border-t border-line pt-4">
+          <button
+            type="submit"
+            className="inline-flex h-11 items-center gap-1.5 rounded-lg border border-line
+                       px-4 text-sm font-medium text-ink hover:border-line-strong
+                       hover:bg-surface-2"
+          >
+            Try the backoffice
+            <span aria-hidden="true">&rarr;</span>
+          </button>
+          <p className="mt-2 text-xs text-ink-faint">
+            No account. You get your own copy of a venue, wiped tonight.
+          </p>
+          {demoFailed && (
+            <p role="alert" className="mt-2 text-xs text-danger">
+              The demo could not start just now. Please try again shortly.
+            </p>
+          )}
+        </form>
       </div>
     </main>
   );

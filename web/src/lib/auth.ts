@@ -4,7 +4,14 @@ import { createClient } from "@/lib/supabase/server";
 export type VenueMembership = {
   venue_id: string;
   role: "owner" | "dj";
-  venues: { id: string; name: string; slug: string };
+  venues: {
+    id: string;
+    name: string;
+    slug: string;
+    /** A throwaway clone one visitor was handed. Not a customer. */
+    is_demo: boolean;
+    expires_at: string | null;
+  };
 };
 
 /** Returns the signed-in user, or sends them to the login page. */
@@ -59,7 +66,7 @@ export async function getMemberships(): Promise<VenueMembership[]> {
 
   const { data } = await supabase
     .from("memberships")
-    .select("venue_id, role, venues(id, name, slug)")
+    .select("venue_id, role, venues(id, name, slug, is_demo, expires_at)")
     .eq("user_id", user.id)
     .order("venue_id");
   return (data ?? []) as unknown as VenueMembership[];
