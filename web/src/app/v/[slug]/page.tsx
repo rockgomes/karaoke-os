@@ -14,9 +14,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const supabase = await createClient();
   const { data: venue } = await supabase
-    .from("venues")
-    .select("name")
-    .eq("slug", slug)
+    .rpc("guest_venue", { venue_slug: slug })
     .maybeSingle();
 
   return venue
@@ -35,10 +33,11 @@ export default async function VenuePage({
   const search = await searchParams;
   const supabase = await createClient();
 
+  // Not a select on venues. The table no longer answers to strangers at all,
+  // so that a customer list cannot be read off it; this asks about the one
+  // slug the guest already has, which is what the code on their table is.
   const { data: venue } = await supabase
-    .from("venues")
-    .select("id, name, slug")
-    .eq("slug", slug)
+    .rpc("guest_venue", { venue_slug: slug })
     .maybeSingle();
 
   if (!venue) notFound();

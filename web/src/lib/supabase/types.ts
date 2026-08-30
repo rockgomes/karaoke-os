@@ -277,6 +277,14 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      guest_venue: {
+        Args: { venue_slug: string }
+        Returns: {
+          id: string
+          name: string
+          slug: string
+        }[]
+      }
       library_genres: {
         Args: { target_library: string }
         Returns: {

@@ -47,7 +47,10 @@ function accountGroup({ venues, currentSlug, isDemo }: NavContext): NavGroup {
 }
 
 export function venueNav(slug: string, context: NavContext): NavGroup[] {
-  return [
+  // A group with nothing in it still draws its heading. Hiding "Add a venue"
+  // from a demo visitor left "Account" sitting on its own at the foot of the
+  // rail, labelling nothing.
+  return dropEmpty([
     {
       label: "Venue",
       items: [
@@ -63,11 +66,15 @@ export function venueNav(slug: string, context: NavContext): NavGroup[] {
       ],
     },
     accountGroup({ ...context, currentSlug: slug }),
-  ];
+  ]);
 }
 
 export function accountNav(context: NavContext): NavGroup[] {
-  return [accountGroup(context)];
+  return dropEmpty([accountGroup(context)]);
+}
+
+function dropEmpty(groups: NavGroup[]): NavGroup[] {
+  return groups.filter((group) => group.items.length > 0);
 }
 
 /** The operator's own rail. No venue navigation belongs here. */
