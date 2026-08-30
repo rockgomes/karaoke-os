@@ -37,12 +37,12 @@ jobs:
           cache: npm
           cache-dependency-path: web/package-lock.json
 
-      # Not `npm ci`. Tailwind v4 ships a wasm32-wasi fallback whose bundled
-      # @emnapi dependencies npm will not resolve on macOS, so a lock file
-      # generated here can never satisfy `npm ci` on Linux. `npm install`
-      # still honours the pinned versions in the lock file; it only fills in
-      # the platform packages macOS omitted.
-      - run: npm install --no-audit --no-fund
+      # `npm install` used to be needed here, and the reason given was wrong:
+      # the lock file was simply incomplete. 376 of its 480 entries carried no
+      # `resolved` URL and no integrity hash, so installs only ever worked on
+      # a machine whose npm cache already held the tarballs. Regenerated
+      # against the registry with a cold cache, `npm ci` works everywhere.
+      - run: npm ci --no-audit --no-fund
 
       - name: Lint
         run: npm run lint
