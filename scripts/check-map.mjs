@@ -10,10 +10,16 @@ import { join, relative } from "node:path";
 const APP_DIR = "web/src/app";
 const MAP_FILE = "docs/MAP.md";
 
+// /dev/* is a bench for looking at components without a sign-in. It is a
+// tool, not a screen anyone using Karaoke OS can reach, and it 404s in
+// production — so it does not belong on a map of the product.
+const NOT_PRODUCT = /^dev(\/|$)/;
+
 async function findPages(dir) {
   const found = [];
   for (const entry of await readdir(dir, { withFileTypes: true })) {
     const full = join(dir, entry.name);
+    if (NOT_PRODUCT.test(relative(APP_DIR, full))) continue;
     if (entry.isDirectory()) {
       found.push(...(await findPages(full)));
     } else if (/^page\.(tsx|ts|jsx|js)$/.test(entry.name)) {

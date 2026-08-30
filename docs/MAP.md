@@ -4,6 +4,10 @@ What exists, how it connects, and who may reach it.
 
 Live at **https://karaoke-os.netlify.app**. See [DEPLOY.md](DEPLOY.md).
 
+`/dev/ui` is deliberately absent below. It is a bench for looking at the
+staff components without signing in, it 404s in production, and it is not
+part of the product.
+
 **This file is checked by CI.** `scripts/check-map.mjs` compares the `routes`
 block below against the real page files. Add a page without listing it and the
 build fails. So this map cannot quietly go stale.
