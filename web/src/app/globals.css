@@ -4,8 +4,10 @@
  * Karaoke OS runs behind a bar, at night, on someone's laptop, while a room
  * is loud. Two ideas carry the design:
  *
- *   1. The rail is dark in both themes, like the back of a mixing desk.
- *      Chrome and content are never confused for one another.
+ *   1. The rail is a raised surface, a shade apart from the content beside
+ *      it, so chrome and content are never confused for one another. It
+ *      follows the theme: a light rail in light mode. It used to stay dark
+ *      in both, which read as a bug rather than a decision.
  *   2. The accent is a stage light. It is spent sparingly, and it is what
  *      lights up when karaoke is actually running.
  *
@@ -39,12 +41,12 @@
   --ok: #1f7a4d;
   --ok-soft: #e6f4ec;
 
-  /* The rail is the same dark in both themes on purpose. */
-  --rail: #15131b;
-  --rail-2: #1e1b26;
-  --rail-ink: #efedf4;
-  --rail-ink-soft: #9793a6;
-  --rail-line: #2b2733;
+  /* White rail against the grey content ground. */
+  --rail: #ffffff;
+  --rail-2: #f1eff5;
+  --rail-ink: #16141c;
+  --rail-ink-soft: #5b5867;
+  --rail-line: #e3e1ea;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -73,8 +75,11 @@
     --ok: #55c78d;
     --ok-soft: #12251c;
 
-    --rail: #0b0a0e;
-    --rail-2: #15131b;
+    --rail: #17151e;
+    --rail-2: #221f2b;
+    --rail-ink: #eeecf3;
+    --rail-ink-soft: #a5a1b3;
+    --rail-line: #2e2a38;
   }
 }
 
@@ -103,8 +108,11 @@
   --ok: #55c78d;
   --ok-soft: #12251c;
 
-  --rail: #0b0a0e;
-  --rail-2: #15131b;
+  --rail: #17151e;
+  --rail-2: #221f2b;
+  --rail-ink: #eeecf3;
+  --rail-ink-soft: #a5a1b3;
+  --rail-line: #2e2a38;
 }
 
 @theme inline {
@@ -209,7 +217,7 @@ body {
  */
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: 260ms;
+  animation-duration: 360ms;
   animation-timing-function: ease;
 }
 
@@ -219,10 +227,10 @@ body {
 .theme-fade,
 .theme-fade *:not(svg):not(svg *) {
   transition:
-    background-color 260ms ease,
-    border-color 260ms ease,
-    color 260ms ease,
-    fill 260ms ease;
+    background-color 360ms ease,
+    border-color 360ms ease,
+    color 360ms ease,
+    fill 360ms ease;
 }
 
 @media (prefers-reduced-motion: reduce) {

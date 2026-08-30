@@ -67,6 +67,7 @@ The whole app as a list. `+` means not built yet.
   * go to your other venue, or add one
   * go to all venues *(platform staff only)*
   * switch between light, dark, and the system setting
+    *(the rail follows the theme)*
   * sign out
 
 **You — platform**

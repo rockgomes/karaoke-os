@@ -213,7 +213,10 @@ export default function SideNav({
     <>
       {/* Desktop rail. Sticky and its own height, so signing out does not
           mean scrolling to the bottom of a thousand-song list. */}
-      <div className="hidden w-[248px] shrink-0 flex-col bg-rail lg:sticky lg:top-0 lg:flex lg:h-screen">
+      <div
+        className="hidden w-[248px] shrink-0 flex-col border-r border-rail-line bg-rail
+                   lg:sticky lg:top-0 lg:flex lg:h-screen"
+      >
         {heading}
         {sessionControl && <div className="px-4 pb-4">{sessionControl}</div>}
         {nav}
@@ -221,7 +224,7 @@ export default function SideNav({
       </div>
 
       {/* Mobile bar. Same links, one disclosure, no second menu anywhere. */}
-      <div className="bg-rail lg:hidden">
+      <div className="border-b border-rail-line bg-rail lg:hidden">
         <div className="flex items-center gap-2 pr-3">
           <div className="min-w-0 flex-1">{heading}</div>
           <button
