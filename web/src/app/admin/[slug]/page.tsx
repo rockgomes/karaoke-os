@@ -199,13 +199,15 @@ export default async function VenueAdminPage({
           </p>
         </div>
 
-        <Link
-          href={`/admin/${slug}/import`}
-          className="inline-flex h-11 items-center text-sm text-ink-soft
-                     underline-offset-4 hover:text-ink hover:underline"
-        >
-          Import a CSV instead
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            href={`/admin/${slug}/import`}
+            className="inline-flex h-11 items-center rounded-lg border border-line
+                       bg-surface px-4 text-sm font-medium text-ink hover:bg-surface-2"
+          >
+            Import a CSV
+          </Link>
+        </div>
       </div>
 
       <div className="mt-6">
@@ -213,19 +215,18 @@ export default async function VenueAdminPage({
       </div>
 
       {library ? (
-        <details className="group mt-6">
-          {/* The one filled control on the screen. Adding a song is the job
-              this page exists for; importing is the occasional alternative. */}
+        <details className="group mt-6 rounded-xl border border-line bg-surface">
           <summary
-            className="inline-flex h-11 cursor-pointer list-none items-center gap-2
-                       rounded-lg bg-accent px-4 text-sm font-medium text-accent-ink
-                       marker:content-none hover:bg-accent-hover"
+            className="flex min-h-11 cursor-pointer list-none items-center px-4 py-3
+                       text-sm font-medium text-ink marker:content-none"
           >
-            <span aria-hidden="true" className="text-base leading-none">+</span>
-            <span className="group-open:hidden">Add a song</span>
-            <span className="hidden group-open:inline">Close</span>
+            <span className="text-accent">＋</span>
+            <span className="ml-1.5">Add a song</span>
+            <span className="ml-2 font-normal text-ink-faint group-open:hidden">
+              title and artist are enough — the rest is filled in for you
+            </span>
           </summary>
-          <div className="mt-3 rounded-xl border border-line bg-surface p-4">
+          <div className="border-t border-line px-4 py-4">
             <AddSongForm slug={slug} libraryId={library.id} />
           </div>
         </details>
