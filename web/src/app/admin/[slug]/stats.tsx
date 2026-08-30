@@ -37,11 +37,14 @@ export default function Stats({ stats }: { stats: Stat[] }) {
             {stat.label}
           </dt>
           {/*
-           * 20px against the 30px page title is a 1.5x step. At 30px the
-           * numbers tied with the heading, so five things competed to be the
-           * first thing you saw.
+           * Back to 30px at Rock's request, after a spell at 20px.
+           *
+           * The critique's point still stands and is a known trade-off: 30px
+           * matches the page title exactly, so the heading and these four
+           * numbers all read as the entry point rather than one of them
+           * leading. Kept anyway, because the numbers are what staff look at.
            */}
-          <dd className="mt-1.5 font-display text-xl font-semibold leading-none tabular-nums text-ink">
+          <dd className="mt-1.5 font-display text-3xl font-semibold leading-none tabular-nums text-ink">
             {stat.value}
           </dd>
           {/* Always rendered, so cards in a row end up the same height. */}
