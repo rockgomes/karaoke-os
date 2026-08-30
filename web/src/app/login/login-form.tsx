@@ -5,7 +5,14 @@ import { authenticate, type AuthState } from "./actions";
 
 const EMPTY: AuthState = { error: null, notice: null };
 
-export default function LoginForm({ next }: { next: string }) {
+export default function LoginForm({
+  next,
+  allowSignUp = true,
+}: {
+  next: string;
+  /** The operator door offers no sign-up: that account is granted, not claimed. */
+  allowSignUp?: boolean;
+}) {
   const [mode, setMode] = useState<"in" | "up">("in");
   const [state, formAction, pending] = useActionState(authenticate, EMPTY);
 
@@ -67,6 +74,7 @@ export default function LoginForm({ next }: { next: string }) {
         {pending ? "Working…" : mode === "in" ? "Sign in" : "Create account"}
       </button>
 
+      {allowSignUp && (
       <button
         type="button"
         onClick={() => setMode(mode === "in" ? "up" : "in")}
@@ -76,6 +84,7 @@ export default function LoginForm({ next }: { next: string }) {
           ? "No account yet? Create one"
           : "Already have an account? Sign in"}
       </button>
+      )}
     </form>
   );
 }

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import type { SurfaceSwitch } from "@/lib/nav";
 import { signOut } from "@/app/login/actions";
 import ThemeToggle from "./theme-toggle";
 
@@ -137,7 +136,7 @@ export default function SideNav({
   groups,
   email,
   sessionControl,
-  switchTo,
+  signOutTo,
 }: {
   /** The venue name, or "Karaoke OS" outside a venue. */
   title: string;
@@ -154,11 +153,8 @@ export default function SideNav({
    * and the switch for it belong in one place, not on two different screens.
    */
   sessionControl?: React.ReactNode;
-  /**
-   * The other surface. Rendered apart from the navigation, because going
-   * there is leaving this product rather than moving inside it.
-   */
-  switchTo?: SurfaceSwitch;
+  /** Where signing out lands. Each door returns to its own. */
+  signOutTo?: string;
 }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
@@ -180,31 +176,6 @@ export default function SideNav({
     </nav>
   );
 
-  const surfaceSwitch = switchTo && (
-    <div className="border-t border-rail-line px-3 py-2">
-      <Link
-        href={switchTo.href}
-        className="flex items-center gap-2 rounded-lg px-3 py-2 text-sm
-                   text-rail-ink-soft transition-colors hover:bg-rail-2
-                   hover:text-rail-ink"
-      >
-        <span className="truncate">{switchTo.label}</span>
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          aria-hidden="true"
-          className="ml-auto h-4 w-4"
-        >
-          <path d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
-      </Link>
-    </div>
-  );
-
   const identity = (
     <div className="border-t border-rail-line px-3 py-3">
       <div className="px-3 pb-2">
@@ -214,6 +185,7 @@ export default function SideNav({
         {email}
       </p>
       <form action={signOut}>
+        {signOutTo && <input type="hidden" name="next" value={signOutTo} />}
         <button
           type="submit"
           className="mt-1 w-full rounded-lg px-3 py-1.5 text-left text-sm text-rail-ink-soft
@@ -262,7 +234,6 @@ export default function SideNav({
         {heading()}
         {sessionControl && <div className="px-4 pb-4">{sessionControl}</div>}
         {nav}
-        {surfaceSwitch}
         {identity}
       </div>
 
@@ -291,7 +262,6 @@ export default function SideNav({
         {open && (
           <div id="venue-menu" className="border-t border-rail-line">
             {nav}
-            {surfaceSwitch}
             {identity}
           </div>
         )}

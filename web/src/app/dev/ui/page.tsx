@@ -93,7 +93,6 @@ export default function DevUiPage() {
         email="owner@example.test"
         groups={venueNav("the-anchor", {
           venues: [{ name: "The Anchor", slug: "the-anchor" }],
-          isPlatformAdmin: true,
         })}
         sessionControl={
           <button

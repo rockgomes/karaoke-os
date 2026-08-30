@@ -55,9 +55,13 @@ export async function authenticate(
   redirect(next);
 }
 
-export async function signOut() {
+export async function signOut(formData?: FormData) {
+  // Each door takes you back to itself: venue staff to the venue sign-in,
+  // the operator to the operator one.
+  const next = safeNext(String(formData?.get("next") ?? ""), "/login");
+
   const supabase = await createClient();
   await supabase.auth.signOut();
   revalidatePath("/", "layout");
-  redirect("/login");
+  redirect(next);
 }

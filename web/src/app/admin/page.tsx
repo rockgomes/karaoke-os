@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import AppFrame from "@/components/app-frame";
-import { getMemberships, isPlatformAdmin, requireUser } from "@/lib/auth";
-import { accountNav, toPlatform } from "@/lib/nav";
+import { getMemberships, requireUser } from "@/lib/auth";
+import { accountNav } from "@/lib/nav";
 
 export const metadata = { title: "Your venues — Karaoke OS" };
 
@@ -15,18 +15,13 @@ export default async function AdminHome() {
     redirect(`/admin/${memberships[0].venues.slug}`);
   }
 
-  const platform = await isPlatformAdmin(user.id);
 
   return (
     <AppFrame
       title="Karaoke OS"
       subtitle="Your venues"
       email={user.email ?? ""}
-      switchTo={toPlatform(platform)}
-      groups={accountNav({
-        venues: memberships.map((m) => m.venues),
-        isPlatformAdmin: platform,
-      })}
+      groups={accountNav({ venues: memberships.map((m) => m.venues) })}
     >
       <h1 className="font-display text-3xl font-semibold tracking-tight">
         Your venues

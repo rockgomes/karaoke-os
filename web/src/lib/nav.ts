@@ -5,22 +5,17 @@ export type NavVenue = { name: string; slug: string };
 export type NavContext = {
   /** Every venue this person works at. */
   venues: NavVenue[];
-  isPlatformAdmin: boolean;
   /** The venue currently open, if any. Keeps the rail from linking to itself. */
   currentSlug?: string;
 };
 
-/** Where the rail offers to take you when you leave this surface entirely. */
-export type SurfaceSwitch = { href: string; label: string };
-
 /**
- * Two surfaces, two rails.
+ * Two systems, not two areas of one.
  *
- * Running a bar and running Karaoke OS are different jobs. The platform used
- * to be a link in the venue rail, sitting between "Add a venue" and the rest,
- * so choosing it silently moved you into a different product. Now each
- * surface has its own navigation, and the way across is a switch set apart
- * from it rather than an item within it.
+ * Running a bar and running Karaoke OS are different jobs done by different
+ * people. A venue's screens carry no trace of the platform — no tab, no
+ * switch, no arrow at the foot of the rail — and the platform carries no
+ * venue navigation. Each has its own door at its own address.
  */
 function accountGroup({ venues, currentSlug }: NavContext): NavGroup {
   const items: NavGroup["items"] = [];
@@ -77,10 +72,4 @@ export function platformNav(): NavGroup[] {
   ];
 }
 
-/** From a venue or the account pages, into the operator surface. */
-export function toPlatform(isPlatformAdmin: boolean): SurfaceSwitch | undefined {
-  return isPlatformAdmin ? { href: "/platform", label: "Platform" } : undefined;
-}
 
-/** And back again. */
-export const TO_VENUES: SurfaceSwitch = { href: "/admin", label: "Your venues" };

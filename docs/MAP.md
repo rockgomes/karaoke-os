@@ -71,13 +71,19 @@ The whole app as a list. `+` means not built yet.
   * go to Songs, Import a CSV or the QR code
   * open the guest page in a new tab
   * go to your other venue, or add one
-  * cross to the platform *(platform staff only, set apart from the menu —
-    it is a different surface, not another item)*
   * switch between light, dark, and the system setting
     *(the rail follows the theme)*
   * sign out
 
-**You — platform** *(its own surface and its own rail, not a tab inside a venue)*
+**You — platform**
+
+A separate system, not an area of the venue app. Its own door, its own
+account, its own rail. No venue screen links here, and nothing here links
+into a venue. An operator is not staff at any bar.
+
+* **Operator sign in** `/platform/login`
+  * sign in as an operator
+  * *(no sign-up — an operator account is granted, not claimed)*
 
 * **All venues** `/platform`
   * see every venue, its owner and its size
@@ -147,6 +153,7 @@ Every route that exists. CI checks this list.
 /admin/[slug]/import
 /admin/[slug]/share
 /platform
+/platform/login
 /v/[slug]
 ```
 
