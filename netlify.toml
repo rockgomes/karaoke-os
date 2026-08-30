@@ -2,19 +2,12 @@
 [build]
   base = "web"
   command = "npm run build"
-  # Relative to the repo root, not to base. Without it Netlify looks for
-  # .next at the top level and the Next runtime finds no build output.
-  publish = "web/.next"
+  # Relative to `base`. A clean-clone build resolved "web/.next" to
+  # web/web/.next and the Next runtime found no output there.
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "22"
-
-  # Not `npm ci`. Tailwind v4 ships a wasm32-wasi fallback whose bundled
-  # @emnapi dependencies npm will not resolve on macOS, so a lock file
-  # generated there can never satisfy `npm ci` on Linux. `npm install` still
-  # honours the pinned versions; it only fills in what macOS omitted.
-  # Same reason as the note in .github/workflows/ci.yml.
-  NETLIFY_USE_NPM_INSTALL = "true"
 
 # Serves the App Router, server actions, and src/proxy.ts on Netlify's
 # functions. Without it only static files would be published.
