@@ -166,11 +166,25 @@ export default async function VenueAdminPage({
     {
       label: "Missing details",
       value: incomplete.toLocaleString(),
+      // The action that fixes this number lives on the number, rather than
+      // in a toolbar three blocks away from what it refers to.
       detail:
         incomplete > 0 ? (
-          <StatLink href={hrefWith({ status: "incomplete", page: null })}>
-            Show them
-          </StatLink>
+          <span className="flex flex-col items-start gap-0.5">
+            <StatLink href={hrefWith({ status: "incomplete", page: null })}>
+              Show them
+            </StatLink>
+            <form action={fillMissingDetails}>
+              <input type="hidden" name="slug" value={slug} />
+              <button
+                type="submit"
+                className="-my-2 inline-flex min-h-11 items-center text-ink-soft
+                           underline-offset-4 hover:text-ink hover:underline"
+              >
+                Fill in the next {Math.min(BATCH_SIZE, incomplete)}
+              </button>
+            </form>
+          </span>
         ) : (
           "Every song is complete"
         ),
@@ -194,7 +208,7 @@ export default async function VenueAdminPage({
           <h1 className="font-display text-3xl font-semibold tracking-tight">
             Songs
           </h1>
-          <p className="mt-1 text-sm text-ink-soft">
+          <p className="mt-1 hidden text-sm text-ink-soft sm:block">
             What guests find when they scan the code on the table.
           </p>
         </div>
@@ -239,23 +253,7 @@ export default async function VenueAdminPage({
           <SongSearch total={total} />
           <Filters genres={genres} genre={genre} status={status} />
 
-          {incomplete > 0 && (
-            <form action={fillMissingDetails} className="ml-auto flex items-center gap-2">
-              <input type="hidden" name="slug" value={slug} />
-              {/* Says what it does. It used to read "Fill in details (54)"
-                  and then quietly handle ten of them. */}
-              <span className="text-xs text-ink-faint">
-                {incomplete.toLocaleString()} to go
-              </span>
-              <button
-                type="submit"
-                className="inline-flex h-11 items-center rounded-lg border border-line bg-surface
-                           px-3 text-sm font-medium text-ink hover:bg-surface-2"
-              >
-                Fill in the next {Math.min(BATCH_SIZE, incomplete)}
-              </button>
-            </form>
-          )}
+          
         </div>
 
         <div className="mt-4 overflow-hidden rounded-xl border border-line bg-surface">
