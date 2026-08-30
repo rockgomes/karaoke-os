@@ -106,7 +106,8 @@ function CataloguePane({
         <button
           type="button"
           onClick={onByHand}
-          className="text-sm text-ink-soft underline-offset-4 hover:underline"
+          className="inline-flex h-11 items-center text-sm text-ink-soft
+                     underline-offset-4 hover:underline"
         >
           Not in the catalogue? Type it in
         </button>
@@ -194,7 +195,8 @@ function ManualForm({
         <button
           type="button"
           onClick={onBack}
-          className="text-sm text-ink-soft underline-offset-4 hover:underline"
+          className="inline-flex h-11 items-center text-sm text-ink-soft
+                     underline-offset-4 hover:underline"
         >
           ← Search the catalogue instead
         </button>

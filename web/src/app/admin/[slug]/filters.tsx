@@ -14,7 +14,7 @@ export const STATUSES = [
 export type Status = (typeof STATUSES)[number]["value"];
 
 const select =
-  "rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink";
+  "h-11 rounded-lg border border-line bg-surface px-3 text-sm text-ink";
 
 /**
  * Filters live in the URL, like the search box, so a filtered view can be
@@ -92,7 +92,7 @@ export default function Filters({
           onClick={() =>
             startTransition(() => router.replace(pathname, { scroll: false }))
           }
-          className="rounded-lg px-2 py-2 text-sm text-ink-soft underline-offset-4 hover:underline"
+          className="inline-flex h-11 items-center rounded-lg px-2 text-sm text-ink-soft underline-offset-4 hover:underline"
         >
           Clear
         </button>

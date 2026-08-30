@@ -49,7 +49,8 @@ export function StatLink({
   return (
     <Link
       href={href}
-      className="text-accent underline-offset-4 hover:underline"
+      className="-my-2 inline-flex min-h-11 items-center text-accent
+                 underline-offset-4 hover:underline"
       scroll={false}
     >
       {children}
