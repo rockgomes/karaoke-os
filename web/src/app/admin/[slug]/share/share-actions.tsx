@@ -3,9 +3,8 @@
 import { useState } from "react";
 
 const button =
-  "rounded-lg border border-line px-4 py-2.5 text-sm font-medium " +
-  "hover:bg-surface-2 focus-visible:outline-offset-2 " +
-  "  hover:bg-surface-2";
+  "inline-flex h-11 w-full items-center justify-center rounded-lg border " +
+  "border-line bg-surface px-4 text-sm font-medium text-ink hover:bg-surface-2";
 
 export default function ShareActions({ url, slug }: { url: string; slug: string }) {
   const [copied, setCopied] = useState(false);
@@ -69,19 +68,38 @@ export default function ShareActions({ url, slug }: { url: string; slug: string 
   }
 
   return (
-    <div className="mt-8 flex flex-wrap items-center gap-3">
-      <button type="button" onClick={copy} className={button}>
-        {copied ? "Link copied" : "Copy the link"}
-      </button>
-      <button type="button" onClick={() => window.print()} className={button}>
+    <div className="mt-5">
+      {/*
+       * A stack with the primary action on top, not four ghost buttons in a
+       * row. Printing is what a venue actually does with this; the downloads
+       * are for whoever makes their signage.
+       */}
+      <button
+        type="button"
+        onClick={() => window.print()}
+        className="inline-flex h-11 w-full items-center justify-center rounded-lg
+                   bg-accent px-4 text-sm font-medium text-accent-ink
+                   hover:bg-accent-hover"
+      >
         Print the card
       </button>
-      <button type="button" onClick={downloadPng} className={button}>
-        Download PNG
+
+      <button type="button" onClick={copy} className={`${button} mt-2`}>
+        {copied ? "Link copied" : "Copy the link"}
       </button>
-      <button type="button" onClick={downloadSvg} className={button}>
-        Download SVG
-      </button>
+
+      <p className="mt-5 text-xs font-medium uppercase tracking-[0.08em] text-ink-faint">
+        Download the code
+      </p>
+      <div className="mt-2 flex gap-2">
+        <button type="button" onClick={downloadPng} className={`${button} flex-1`}>
+          PNG
+        </button>
+        <button type="button" onClick={downloadSvg} className={`${button} flex-1`}>
+          SVG
+        </button>
+      </div>
+
       <span aria-live="polite" className="sr-only">
         {copied ? "Link copied to the clipboard" : ""}
       </span>

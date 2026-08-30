@@ -3,6 +3,7 @@ import AppFrame from "@/components/app-frame";
 import { createClient } from "@/lib/supabase/server";
 import { getMemberships, requirePlatformAdmin } from "@/lib/auth";
 import { platformNav } from "@/lib/nav";
+import PageHeader from "@/components/page-header";
 import { setVenueSuspended } from "./actions";
 
 export const metadata = { title: "All venues — Karaoke OS" };
@@ -67,12 +68,10 @@ export default async function PlatformPage() {
       groups={platformNav()}
       signOutTo="/platform/login"
     >
-      <h1 className="font-display text-3xl font-semibold tracking-tight">
-        All venues
-      </h1>
-      <p className="mt-1 text-sm text-ink-soft">
-        Every bar signed up to Karaoke OS.
-      </p>
+      <PageHeader
+        title="All venues"
+        description="Every bar signed up to Karaoke OS."
+      />
 
       {error && (
         <p role="alert" className="mt-4 text-sm text-danger">

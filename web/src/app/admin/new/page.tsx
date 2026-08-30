@@ -1,6 +1,7 @@
 import AppFrame from "@/components/app-frame";
 import { getMemberships, requireUser } from "@/lib/auth";
 import { accountNav } from "@/lib/nav";
+import PageHeader, { Panel } from "@/components/page-header";
 import NewVenueForm from "./new-venue-form";
 
 export const metadata = { title: "Add a venue — Karaoke OS" };
@@ -17,15 +18,13 @@ export default async function NewVenuePage() {
       groups={accountNav({ venues: memberships.map((m) => m.venues) })}
     >
       <div className="max-w-lg">
-        <h1 className="font-display text-3xl font-semibold tracking-tight">
-          Add a venue
-        </h1>
-        <p className="mt-1 text-sm text-ink-soft">
-          You become its owner. A song list is created with it.
-        </p>
-        <div className="mt-6 rounded-xl border border-line bg-surface p-5">
+        <PageHeader
+          title="Add a venue"
+          description="You become its owner. A song list is created with it."
+        />
+        <Panel className="mt-6">
           <NewVenueForm />
-        </div>
+        </Panel>
       </div>
     </AppFrame>
   );

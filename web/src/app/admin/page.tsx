@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import AppFrame from "@/components/app-frame";
 import { getMemberships, requireUser } from "@/lib/auth";
+import PageHeader from "@/components/page-header";
 import { accountNav } from "@/lib/nav";
 
 export const metadata = { title: "Your venues — Karaoke OS" };
@@ -23,9 +24,10 @@ export default async function AdminHome() {
       email={user.email ?? ""}
       groups={accountNav({ venues: memberships.map((m) => m.venues) })}
     >
-      <h1 className="font-display text-3xl font-semibold tracking-tight">
-        Your venues
-      </h1>
+      <PageHeader
+        title="Your venues"
+        description="The bars you work at."
+      />
 
       {memberships.length === 0 ? (
         <div className="mt-6 rounded-xl border border-line bg-surface px-4 py-12 text-center">

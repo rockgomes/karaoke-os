@@ -8,6 +8,7 @@ import AddSongForm from "./add-song-form";
 import SongSearch from "./song-search";
 import SongTable, { type SortKey } from "./song-table";
 import Filters, { STATUSES, type GenreOption, type Status } from "./filters";
+import PageHeader from "@/components/page-header";
 import Stats, { StatLink, type Stat } from "./stats";
 
 const PER_PAGE = 25;
@@ -203,17 +204,14 @@ export default async function VenueAdminPage({
 
   return (
     <>
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <h1 className="font-display text-3xl font-semibold tracking-tight">
-            Songs
-          </h1>
-          <p className="mt-1 hidden text-sm text-ink-soft sm:block">
+      <PageHeader
+        title="Songs"
+        description={
+          <span className="hidden sm:inline">
             What guests find when they scan the code on the table.
-          </p>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
+          </span>
+        }
+        actions={
           <Link
             href={`/admin/${slug}/import`}
             className="inline-flex h-11 items-center rounded-lg border border-line
@@ -221,8 +219,8 @@ export default async function VenueAdminPage({
           >
             Import a CSV
           </Link>
-        </div>
-      </div>
+        }
+      />
 
       <div className="mt-6">
         <Stats stats={stats} />
