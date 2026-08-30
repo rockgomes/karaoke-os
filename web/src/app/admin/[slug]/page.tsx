@@ -236,7 +236,7 @@ export default async function VenueAdminPage({
           >
             <span className="text-accent">＋</span>
             <span className="ml-1.5">Add a song</span>
-            <span className="ml-2 font-normal text-ink-faint group-open:hidden">
+            <span className="ml-2 hidden font-normal text-ink-faint sm:inline sm:group-open:hidden">
               title and artist are enough — the rest is filled in for you
             </span>
           </summary>
