@@ -190,8 +190,12 @@ export default function SideNav({
     </div>
   );
 
-  const heading = (
-    <div className="flex items-start gap-2.5 px-6 pb-4 pt-5">
+  const heading = (compact = false) => (
+    <div
+      className={`flex items-start gap-2.5 ${
+        compact ? "px-4 py-3" : "px-6 pb-4 pt-5"
+      }`}
+    >
       <span
         aria-hidden="true"
         className={`mt-[7px] h-2 w-2 shrink-0 rounded-full ${
@@ -217,7 +221,7 @@ export default function SideNav({
         className="hidden w-[248px] shrink-0 flex-col border-r border-rail-line bg-rail
                    lg:sticky lg:top-0 lg:flex lg:h-screen"
       >
-        {heading}
+        {heading()}
         {sessionControl && <div className="px-4 pb-4">{sessionControl}</div>}
         {nav}
         {identity}
@@ -226,21 +230,25 @@ export default function SideNav({
       {/* Mobile bar. Same links, one disclosure, no second menu anywhere. */}
       <div className="border-b border-rail-line bg-rail lg:hidden">
         <div className="flex items-center gap-2 pr-3">
-          <div className="min-w-0 flex-1">{heading}</div>
+          <div className="min-w-0 flex-1">{heading(true)}</div>
+          {/* The karaoke switch stays out of the disclosure — it is the one
+              control someone may need in a hurry — but it sits on this row
+              rather than taking a full-width one of its own. */}
+          {sessionControl && (
+            <div className="w-[8.75rem] shrink-0">{sessionControl}</div>
+          )}
           <button
             type="button"
             onClick={() => setOpen((v) => !v)}
             aria-expanded={open}
             aria-controls="venue-menu"
-            className="rounded-lg px-3 py-2 text-sm text-rail-ink-soft transition-colors
- hover:bg-rail-2 hover:text-rail-ink"
+            className="inline-flex h-11 items-center rounded-lg px-3 text-sm
+                       text-rail-ink-soft transition-colors hover:bg-rail-2
+                       hover:text-rail-ink"
           >
             {open ? "Close" : "Menu"}
           </button>
         </div>
-        {/* The karaoke switch stays out of the disclosure. It is the one
-            control someone may need in a hurry. */}
-        {sessionControl && <div className="px-4 pb-4">{sessionControl}</div>}
         {open && (
           <div id="venue-menu" className="border-t border-rail-line">
             {nav}
