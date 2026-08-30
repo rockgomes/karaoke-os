@@ -4,6 +4,7 @@ import { getMemberships, getMembershipBySlug, requireUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
 import { venueNav } from "@/lib/nav";
 import SessionToggle from "./session-toggle";
+import DemoBanner from "@/components/demo-banner";
 
 export default async function VenueLayout({
   children,
@@ -33,12 +34,18 @@ export default async function VenueLayout({
     <AppFrame
       title={membership.venues.name}
       live={Boolean(openSession)}
-      email={user.email ?? ""}
-      groups={venueNav(slug, { venues: memberships.map((m) => m.venues) })}
+      // An anonymous visitor has no address to show, and an empty line
+      // under the nav looks like something failed to load.
+      email={user.email ?? "Demo visitor"}
+      groups={venueNav(slug, {
+        venues: memberships.map((m) => m.venues),
+        isDemo: membership.venues.is_demo,
+      })}
       sessionControl={
         <SessionToggle slug={slug} openSessionId={openSession?.id ?? null} />
       }
     >
+      {membership.venues.is_demo && <DemoBanner slug={slug} />}
       {children}
     </AppFrame>
   );

@@ -7,6 +7,12 @@ export type NavContext = {
   venues: NavVenue[];
   /** The venue currently open, if any. Keeps the rail from linking to itself. */
   currentSlug?: string;
+  /**
+   * True for a visitor trying the demo. They are signed in, but they are not
+   * a customer, and the database refuses to let them create a venue. The rail
+   * should not offer a door the back end holds shut.
+   */
+  isDemo?: boolean;
 };
 
 /**
@@ -17,7 +23,7 @@ export type NavContext = {
  * switch, no arrow at the foot of the rail — and the platform carries no
  * venue navigation. Each has its own door at its own address.
  */
-function accountGroup({ venues, currentSlug }: NavContext): NavGroup {
+function accountGroup({ venues, currentSlug, isDemo }: NavContext): NavGroup {
   const items: NavGroup["items"] = [];
 
   if (venues.length > 1) {
@@ -33,7 +39,9 @@ function accountGroup({ venues, currentSlug }: NavContext): NavGroup {
     });
   }
 
-  items.push({ href: "/admin/new", label: "Add a venue", icon: "add" });
+  if (!isDemo) {
+    items.push({ href: "/admin/new", label: "Add a venue", icon: "add" });
+  }
 
   return { label: "Account", items };
 }
