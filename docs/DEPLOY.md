@@ -13,9 +13,33 @@ directory that is still live code.
 | Setting | Value | Why |
 |---|---|---|
 | `base` | `web` | Everything above it is the superseded prototype. |
-| `publish` | `web/.next` | Publish is relative to the repo root, **not** to `base`. Set it to `.next` and the build fails with "publish directory was not found". |
+| `publish` | `.next` | Relative to **`base`**. Set it to `web/.next` and Netlify resolves `web/web/.next`, where the Next runtime finds nothing. |
 | plugin | `@netlify/plugin-nextjs` | Runs the App Router, the server actions, and `src/proxy.ts`. Without it Netlify would publish static files only. |
 | `NODE_VERSION` | `22` | Matches CI. |
+
+The linked GitHub project also stores build settings of its own. They must
+agree with this file: base `web`, publish `web/.next` (the dashboard's paths
+are relative to the repo root, unlike the ones here).
+
+## The lock file must be complete
+
+The first automatic deploy failed with `No matching version found for
+fastq@1.20.3` — a version that exists. The real fault was that 376 of the lock
+file's 480 entries carried no `resolved` URL and no integrity hash, so an
+install only worked on a machine whose npm cache already held the tarballs.
+Local builds passed; Netlify's clean container did not.
+
+If that happens again, regenerate against the registry with a cold cache:
+
+```bash
+rm -rf node_modules package-lock.json && npm install --cache /tmp/coldcache
+```
+
+Then check the result before committing — this should print `0`:
+
+```bash
+node -e "const p=require('./package-lock.json').packages;console.log(Object.entries(p).filter(([k,v])=>k&&!v.link&&!v.resolved).length)"
+```
 
 Next 16.3.3 works on plugin 5.15.13. The build produces one server function
 (`___netlify-server-handler`) and one edge function for the proxy.
