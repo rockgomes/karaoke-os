@@ -16,9 +16,7 @@ export type EditableSong = {
 const EMPTY: SongState = { error: null };
 
 const field =
-  "mt-1 w-full rounded-lg border border-line px-3 py-2 text-sm  " +
-  " " +
-  " ";
+  "mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-sm text-ink";
 
 export default function EditSongDialog({
   slug,
@@ -52,8 +50,8 @@ export default function EditSongDialog({
     <dialog
       ref={ref}
       onClose={onClose}
-      className="w-[min(32rem,calc(100vw-2rem))] rounded-xl border border-line
- bg-surface p-0 text-ink backdrop:bg-black/50"
+      className="m-auto w-[min(32rem,calc(100vw-2rem))] rounded-xl border border-line
+                 bg-surface p-0 text-ink backdrop:bg-black/50"
     >
       <form action={formAction} className="p-5">
         <input type="hidden" name="slug" value={slug} />

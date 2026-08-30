@@ -4,11 +4,12 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getMembershipBySlug } from "@/lib/auth";
 import { enrichSong } from "@/lib/metadata";
+import { BATCH_SIZE } from "./constants";
 
 export type SongState = { error: string | null };
 
 /** One MusicBrainz call a second, so keep a run well inside any host timeout. */
-const BATCH_SIZE = 10;
+
 
 /** Row level security is the real gate. This just gives a clear message. */
 async function requireMembership(slug: string) {

@@ -173,7 +173,7 @@ export default function SongTable({
             {songs.map((song) => (
               <tr
                 key={song.id}
-                className="border-b border-line last:border-0 hover:bg-surface-2"
+                className="cursor-pointer border-b border-line last:border-0 hover:bg-surface-2"
               >
                 <td className="py-2 pl-4">
                   <input
@@ -185,8 +185,12 @@ export default function SongTable({
                   />
                 </td>
 
-                <td className="py-2 pr-4">
-                  <div className="flex items-center gap-3">
+                <td className="p-0">
+                  <button
+                    type="button"
+                    onClick={() => setEditing(song)}
+                    className="flex w-full items-center gap-3 py-2 pr-4 text-left"
+                  >
                     {song.cover_url ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
@@ -211,7 +215,7 @@ export default function SongTable({
                         </span>
                       </p>
                     </div>
-                  </div>
+                  </button>
                 </td>
 
                 <td className="hidden py-2 pr-4 text-ink-soft md:table-cell">

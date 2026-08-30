@@ -3,6 +3,7 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getMembershipBySlug, requireUser } from "@/lib/auth";
 import { fillMissingDetails } from "./actions";
+import { BATCH_SIZE } from "./constants";
 import AddSongForm from "./add-song-form";
 import SongSearch from "./song-search";
 import SongTable, { type SortKey } from "./song-table";
@@ -238,14 +239,19 @@ export default async function VenueAdminPage({
           <Filters genres={genres} genre={genre} status={status} />
 
           {incomplete > 0 && (
-            <form action={fillMissingDetails} className="ml-auto">
+            <form action={fillMissingDetails} className="ml-auto flex items-center gap-2">
               <input type="hidden" name="slug" value={slug} />
+              {/* Says what it does. It used to read "Fill in details (54)"
+                  and then quietly handle ten of them. */}
+              <span className="text-xs text-ink-faint">
+                {incomplete.toLocaleString()} to go
+              </span>
               <button
                 type="submit"
                 className="rounded-lg border border-line bg-surface px-3 py-2 text-sm
- font-medium text-ink hover:bg-surface-2"
+                           font-medium text-ink hover:bg-surface-2"
               >
-                Fill in details ({incomplete})
+                Fill in the next {Math.min(BATCH_SIZE, incomplete)}
               </button>
             </form>
           )}
