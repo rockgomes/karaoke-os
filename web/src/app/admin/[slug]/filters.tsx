@@ -13,8 +13,63 @@ export const STATUSES = [
 
 export type Status = (typeof STATUSES)[number]["value"];
 
-const select =
-  "h-11 rounded-lg border border-line bg-surface px-3 text-sm text-ink";
+/**
+ * A native <select> with our own arrow.
+ *
+ * The browser draws its arrow hard against the right border and ignores
+ * padding-right when placing it, so the control ends up with the label at one
+ * end, the arrow jammed against the other, and dead space between. Turning
+ * the native arrow off and drawing our own puts both on the same 12px inset
+ * as everything else in the toolbar.
+ *
+ * Still a real <select>: on a phone that means the system picker, which no
+ * custom dropdown does better.
+ */
+function Select({
+  id,
+  value,
+  onChange,
+  disabled,
+  children,
+}: {
+  id: string;
+  value: string;
+  onChange: (value: string) => void;
+  disabled?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <span className="relative inline-flex">
+      <select
+        id={id}
+        value={value}
+        disabled={disabled}
+        onChange={(e) => onChange(e.target.value)}
+        // One fixed width for both, rather than each sizing to its own longest
+        // option — that left them different widths and put a wide gap after a
+        // short label. A long genre ellipsises when closed; the open list
+        // still shows it in full.
+        className="h-11 w-40 appearance-none truncate rounded-lg border border-line
+                   bg-surface py-0 pl-3 pr-9 text-sm text-ink disabled:opacity-60"
+      >
+        {children}
+      </select>
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        aria-hidden="true"
+        className="pointer-events-none absolute right-3 top-1/2 h-4 w-4
+                   -translate-y-1/2 text-ink-faint"
+      >
+        <path d="m6 9 6 6 6-6" />
+      </svg>
+    </span>
+  );
+}
 
 /**
  * Filters live in the URL, like the search box, so a filtered view can be
@@ -53,11 +108,10 @@ export default function Filters({
       <label className="sr-only" htmlFor="genre-filter">
         Filter by genre
       </label>
-      <select
+      <Select
         id="genre-filter"
         value={genre}
-        onChange={(e) => apply("genre", e.target.value)}
-        className={select}
+        onChange={(v) => apply("genre", v)}
         disabled={genres.length === 0}
       >
         <option value="">
@@ -68,23 +122,22 @@ export default function Filters({
             {g.genre} ({g.songs})
           </option>
         ))}
-      </select>
+      </Select>
 
       <label className="sr-only" htmlFor="status-filter">
         Filter by how complete a song is
       </label>
-      <select
+      <Select
         id="status-filter"
         value={status}
-        onChange={(e) => apply("status", e.target.value)}
-        className={select}
+        onChange={(v) => apply("status", v)}
       >
         {STATUSES.map((s) => (
           <option key={s.value} value={s.value}>
             {s.label}
           </option>
         ))}
-      </select>
+      </Select>
 
       {filtered && (
         <button
