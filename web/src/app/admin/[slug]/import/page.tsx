@@ -30,9 +30,14 @@ export default async function ImportPage({
 
       <h1 className="font-display text-3xl font-semibold tracking-tight">Import songs</h1>
       <p className="mt-2 max-w-prose text-sm text-ink-soft">
-        Choose a CSV file or paste the rows. Columns go{" "}
-        <strong>title, artist, genre, length, year, album</strong> — only the
-        first two are needed. A header row is detected and skipped.
+        Choose a CSV file or paste the rows. With a header row the columns
+        can be in any order and are matched by name — <strong>title</strong>,
+        <strong> artist</strong>, <strong> genre</strong>,
+        <strong> length</strong>, <strong> year</strong>,
+        <strong> album</strong>, and the usual alternatives such as
+        <strong> song</strong> or <strong> performer</strong>. Without a
+        header they are read in that order. Only a title and an artist are
+        needed.
       </p>
 
       {library ? (

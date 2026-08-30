@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { test } from "node:test";
-import { parseCsv, songKey, splitLine } from "./csv.ts";
+import { parseCsv, readHeader, songKey, splitLine } from "./csv.ts";
 
 // The two files a real venue would send, kept at the repo root.
 const read = (name: string) => readFileSync(new URL(`../../../${name}`, import.meta.url), "utf8");
@@ -68,4 +68,58 @@ test("an unusable year becomes null rather than NaN", () => {
 test("songKey ignores case and surrounding space", () => {
   assert.equal(songKey(" Africa ", "TOTO"), songKey("africa", "Toto"));
   assert.notEqual(songKey("Africa", "Toto"), songKey("Africa", "Weezer"));
+});
+
+test("a header in a different order does not invert the list", () => {
+  // The bug this exists to stop: read by position and every song comes in
+  // with the artist and the title the wrong way round, silently.
+  const { rows, hadHeader } = parseCsv("Artist,Title\nToto,Africa");
+  assert.equal(hadHeader, true);
+  assert.equal(rows[0].title, "Africa");
+  assert.equal(rows[0].artist, "Toto");
+});
+
+test("columns are found by name wherever they sit", () => {
+  const { rows } = parseCsv(
+    "Year,Performer,Album,Song,Genre,Length\n1982,Toto,Toto IV,Africa,Rock,4:55",
+  );
+  assert.deepEqual(
+    { ...rows[0], line: undefined },
+    {
+      line: undefined,
+      title: "Africa",
+      artist: "Toto",
+      genre: "Rock",
+      duration: "4:55",
+      year: 1982,
+      album: "Toto IV",
+    },
+  );
+});
+
+test("header names ignore case, spaces and underscores", () => {
+  const { rows } = parseCsv("SONG_TITLE, Artist Name\nAfrica,Toto");
+  assert.equal(rows[0].title, "Africa");
+  assert.equal(rows[0].artist, "Toto");
+});
+
+test("a first row of real songs is not eaten as a header", () => {
+  // "Africa,Toto" names no columns, so it is data and must survive.
+  const { rows, hadHeader } = parseCsv("Africa,Toto\nMamma Mia,ABBA");
+  assert.equal(hadHeader, false);
+  assert.equal(rows.length, 2);
+  assert.equal(rows[0].title, "Africa");
+});
+
+test("a header naming only some columns still reads the rest by position", () => {
+  const { rows } = parseCsv("Song,Artist\nAfrica,Toto,Rock,4:55,1982,Toto IV");
+  assert.equal(rows[0].genre, "Rock");
+  assert.equal(rows[0].year, 1982);
+  assert.equal(rows[0].album, "Toto IV");
+});
+
+test("readHeader needs both a title and an artist column", () => {
+  assert.equal(readHeader("Title,Genre,Year"), null);
+  assert.equal(readHeader("Artist,Genre"), null);
+  assert.notEqual(readHeader("Title,Artist"), null);
 });
