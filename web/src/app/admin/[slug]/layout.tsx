@@ -1,13 +1,8 @@
 import { notFound } from "next/navigation";
 import AppFrame from "@/components/app-frame";
-import {
-  getMemberships,
-  getMembershipBySlug,
-  isPlatformAdmin,
-  requireUser,
-} from "@/lib/auth";
+import { getMemberships, getMembershipBySlug, requireUser } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { toPlatform, venueNav } from "@/lib/nav";
+import { venueNav } from "@/lib/nav";
 import SessionToggle from "./session-toggle";
 
 export default async function VenueLayout({
@@ -24,9 +19,8 @@ export default async function VenueLayout({
   if (!membership) notFound();
 
   const supabase = await createClient();
-  const [memberships, platform, { data: openSession }] = await Promise.all([
+  const [memberships, { data: openSession }] = await Promise.all([
     getMemberships(),
-    isPlatformAdmin(user.id),
     supabase
       .from("sessions")
       .select("id")
@@ -40,11 +34,7 @@ export default async function VenueLayout({
       title={membership.venues.name}
       live={Boolean(openSession)}
       email={user.email ?? ""}
-      groups={venueNav(slug, {
-        venues: memberships.map((m) => m.venues),
-        isPlatformAdmin: platform,
-      })}
-      switchTo={toPlatform(platform)}
+      groups={venueNav(slug, { venues: memberships.map((m) => m.venues) })}
       sessionControl={
         <SessionToggle slug={slug} openSessionId={openSession?.id ?? null} />
       }

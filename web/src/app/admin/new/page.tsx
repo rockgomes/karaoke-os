@@ -1,27 +1,20 @@
 import AppFrame from "@/components/app-frame";
-import { getMemberships, isPlatformAdmin, requireUser } from "@/lib/auth";
-import { accountNav, toPlatform } from "@/lib/nav";
+import { getMemberships, requireUser } from "@/lib/auth";
+import { accountNav } from "@/lib/nav";
 import NewVenueForm from "./new-venue-form";
 
 export const metadata = { title: "Add a venue — Karaoke OS" };
 
 export default async function NewVenuePage() {
   const user = await requireUser();
-  const [memberships, platform] = await Promise.all([
-    getMemberships(),
-    isPlatformAdmin(user.id),
-  ]);
+  const memberships = await getMemberships();
 
   return (
     <AppFrame
       title="Karaoke OS"
       subtitle="Add a venue"
       email={user.email ?? ""}
-      switchTo={toPlatform(platform)}
-      groups={accountNav({
-        venues: memberships.map((m) => m.venues),
-        isPlatformAdmin: platform,
-      })}
+      groups={accountNav({ venues: memberships.map((m) => m.venues) })}
     >
       <div className="max-w-lg">
         <h1 className="font-display text-3xl font-semibold tracking-tight">

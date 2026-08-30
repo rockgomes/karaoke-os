@@ -2,7 +2,7 @@ import Link from "next/link";
 import AppFrame from "@/components/app-frame";
 import { createClient } from "@/lib/supabase/server";
 import { getMemberships, requirePlatformAdmin } from "@/lib/auth";
-import { platformNav, TO_VENUES } from "@/lib/nav";
+import { platformNav } from "@/lib/nav";
 import { setVenueSuspended } from "./actions";
 
 export const metadata = { title: "All venues — Karaoke OS" };
@@ -65,7 +65,7 @@ export default async function PlatformPage() {
       subtitle="Platform"
       email={user.email ?? ""}
       groups={platformNav()}
-      switchTo={TO_VENUES}
+      signOutTo="/platform/login"
     >
       <h1 className="font-display text-3xl font-semibold tracking-tight">
         All venues
