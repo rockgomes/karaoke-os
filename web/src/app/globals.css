@@ -47,6 +47,9 @@
   --rail-ink: #16141c;
   --rail-ink-soft: #5b5867;
   --rail-line: #e3e1ea;
+
+  /* How much of the header's album-art texture the scrim keeps. */
+  --wash: 66%;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -80,6 +83,8 @@
     --rail-ink: #eeecf3;
     --rail-ink-soft: #a5a1b3;
     --rail-line: #2e2a38;
+
+    --wash: 52%;
   }
 }
 
@@ -113,6 +118,8 @@
   --rail-ink: #eeecf3;
   --rail-ink-soft: #a5a1b3;
   --rail-line: #2e2a38;
+
+  --wash: 52%;
 }
 
 @theme inline {
@@ -254,6 +261,12 @@ body {
  * painted over it — which keeps it working in both themes without a second
  * palette.
  */
+/* The scrim over the header texture. Thin enough to see the records
+   through, thick enough to keep the venue's name at full contrast. */
+.marquee-wash {
+  background: color-mix(in oklab, var(--surface) var(--wash), transparent);
+}
+
 .cover-tint {
   background: color-mix(
     in oklab,
