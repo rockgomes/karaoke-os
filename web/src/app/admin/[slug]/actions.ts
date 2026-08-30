@@ -3,12 +3,19 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getMembershipBySlug } from "@/lib/auth";
-import { enrichSong } from "@/lib/metadata";
+import { enrichSong, searchItunes, type Candidate } from "@/lib/metadata";
+import { BATCH_SIZE } from "./constants";
 
-export type SongState = { error: string | null };
+export type SongState = {
+  error: string | null;
+  /**
+   * Changes on every successful save. The forms use it as a React key to
+   * remount themselves clean, which resets their state without an effect —
+   * React refuses setState inside one, and it is right to.
+   */
+  token?: string;
+};
 
-/** One MusicBrainz call a second, so keep a run well inside any host timeout. */
-const BATCH_SIZE = 10;
 
 /** Row level security is the real gate. This just gives a clear message. */
 async function requireMembership(slug: string) {
@@ -194,7 +201,7 @@ export async function updateSong(
 
   revalidatePath(`/admin/${slug}`);
   revalidatePath(`/v/${slug}`);
-  return { error: null };
+  return { error: null, token: crypto.randomUUID() };
 }
 
 /** Remove several songs at once, from the checkboxes in the table. */
@@ -210,4 +217,103 @@ export async function deleteSongs(formData: FormData) {
 
   revalidatePath(`/admin/${slug}`);
   revalidatePath(`/v/${slug}`);
+}
+
+/**
+ * Look a song up in the commercial catalogue so staff can pick the real one
+ * instead of typing it.
+ *
+ * Free text is how a list becomes unsearchable: one person types "Bon Jovi",
+ * the next "bon jovi ", a third "Jon Bon Jovi", and a guest looking for any
+ * of them finds one. Picking a real record fixes the spelling, the album,
+ * the year, the running time and the artwork in one go.
+ *
+ * Signed-in staff only. It is a proxy onto someone else's API, and it should
+ * not be an open one.
+ */
+export async function searchCatalogue(
+  slug: string,
+  query: string,
+): Promise<Candidate[]> {
+  await requireMembership(slug);
+  return searchItunes(query);
+}
+
+function candidateFromForm(formData: FormData) {
+  const num = (name: string) => {
+    const raw = String(formData.get(name) ?? "").trim();
+    const value = Number(raw);
+    return raw && Number.isFinite(value) ? value : null;
+  };
+  const text = (name: string) => {
+    const raw = String(formData.get(name) ?? "").trim();
+    return raw || null;
+  };
+
+  return {
+    title: String(formData.get("title") ?? "").trim(),
+    artist: String(formData.get("artist") ?? "").trim(),
+    album: text("album"),
+    year: num("year"),
+    duration: text("duration"),
+    genre: text("genre"),
+    cover_url: text("cover_url"),
+  };
+}
+
+/** Add a song the person picked from the catalogue. Nothing is guessed. */
+export async function addFromCatalogue(
+  _prev: SongState,
+  formData: FormData,
+): Promise<SongState> {
+  const slug = String(formData.get("slug") ?? "");
+  const libraryId = String(formData.get("library_id") ?? "");
+  if (!libraryId) return { error: "This venue has no song list yet." };
+
+  await requireMembership(slug);
+
+  const chosen = candidateFromForm(formData);
+  if (!chosen.title || !chosen.artist) return { error: "Pick a song first." };
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("songs")
+    .insert({ library_id: libraryId, ...chosen });
+
+  if (error) return { error: error.message };
+
+  revalidatePath(`/admin/${slug}`);
+  revalidatePath(`/v/${slug}`);
+  return { error: null, token: crypto.randomUUID() };
+}
+
+/**
+ * Repoint an existing song at a catalogue record.
+ *
+ * An update rather than a delete and re-insert, so the row keeps its id and
+ * anyone who has favourited it keeps their favourite.
+ */
+export async function matchSongToCatalogue(
+  _prev: SongState,
+  formData: FormData,
+): Promise<SongState> {
+  const slug = String(formData.get("slug") ?? "");
+  const songId = String(formData.get("song_id") ?? "");
+  await requireMembership(slug);
+  if (!songId) return { error: "No song to update." };
+
+  const chosen = candidateFromForm(formData);
+  if (!chosen.title || !chosen.artist) return { error: "Pick a song first." };
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("songs")
+    .update({ ...chosen, musicbrainz_id: null })
+    .eq("id", songId);
+
+  if (error) return { error: error.message };
+
+  revalidatePath(`/admin/${slug}`);
+  revalidatePath(`/v/${slug}`);
+  return { error: null, token: crypto.randomUUID() };
 }

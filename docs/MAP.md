@@ -49,7 +49,9 @@ The whole app as a list. `+` means not built yet.
 * **Songs** `/admin/blue-note`
   * see how many songs, how many are missing details, how many were added
     this week, and how many genres
-  * add a song
+  * search the catalogue and add the real record
+  * type a song in by hand when the catalogue does not have it
+  * match a song already in the list to a catalogue record
   * edit a song
   * remove a song
   * remove several songs at once
@@ -221,6 +223,7 @@ Anything a person typed is never overwritten.
 | Create a venue | built |
 | Add and remove songs | built |
 | Fill in song details automatically | built |
+| Pick a song from the catalogue | built |
 | Open and close a karaoke session | built |
 | One venue cannot touch another | built, tested |
 | Edit a song | built |
