@@ -82,13 +82,18 @@ function applyTheme(next: Theme) {
   }
 
   if (typeof document.startViewTransition === "function") {
-    document.startViewTransition(() => commit(next));
+    const transition = document.startViewTransition(() => commit(next));
+    // Starting a second transition while one is running rejects these with
+    // "Transition was aborted". A cancelled cross-fade is not a problem
+    // worth an unhandled rejection in the console.
+    transition.ready.catch(() => {});
+    transition.finished.catch(() => {});
     return;
   }
 
   root.classList.add("theme-fade");
   commit(next);
-  window.setTimeout(() => root.classList.remove("theme-fade"), 320);
+  window.setTimeout(() => root.classList.remove("theme-fade"), 420);
 }
 
 const OPTIONS: { value: Theme; label: string; icon: React.ReactNode }[] = [

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Bricolage_Grotesque, Instrument_Sans } from "next/font/google";
 import { THEME_SCRIPT } from "@/components/theme-toggle";
 import "./globals.css";
@@ -35,15 +36,23 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       // attribute.
       suppressHydrationWarning
     >
-      <head>
+      <body className="flex min-h-full flex-col">
         {/*
-          Blocking on purpose, and before anything paints: a stored dark
-          choice must apply to the first frame, or the visitor gets a white
-          flash on every navigation.
+          Runs before anything paints: a stored dark choice must apply to the
+          first frame, or the visitor gets a white flash on every navigation.
+
+          next/script rather than a bare <script>, which React warns about —
+          "scripts inside React components are never executed when rendering
+          on the client". beforeInteractive puts it in the initial HTML,
+          which is the only place it needs to be.
         */}
-        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
-      </head>
-      <body className="flex min-h-full flex-col">{children}</body>
+        <Script
+          id="theme"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
