@@ -22,6 +22,25 @@ export default function Home() {
           Scan the code on your table. There is nothing to install and no
           account to make.
         </p>
+
+        {/*
+         * One named venue, not a directory. Telling a visitor with no table
+         * in front of them to go and scan one is a dead end, and this page is
+         * where anyone arriving from a link lands. The Anchor is seeded demo
+         * data, so pointing at it publishes nothing a customer owns.
+         */}
+        <Link
+          href="/v/the-anchor"
+          className="mt-4 inline-flex h-11 items-center gap-1.5 rounded-lg border border-line
+                     px-4 text-sm font-medium text-ink hover:border-line-strong
+                     hover:bg-surface-2"
+        >
+          See an example list
+          <span aria-hidden="true">&rarr;</span>
+        </Link>
+        <p className="mt-2 text-xs text-ink-faint">
+          The Anchor is a demonstration venue.
+        </p>
       </div>
 
       <div className="mt-4 rounded-xl border border-line p-5">
