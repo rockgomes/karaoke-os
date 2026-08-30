@@ -2,6 +2,7 @@ import "server-only";
 import { fetchJson, formatDurationFromSeconds, yearFrom } from "./shared";
 
 type ItunesSong = {
+  trackId?: number;
   trackName?: string;
   artistName?: string;
   collectionName?: string;
@@ -45,4 +46,53 @@ export async function lookupItunes(artist: string, title: string) {
     // The same path serves other sizes; 100px is too small for the UI.
     cover_url: hit.artworkUrl100?.replace("100x100bb", "400x400bb") ?? null,
   };
+}
+
+export type Candidate = {
+  /** iTunes track id. Only used to key the list in the UI. */
+  id: string;
+  title: string;
+  artist: string;
+  album: string | null;
+  year: number | null;
+  duration: string | null;
+  genre: string | null;
+  cover_url: string | null;
+};
+
+/**
+ * Several candidates rather than one, so a person can choose.
+ *
+ * Automatic matching takes the top hit, and the top hit is often a
+ * compilation: "Thunderstruck" comes back on the Iron Man 2 soundtrack, not
+ * on The Razors Edge. A machine cannot tell which release a bar means. A
+ * person can, at a glance, from the cover and the year.
+ */
+export async function searchItunes(
+  query: string,
+  limit = 8,
+): Promise<Candidate[]> {
+  const term = query.trim();
+  if (term.length < 2) return [];
+
+  const data = await fetchJson<{ results?: ItunesSong[] }>(
+    `https://itunes.apple.com/search?term=${encodeURIComponent(term)}` +
+      `&media=music&entity=song&limit=${limit}`,
+    { timeoutMs: 5000 },
+  );
+
+  return (data?.results ?? [])
+    .filter((hit) => hit.trackName && hit.artistName)
+    .map((hit) => ({
+      id: String(hit.trackId ?? `${hit.artistName}-${hit.trackName}`),
+      title: hit.trackName!,
+      artist: hit.artistName!,
+      album: hit.collectionName ?? null,
+      year: yearFrom(hit.releaseDate),
+      duration: hit.trackTimeMillis
+        ? formatDurationFromSeconds(hit.trackTimeMillis / 1000)
+        : null,
+      genre: hit.primaryGenreName ?? null,
+      cover_url: hit.artworkUrl100?.replace("100x100bb", "400x400bb") ?? null,
+    }));
 }

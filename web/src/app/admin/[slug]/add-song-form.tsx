@@ -1,13 +1,23 @@
 "use client";
 
-import { useActionState, useEffect, useRef } from "react";
-import { addSong, type SongState } from "./actions";
+import { useActionState, useEffect, useRef, useState } from "react";
+import type { Candidate } from "@/lib/metadata";
+import { addFromCatalogue, addSong, type SongState } from "./actions";
+import SongPicker, { PickedFields } from "./song-picker";
 
 const EMPTY: SongState = { error: null };
 
 const field =
   "mt-1 w-full rounded-lg border border-line bg-surface px-3 py-2 text-ink";
 
+/**
+ * Two ways in, and the good one is the default.
+ *
+ * Searching the catalogue is what keeps the list findable: it settles the
+ * spelling of the title and the artist, and brings the album, year, running
+ * time and artwork with it. Typing by hand stays available, because a karaoke
+ * catalogue holds things the commercial one does not.
+ */
 export default function AddSongForm({
   slug,
   libraryId,
@@ -15,10 +25,108 @@ export default function AddSongForm({
   slug: string;
   libraryId: string;
 }) {
+  const [byHand, setByHand] = useState(false);
+
+  return byHand ? (
+    <ManualForm
+      slug={slug}
+      libraryId={libraryId}
+      onBack={() => setByHand(false)}
+    />
+  ) : (
+    <CatalogueForm
+      slug={slug}
+      libraryId={libraryId}
+      onByHand={() => setByHand(true)}
+    />
+  );
+}
+
+function CatalogueForm(props: {
+  slug: string;
+  libraryId: string;
+  onByHand: () => void;
+}) {
+  const [state, formAction, pending] = useActionState(addFromCatalogue, EMPTY);
+
+  // Remounted on every successful save, which clears the chosen song ready
+  // for the next one. A key rather than an effect: React refuses setState
+  // inside one, and it is right to.
+  return (
+    <CataloguePane
+      key={state.token ?? "first"}
+      {...props}
+      state={state}
+      formAction={formAction}
+      pending={pending}
+    />
+  );
+}
+
+function CataloguePane({
+  slug,
+  libraryId,
+  onByHand,
+  state,
+  formAction,
+  pending,
+}: {
+  slug: string;
+  libraryId: string;
+  onByHand: () => void;
+  state: SongState;
+  formAction: (formData: FormData) => void;
+  pending: boolean;
+}) {
+  const [picked, setPicked] = useState<Candidate | null>(null);
+
+  return (
+    <form action={formAction}>
+      <input type="hidden" name="slug" value={slug} />
+      <input type="hidden" name="library_id" value={libraryId} />
+      <PickedFields candidate={picked} />
+
+      <SongPicker slug={slug} picked={picked} onPick={setPicked} />
+
+      {state.error && (
+        <p role="alert" className="mt-3 text-sm text-danger">
+          {state.error}
+        </p>
+      )}
+
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <button
+          type="submit"
+          disabled={pending || !picked}
+          className="rounded-lg bg-accent px-4 py-2.5 font-medium text-accent-ink
+                     hover:bg-accent-hover disabled:opacity-50"
+        >
+          {pending ? "Adding…" : "Add this song"}
+        </button>
+        <button
+          type="button"
+          onClick={onByHand}
+          className="text-sm text-ink-soft underline-offset-4 hover:underline"
+        >
+          Not in the catalogue? Type it in
+        </button>
+      </div>
+    </form>
+  );
+}
+
+function ManualForm({
+  slug,
+  libraryId,
+  onBack,
+}: {
+  slug: string;
+  libraryId: string;
+  onBack: () => void;
+}) {
   const [state, formAction, pending] = useActionState(addSong, EMPTY);
   const formRef = useRef<HTMLFormElement>(null);
 
-  // Clear the form after a save so the next song can be typed straight in.
   useEffect(() => {
     if (!pending && state.error === null) formRef.current?.reset();
   }, [state, pending]);
@@ -27,6 +135,11 @@ export default function AddSongForm({
     <form ref={formRef} action={formAction}>
       <input type="hidden" name="slug" value={slug} />
       <input type="hidden" name="library_id" value={libraryId} />
+
+      <p className="mb-3 text-xs text-ink-faint">
+        Whatever you leave blank is looked up afterwards, from the title and
+        artist you type. Getting either wrong means the lookup misses.
+      </p>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
@@ -69,14 +182,23 @@ export default function AddSongForm({
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="mt-4 rounded-lg bg-accent px-4 py-2.5 font-medium text-accent-ink
- hover:bg-accent-hover disabled:opacity-60"
-      >
-        {pending ? "Adding…" : "Add song"}
-      </button>
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <button
+          type="submit"
+          disabled={pending}
+          className="rounded-lg bg-accent px-4 py-2.5 font-medium text-accent-ink
+                     hover:bg-accent-hover disabled:opacity-60"
+        >
+          {pending ? "Adding…" : "Add song"}
+        </button>
+        <button
+          type="button"
+          onClick={onBack}
+          className="text-sm text-ink-soft underline-offset-4 hover:underline"
+        >
+          ← Search the catalogue instead
+        </button>
+      </div>
     </form>
   );
 }

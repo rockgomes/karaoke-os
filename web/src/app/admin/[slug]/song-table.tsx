@@ -247,7 +247,14 @@ export default function SongTable({
         </table>
       </div>
 
-      <EditSongDialog slug={slug} song={editing} onClose={() => setEditing(null)} />
+      {/* Keyed by song, so the dialog reopens clean rather than carrying the
+          last song's matching pane into the next one. */}
+      <EditSongDialog
+        key={editing?.id ?? "none"}
+        slug={slug}
+        song={editing}
+        onClose={() => setEditing(null)}
+      />
     </>
   );
 }

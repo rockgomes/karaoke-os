@@ -1,6 +1,7 @@
 import "server-only";
 import { searchRecording } from "./musicbrainz";
 import { lookupItunes } from "./itunes";
+export { searchItunes, type Candidate } from "./itunes";
 import type { SongMetadata } from "./shared";
 
 export type { SongMetadata } from "./shared";
